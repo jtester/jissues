@@ -8,35 +8,26 @@
 
 defined('_JEXEC') or die;
 ?>
-<h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
+
 <div class="container-fluid">
+	<div class="row-fluild">
+		<div class="span12">
+            <h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
+		</div>
+	</div>
 	<div class="row-fluid">
-		<div class="span5">
+		<div class="span9">
 			<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_INFO'); ?></h4>
 			<table class="table">
-				<tr>
-					<td><strong><?php echo JText::_('JSTATUS'); ?></strong></td>
-					<td><?php echo JText::_('COM_TRACKER_STATUS_' . strtoupper($this->item->status_title)); ?></td>
-				</tr>
-				<?php if ($this->item->gh_id) : ?>
-				<tr>
-					<td><strong><?php echo JText::_('COM_TRACKER_HEADING_GITHUB_ID'); ?></strong></td>
-					<td><a href="https://github.com/joomla/joomla-cms/issues/<?php echo $this->item->gh_id; ?>" target="_blank"><?php echo $this->item->gh_id; ?></a></td>
-				</tr>
-				<?php endif; ?>
-				<?php if ($this->item->jc_id) : ?>
-				<tr>
-					<td><strong><?php echo JText::_('COM_TRACKER_HEADING_JOOMLACODE_ID'); ?></strong></td>
+				<tr class="issue-info-row">
 					<td>
-						<a href="http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&tracker_item_id=<?php echo (int) $this->item->jc_id; ?>" target="_blank">
-							<?php echo (int) $this->item->jc_id; ?>
-						</a>
+						<label><?php echo JText::_('JSTATUS'); ?></label>
+						<?php echo JText::_('COM_TRACKER_STATUS_' . strtoupper($this->item->status_title)); ?>
 					</td>
-				</tr>
-				<?php endif; ?>
-				<tr>
-					<td><strong><?php echo JText::_('COM_TRACKER_HEADING_PRIORITY'); ?></strong></td>
-					<td>
+
+                    <td>
+						<label><?php echo JText::_('COM_TRACKER_HEADING_PRIORITY'); ?></label>
+
 						<?php if($this->item->priority == 1)
 						{
 							$status_class = 'badge-important';
@@ -58,29 +49,72 @@ defined('_JEXEC') or die;
 							$status_class = '';
 						}
 						?>
-						<span class="badge <?php echo $status_class; ?>">
+                        <span class="badge <?php echo $status_class; ?>">
 							<?php echo $this->item->priority; ?>
 						</span>
-					</td>
+                    </td>
 				</tr>
-				<?php if ($this->item->patch_url) : ?>
-				<tr>
-					<td><strong><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PATCH_URL'); ?></strong></td>
-					<td><a href="<?php echo $this->item->patch_url; ?>" target="_blank"><?php echo $this->item->patch_url; ?></a></td>
-				</tr>
-				<?php endif; ?>
-				<tr>
+
+				<tr class="issue-info-row">
+                    <td>
+                        <label><?php echo JText::_('COM_TRACKER_HEADING_GITHUB_ID'); ?></label>
+						<?php if ($this->item->gh_id) : ?>
+                        <a href="https://github.com/joomla/joomla-cms/issues/<?php echo $this->item->gh_id; ?>" target="_blank"><?php echo $this->item->gh_id; ?></a>
+						<?php endif; ?>
+                    </td>
 					<td>
-						<strong><?php echo JText::_('COM_TRACKER_HEADING_DATE_OPENED'); ?></strong>
+						<label><?php echo JText::_('COM_TRACKER_HEADING_JOOMLACODE_ID'); ?></strong></label>
+						<?php if ($this->item->jc_id) : ?>
+                        <a href="http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&tracker_item_id=<?php echo (int) $this->item->jc_id; ?>" target="_blank">
+							<?php echo (int) $this->item->jc_id; ?>
+                        </a>
+						<?php endif ?>
 					</td>
-					<td><?php echo JHtml::_('date', $this->item->opened, 'DATE_FORMAT_LC2'); ?></td>
 				</tr>
-				<?php if ($this->item->closed) : ?>
-					<tr>
-						<td><strong><?php echo JText::_('COM_TRACKER_HEADING_DATE_CLOSED'); ?></strong></td>
-						<td><?php echo JHtml::_('date', $this->item->closed_date, 'DATE_FORMAT_LC2'); ?></td>
-					</tr>
-				<?php endif; ?>
+
+
+				<tr class="issue-info-row">
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PATCH_URL'); ?></label>
+						<?php if ($this->item->patch_url) : ?>
+						<a href="<?php echo $this->item->patch_url; ?>" target="_blank"><?php echo $this->item->patch_url; ?></a>
+						<?php endif ?>
+					</td>
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DATABASE_TYPE') ?></label>
+						<?php if ($this->item->database_type) : ?>
+                        <?php echo $this->item->database_type; ?>
+						<?php endif ?>
+					</td>
+				</tr>
+
+				<tr class="issue-info-row">
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_HEADING_DATE_OPENED'); ?></label>
+                    	<?php echo JHtml::_('date', $this->item->opened, 'DATE_FORMAT_LC2'); ?>
+					</td>
+                    <td>
+                        <label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_WEBSERVER') ?></label>
+						<?php if ($this->item->webserver) : ?>
+                        <?php echo $this->item->webserver; ?>
+						<?php endif ?>
+                    </td>
+				</tr>
+
+				<tr class="issue-info-row">
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_HEADING_DATE_CLOSED'); ?></label>
+						<?php if ($this->item->closed_date) : ?>
+						<?php echo JHtml::_('date', $this->item->closed_date, 'DATE_FORMAT_LC2'); ?>
+						<?php endif; ?>
+					</td>
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_HEADING_PHP_VERSION'); ?></label>
+						<?php echo $this->item->php_version; ?>
+					</td>
+
+				</tr>
+
 				<?php if ($this->item->modified != '0000-00-00 00:00:00') : ?>
 					<tr>
 						<td><strong><?php echo JText::_('COM_TRACKER_HEADING_DATE_MODIFIED'); ?></strong></td>
@@ -114,13 +148,20 @@ defined('_JEXEC') or die;
 			</table>
 			<a href="index.php?option=com_tracker&view=issues"><?php echo JTEXT::_('COM_TRACKER_BACK_TO_ISSUES'); ?></a>
 		</div>
-		<div class="span7">
-			<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DESC'); ?></h4>
-			<div class="well well-small issue">
-				<p><?php echo $this->item->description; ?></p>
-			</div>
+		<div class="span3">
+
 		</div>
 	</div>
+
+	<div class="row-fluid">
+        <div class="span12">
+            <h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DESC'); ?></h4>
+            <div class="well well-small issue">
+                <p><?php echo $this->item->description; ?></p>
+            </div>
+        </div>
+	</div>
+
 	<?php if ($this->comments) : ?>
 	<div class="row-fluid">
 		<div class="span12">

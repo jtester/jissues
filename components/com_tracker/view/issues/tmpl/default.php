@@ -20,16 +20,12 @@ JHtml::_('formbehavior.chosen', 'select');
 
 $filterStatus = $this->state->get('filter.status')
 ?>
-<form action="<?php echo htmlspecialchars(JUri::getInstance()->toString()); ?>" method="post" name="adminForm" id="adminForm" class="form-inline form-search">
-	<div class="filters btn-toolbar clearfix">
-		<div class="filter-search btn-group pull-left input-append">
-			<label class="filter-search-lbl element-invisible" for="filter-search"><?php echo JText::_('COM_TRACKER_FILTER_SEARCH_DESCRIPTION'); ?></label>
-			<input type="text" class="search-query input-xlarge" name="filter-search" id="filter-search" value="<?php echo $this->escape($this->state->get('list.filter')); ?>" class="inputbox" onchange="document.adminForm.submit();" title="<?php echo JText::_('COM_TRACKER_FILTER_SEARCH_DESCRIPTION'); ?>" placeholder="<?php echo JText::_('COM_TRACKER_FILTER_SEARCH_DESCRIPTION'); ?>" />
-			<button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-		</div>
-		<div class="btn-group pull-left">
-			<button class="btn tip hasTooltip" type="button" onclick="jQuery('#filter-search').val('');document.adminForm.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-		</div>
+<form action="<?php echo htmlspecialchars(JUri::getInstance()->toString()); ?>" method="post" name="adminForm" id="adminForm" class="form-inline">
+	<div class="filters clearfix">
+        <div class="input-append">
+            <input type="text" class="input-xlarge" name="filter-search" id="appendedInputButtons" value="<?php echo $this->escape($this->state->get('list.filter')); ?>" onchange="document.adminForm.submit();" title="<?php echo JText::_('COM_TRACKER_FILTER_SEARCH_DESCRIPTION'); ?>" placeholder="<?php echo JText::_('COM_TRACKER_FILTER_SEARCH_DESCRIPTION'); ?>" /><button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button><button class="btn tip hasTooltip" type="button" onclick="jQuery('#filter-search').val('');document.adminForm.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+        </div>
+
 		<div class="btn-group pull-right">
 			<label for="status" class="element-invisible"><?php echo JText::_('COM_TRACKER_FILTER_STATUS'); ?></label>
 			<select name="status" id="filter-status" class="input-medium" onchange="document.adminForm.submit();">
