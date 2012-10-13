@@ -22,7 +22,7 @@ $doc->addStyleSheet('templates/bugtrap/css/template.css');
 $doc->addStyleSheet('templates/bugtrap/css/menus.css');
 
 // Load optional rtl Bootstrap css and Bootstrap bugfixes
-JHtmlBootstrap::loadCss($includeMaincss = false, $this->direction);
+JHtmlBootstrap::loadCss(false, $this->direction);
 
 ?>
 <!DOCTYPE html>
@@ -35,268 +35,253 @@ JHtmlBootstrap::loadCss($includeMaincss = false, $this->direction);
 	<![endif]-->
 </head>
 
-<body class="site fluid">
-	<div id="menuWrap">
-	<div id="menuWrapInner" class="container_12 clearfix">
-	<div id="menu" class="width">
-	<!--Begin Menu-->
-	<ul id="menu">
-	<li class="home_item"><a href="http://www.joomla.org/" class="drop"><span class="logo">Joomla!<span class="sup">®</span></span></a>
-		<!-- Begin Home Item -->
-		<div class="dropdown_2columns">
-			<!-- Begin 2 columns container -->
-			<div class="col_2">
-				<h2>Welcome to Joomla!</h2>
-			</div>
-			<div class="col_2">
-				<p>Joomla! is an award-winning open source CMS for building powerful websites.</p>
-			</div>
-			<div class="col_2">
-				<h2>Recent Joomla! News</h2>
-			</div>
-			<div class="col_2"> <img src="/templates/joomla12/images/menu/joomla.jpg" class="img_left imgshadow" width="70" height="70" alt="Joomla!">
-				<ul class="img_left">
-					<li><a href="http://www.joomla.org/announcements.html">Announcements</a></li>
-					<li><a href="http://community.joomla.org/blogs/community.html">Joomla! Blogs</a></li>
-					<li><a href="http://magazine.joomla.org/">Joomla! Magazine</a></li>
+<body class="site">
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container">
+			<!--Begin Menu-->
+				<ul id="menu">
+					<li class="home_item">
+						<a href="http://www.joomla.org/" class="drop">
+							<span class="logo">Joomla!<span class="sup">®</span></span>
+						</a>
+						<!-- Begin Home Item -->
+						<div class="dropdown_2columns">
+							<!-- Begin 2 columns container -->
+							<div class="col_2">
+								<h2>Welcome to Joomla!</h2>
+							</div>
+							<div class="col_2">
+								<p>Joomla! is an award-winning open source CMS for building powerful websites.</p>
+							</div>
+							<div class="col_2">
+								<h2>Recent Joomla! News</h2>
+							</div>
+							<div class="col_2"> <img src="http://developer.joomla.org/templates/joomla12/images/menu/joomla.jpg" class="img_left imgshadow" width="70" height="70" alt="Joomla!">
+								<ul class="img_left">
+									<li><a href="http://www.joomla.org/announcements.html">Announcements</a></li>
+									<li><a href="http://community.joomla.org/blogs/community.html">Joomla! Blogs</a></li>
+									<li><a href="http://magazine.joomla.org/">Joomla! Magazine</a></li>
+								</ul>
+							</div>
+							<div class="col_2">
+								<h2>Support Joomla!</h2>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li class="blue"><a href="http://shop.joomla.org/">Shop Joomla! Gear</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li class="blue"><a href="http://opensourcematters.org/support-joomla.html">Contribution</a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- End 2 columns container -->
+					</li>
+					<!-- End Home Item -->
+					<li>
+						<a href="http://www.joomla.org/about-joomla.html" class="drop">About</a>
+						<!-- Begin 5 columns Item -->
+						<div class="dropdown_4columns">
+							<!-- Begin 5 columns container -->
+							<div class="col_4">
+								<h2>What Is Joomla?</h2>
+								<p>Joomla is an award-winning content management system (CMS), which enables you to build Web sites and powerful online applications.<br><a href="http://www.joomla.org/about-joomla.html">Read more...</a></p>
+							</div>
+							<div class="col_2">
+								<h3>Joomla! for Business</h3>
+								<p>Joomla! is a extremely customizable and adaptable for Enterprise, SMBs, NPOs and beyond. <a href="http://www.joomla.org/core-features.html">Read more...</a></p>
+							</div>
+							<div class="col_2">
+								<h3>Joomla! for Developers</h3>
+								<p class="black_box">No matter what level of experience you hold, Joomla! has strengths to match; programmers, designers and end users alike!<a href="http://developer.joomla.org/">Read more...</a></p>
+							</div>
+							<div class="col_4">
+								<h2>Learn more about Joomla!</h2>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li><a href="http://www.joomla.org/about-joomla.html">The Software</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li><a href="http://www.joomla.org/about-joomla/the-project.html">The Project</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li><a href="http://www.joomla.org/about-joomla/the-project/leadership-team.html">The Leadership</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li><a href="http://opensourcematters.org/index.php">Open Source Matters</a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- End 5 columns container -->
+					</li>
+					<!-- End 5 columns Item -->
+					<li>
+						<a href="http://community.joomla.org/" class="drop">Community &amp; Support</a>
+						<!-- Begin 4 columns Item -->
+						<div class="dropdown_3columns">
+							<!-- Begin 4 columns container -->
+							<div class="col_1">
+								<h3>Connect!</h3>
+								<ul>
+									<li><a href="http://people.joomla.org/">Joomla! People Site</a></li>
+									<li><a href="http://events.joomla.org/">Joomla! Events</a></li>
+									<li><a href="http://ux.joomla.org/">Joomla! UX</a></li>
+									<li><a href="http://community.joomla.org/user-groups.html">Joomla! User Groups</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<h3>Support!</h3>
+								<ul>
+									<li><a href="http://forum.joomla.org/">Joomla! Forum</a></li>
+									<li><a href="http://docs.joomla.org/">Joomla! Documentation</a></li>
+									<li><a href="http://resources.joomla.org/">Joomla! Resources</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<h3>Read!</h3>
+								<ul>
+									<li><a href="http://magazine.joomla.org/">Joomla! Magazine</a></li>
+									<li><a href="http://community.joomla.org/connect.html">Joomla! Connect</a></li>
+									<li><a href="http://www.joomla.org/mailing-lists.html">Joomla! Mailing Lists</a></li>
+								</ul>
+							</div>
+							<div class="col_3">
+								<h2>Get involved with Joomla!</h2> <img src="http://developer.joomla.org/templates/joomla12/images/menu/joomla.jpg" alt="Joomla!" width="70" height="70" class="img_left imgshadow">
+								<p>Joomla is an open source project and contributions from the community are essential to its growth and success. Anyone can contribute on any level, even newcomers can contribute to Joomla. <a href="http://www.joomla.org/about-joomla/contribute-to-joomla.html">Read more...</a></p>
+							</div>
+						</div>
+						<!-- End 4 columns container -->
+					</li>
+					<!-- End 4 columns Item -->
+					<li>
+						<a href="http://extensions.joomla.org/" class="drop">Extend</a>
+						<!-- Begin 4 columns Item -->
+						<div class="dropdown_2columns">
+							<!-- Begin 4 columns container -->
+							<div class="col_1">
+								<h3>Directories</h3>
+								<ul>
+									<li><a href="http://extensions.joomla.org/">Extension Directory</a></li>
+									<li><a href="http://community.joomla.org/showcase/">Showcase Directory</a></li>
+									<li><a href="http://resources.joomla.org/">Resource Directory</a></li>
+									<li><a href="http://community.joomla.org/translations.html">Translations</a></li>
+									<li><a href="http://ideas.joomla.org/">Idea Pool</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<h3>Developers</h3>
+								<ul>
+									<li><a href="http://developer.joomla.org/">Developer Site</a></li>
+									<li><a href="http://docs.joomla.org/">Documentation</a></li>
+									<li><a href="http://docs.joomla.org/Bug_Squad">Joomla! Bug Squad</a></li>
+									<li><a href="http://api.joomla.org/">Joomla! API</a></li>
+									<li><a href="http://joomlacode.org/">JoomlaCode</a></li>
+									<li><a href="https://github.com/joomla/joomla-platform">Joomla! Platform</a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- End 4 columns container -->
+					</li>
+					<!-- End 4 columns Item -->
+					<li class="download">
+						<a href="http://www.joomla.org/download.html" class="drop">Download</a>
+						<!-- Begin 3 columns Item -->
+						<div class="dropdown_3columns">
+							<!-- Begin 3 columns container -->
+							<div class="col_3">
+								<h2>Download Joomla! 2.5</h2>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li class="orange"><a href="http://www.joomla.org/download.html">2.5 Full Package</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li><a href="http://joomlacode.org/gf/project/joomla/frs/?action=index">Update Packages</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li><a href="http://demo.joomla.org/">Demo Joomla! 2.5</a></li>
+								</ul>
+							</div>
+							<div class="col_3">
+								<h2>Download Joomla! 3.0 </h2>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li class="blue"><a href="http://www.joomla.org/download.html#j3">3.0 Full Package</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li><a href="http://joomlacode.org/gf/project/joomla/frs/?action=index">Update Packages</a></li>
+								</ul>
+							</div>
+							<div class="col_1">
+								<ul class="greybox">
+									<li><a href="http://demo.joomla.org/">Demo Joomla! 3.0</a></li>
+								</ul>
+							</div>
+							<div class="col_3">
+								<h2>Getting Started with Joomla!</h2>
+							</div>
+							<div class="col_3">
+								<ul class="nowrap">
+									<li><a href="http://docs.joomla.org/Beginners">Beginner Documentation</a></li>
+									<li><a href="http://www.joomla.org/technical-requirements.html">Technical Requirements</a></li>
+									<li><a href="http://opensourcematters.org/index.php?option=com_content&amp;view=article&amp;id=56&amp;Itemid=155">License &amp; Usage</a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- End 3 columns container -->
+					</li>
+					<li class="menu_right language">
+						<a href="http://community.joomla.org/translations.html" class="drop language_link">Internationalization</a>
+						<!-- Begin 3 columns Item -->
+						<div class="dropdown_1column align_right">
+							<!-- Begin 3 columns container -->
+							<div class="col_1">
+								<h2>Internationalization</h2>
+							</div>
+							<div class="col_1">
+								<ul class="nowrap">
+									<li><a href="http://community.joomla.org/translations.html">Translations</a></li>
+									<li><a href="http://multilingual-joomla-demo.cloudaccess.net/">Multilingual Demo</a></li>
+									<li><a href="http://docs.joomla.org/Translations_Working_Group">Translation Working Group</a></li>
+									<li><a href="http://forum.joomla.org/viewforum.php?f=11">Translations Forum</a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- End 3 columns container -->
+					</li>
+					<!-- End 3 columns Item -->
+					<li class="menu_right">
+					<?php if ($user->id) :  ?>
+						<a href="<?php echo JRoute::_('index.php?option=com_users') ?>"><?php echo $user->name; ?></a>
+					<?php else : ?>
+						<a href="<?php echo JRoute::_('index.php?option=com_users') ?>">Login</a>
+					<?php endif; ?>
+					</li>
 				</ul>
-			</div>
-			<div class="col_2">
-				<h2>Support Joomla!</h2>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li class="blue"><a href="http://shop.joomla.org/">Shop Joomla! Gear</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li class="blue"><a href="http://opensourcematters.org/support-joomla.html">Contribution</a></li>
-				</ul>
+			<!--End Menu-->
 			</div>
 		</div>
-		<!-- End 2 columns container -->
-	</li>
-	<li>
-        <a href="index.php" class="drop">Tracker</a>
-        <!-- Begin 5 columns Item -->
-        <div class="dropdown_4columns">
-            <!-- Begin 5 columns container -->
-            <div class="col_4">
-                <h2>What is Tracker</h2>
-                <p>[Insert some description text here ...]</p>
-            </div>
-            <div class="col_2">
-                <h3>For end-user</h3>
-                <p>[Insert some help text, links that help end users to submit bugs etc...]</p>
-            </div>
-            <div class="col_2">
-                <h3>For developers</h3>
-                <p class="black_box">Insert some help text, links that help developers who want to contribute: testing, coding</p>
-            </div>
-        </div>
-        <!-- End 5 columns container -->
-	</li>
-	<!-- End Home Item -->
-	<li><a href="http://www.joomla.org/about-joomla.html" class="drop">About</a>
-		<!-- Begin 5 columns Item -->
-		<div class="dropdown_4columns">
-			<!-- Begin 5 columns container -->
-			<div class="col_4">
-				<h2>What Is Joomla?</h2>
-				<p>Joomla is an award-winning content management system (CMS), which enables you to build Web sites and powerful online applications.<br><a href="http://www.joomla.org/about-joomla.html">Read more...</a></p>
-			</div>
-			<div class="col_2">
-				<h3>Joomla! for Business</h3>
-				<p>Joomla! is a extremely customizable and adaptable for Enterprise, SMBs, NPOs and beyond. <a href="http://www.joomla.org/core-features.html">Read more...</a></p>
-			</div>
-			<div class="col_2">
-				<h3>Joomla! for Developers</h3>
-				<p class="black_box">No matter what level of experience you hold, Joomla! has strengths to match; programmers, designers and end users alike!<a href="http://developer.joomla.org/">Read more...</a></p>
-			</div>
-			<div class="col_4">
-				<h2>Learn more about Joomla!</h2>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li><a href="http://www.joomla.org/about-joomla.html">The Software</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li><a href="http://www.joomla.org/about-joomla/the-project.html">The Project</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li><a href="http://www.joomla.org/about-joomla/the-project/leadership-team.html">The Leadership</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li><a href="http://opensourcematters.org/index.php">Open Source Matters</a></li>
-				</ul>
-			</div>
-		</div>
-		<!-- End 5 columns container -->
-	</li>
-	<!-- End 5 columns Item -->
-	<li><a href="http://community.joomla.org/" class="drop">Community &amp; Support</a>
-		<!-- Begin 4 columns Item -->
-		<div class="dropdown_3columns"><!-- Begin 4 columns container -->
-			<div class="col_1">
-				<h3>Connect!</h3>
-				<ul>
-					<li><a href="http://people.joomla.org/">Joomla! People Site</a></li>
-					<li><a href="http://events.joomla.org/">Joomla! Events</a></li>
-					<li><a href="http://ux.joomla.org/">Joomla! UX</a></li>
-					<li><a href="http://community.joomla.org/user-groups.html">Joomla! User Groups</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<h3>Support!</h3>
-				<ul>
-					<li><a href="http://forum.joomla.org/">Joomla! Forum</a></li>
-					<li><a href="http://docs.joomla.org/">Joomla! Documentation</a></li>
-					<li><a href="http://resources.joomla.org/">Joomla! Resources</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<h3>Read!</h3>
-				<ul>
-					<li><a href="http://magazine.joomla.org/">Joomla! Magazine</a></li>
-					<li><a href="http://community.joomla.org/connect.html">Joomla! Connect</a></li>
-					<li><a href="http://www.joomla.org/mailing-lists.html">Joomla! Mailing Lists</a></li>
-				</ul>
-			</div>
-			<div class="col_3">
-				<h2>Get involved with Joomla!</h2> <img src="/templates/joomla12/images/menu/joomla.jpg" alt="Joomla!" width="70" height="70" class="img_left imgshadow">
-				<p>Joomla is an open source project and contributions from the community are essential to its growth and success. Anyone can contribute on any level, even newcomers can contribute to Joomla. <a href="http://www.joomla.org/about-joomla/contribute-to-joomla.html">Read more...</a></p>
-			</div>
-		</div>
-		<!-- End 4 columns container -->
-	</li>
-	<!-- End 4 columns Item -->
-	<li><a href="http://extensions.joomla.org/" class="drop">Extend</a>
-		<!-- Begin 4 columns Item -->
-		<div class="dropdown_2columns">
-			<!-- Begin 4 columns container -->
-			<div class="col_1">
-				<h3>Directories</h3>
-				<ul>
-					<li><a href="http://extensions.joomla.org/">Extension Directory</a></li>
-					<li><a href="http://community.joomla.org/showcase/">Showcase Directory</a></li>
-					<li><a href="http://resources.joomla.org/">Resource Directory</a></li>
-					<li><a href="http://community.joomla.org/translations.html">Translations</a></li>
-					<li><a href="http://ideas.joomla.org/">Idea Pool</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<h3>Developers</h3>
-				<ul>
-					<li><a href="http://developer.joomla.org/">Developer Site</a></li>
-					<li><a href="http://docs.joomla.org/">Documentation</a></li>
-					<li><a href="http://docs.joomla.org/Bug_Squad">Joomla! Bug Squad</a></li>
-					<li><a href="http://api.joomla.org/">Joomla! API</a></li>
-					<li><a href="http://joomlacode.org/">JoomlaCode</a></li>
-					<li><a href="https://github.com/joomla/joomla-platform">Joomla! Platform</a></li>
-				</ul>
-			</div>
-		</div>
-		<!-- End 4 columns container -->
-	</li>
-	<!-- End 4 columns Item -->
-	<li class="download"><a href="http://www.joomla.org/download.html" class="drop">Download</a>
-		<!-- Begin 3 columns Item -->
-		<div class="dropdown_3columns">
-			<!-- Begin 3 columns container -->
-			<div class="col_3">
-				<h2>Download Joomla! 2.5</h2>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li class="orange"><a href="http://www.joomla.org/download.html">2.5 Full Package</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li><a href="http://joomlacode.org/gf/project/joomla/frs/?action=index">Update Packages</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li><a href="http://demo.joomla.org/">Demo Joomla! 2.5</a></li>
-				</ul>
-			</div>
-			<div class="col_3">
-				<h2>Download Joomla! 3.0 </h2>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li class="blue"><a href="http://www.joomla.org/download.html#j3">3.0 Full Package</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li><a href="http://joomlacode.org/gf/project/joomla/frs/?action=index">Update Packages</a></li>
-				</ul>
-			</div>
-			<div class="col_1">
-				<ul class="greybox">
-					<li><a href="http://demo.joomla.org/">Demo Joomla! 3.0</a></li>
-				</ul>
-			</div>
-			<div class="col_3">
-				<h2>Getting Started with Joomla!</h2>
-			</div>
-			<div class="col_3">
-				<ul class="nowrap">
-					<li><a href="http://docs.joomla.org/Beginners">Beginner Documentation</a></li>
-					<li><a href="http://www.joomla.org/technical-requirements.html">Technical Requirements</a></li>
-					<li><a href="http://opensourcematters.org/index.php?option=com_content&amp;view=article&amp;id=56&amp;Itemid=155">License &amp; Usage</a></li>
-				</ul>
-			</div>
-		</div>
-		<!-- End 3 columns container -->
-	</li>
-	<li class="menu_right language"><a href="http://community.joomla.org/translations.html" class="drop language_link">Internationalization</a><!-- Begin 3 columns Item -->
-
-		<div class="dropdown_1column align_right"><!-- Begin 3 columns container -->
-
-			<div class="col_1">
-				<h2>Internationalization
-				</h2>
-			</div>
-
-			<div class="col_1">
-				<ul class="nowrap">
-					<li><a href="http://community.joomla.org/translations.html">Translations</a></li>
-					<li><a href="http://multilingual-joomla-demo.cloudaccess.net/">Multilingual Demo</a></li>
-					<li><a href="http://docs.joomla.org/Translations_Working_Group">Translation Working Group</a></li>
-					<li><a href="http://forum.joomla.org/viewforum.php?f=11">Translations Forum</a></li>
-				</ul>
-			</div>
-
-		</div><!-- End 3 columns container -->
-
-	</li><!-- End 3 columns Item -->
-
-	<?php if ($user->id) :  ?>
-	<li class="menu_right dropdown">
-		<a class="dropdown-toggle" data-toggle="dropdown" href="<?php echo JRoute::_('index.php?option=com_users') ?>"><?php echo $user->name; ?> <b class="caret"></b></a>
-	</li>
-	<?php else : ?>
-	<li class="menu_right dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="<?php echo JRoute::_('index.php?option=com_users') ?>">Login</a>
-	<?php endif; ?>
-
-	</ul>
-	<!--End Menu-->
-	</div>
-	</div>
 	</div>
 	<!-- Body -->
 	<div class="body">
-		<div class="container-fluid">
+		<div class="container">
 			<!-- Header -->
 			<div class="header">
 				<div class="header-inner clearfix">

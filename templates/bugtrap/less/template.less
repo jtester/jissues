@@ -30,7 +30,7 @@
 
 // Components: Nav
 @import "../../../media/jui/less/navs.less";
-@import "../../../media/jui/less/navbar.less";
+@import "navbar.less"; // Overridden Navbar
 @import "../../../media/jui/less/breadcrumbs.less";
 @import "../../../media/jui/less/pagination.less";
 @import "../../../media/jui/less/pager.less";
@@ -83,12 +83,11 @@
 @import "icomoon.less";
 
 /* Site Body Styles */
-body.site{
-	border-top:3px solid #0088cc;
-	background-color: #f4f6f7;
+body.site {
+	background-color: #EDEDED;
 }
 body.site.fluid{
-	background-color: #ffffff;
+	background-color: #EDEDED;
 }
 .thumbnail {
 	margin-bottom:9px;
@@ -280,18 +279,18 @@ h6 { font-size: 12px; line-height: 14px; }
 		-webkit-background-clip: padding-box;
 		 -moz-background-clip: padding;
 		      background-clip: padding-box;
-		
+
 		// Aligns the dropdown menu to right
 		&.pull-right {
 			right: 0;
 			left: auto;
 		}
-		
+
 		// Dividers (basically an hr) within the dropdown
 		.divider {
 			.nav-divider(@dropdownDividerTop, @dropdownDividerBottom);
 		}
-		
+
 		// Links within the dropdown menu
 		a {
 			display: block;
@@ -487,4 +486,10 @@ table tr.issue-info-row td label {
     width: 120px;
     float: left;
     font-weight: bold;
+}
+.sup {
+	font-size: 10px;
+	position: relative;
+	top: -8px;
+	left: 2px;
 }

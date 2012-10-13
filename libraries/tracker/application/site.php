@@ -93,7 +93,7 @@ final class JApplicationSite extends JApplicationTracker
 	{
 		// Build the object
 		$template = new stdClass;
-		$template->template = 'protostar';
+		$template->template = 'bugtrap';
 		$template->params   = new JRegistry;
 
 		if ($params)
