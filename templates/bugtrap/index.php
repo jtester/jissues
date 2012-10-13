@@ -267,7 +267,45 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 						<!-- End 3 columns container -->
 					</li>
 					<!-- End 3 columns Item -->
-					<li class="menu_right">
+				</ul>
+			<!--End Menu-->
+			</div>
+		</div>
+	</div>
+	<!-- Header -->
+	<div id="header">
+		<div class="container">
+			<div class="row">
+				<div id="title" class="span12 clearfix">
+					<div class="row">
+						<div class="span7">
+							<h1 title="Joomla! CMS Issue Tracker">Joomla! CMS Issue Tracker</h1>
+						</div>
+						<div class="span5 hidden-phone">
+							<div class="downdemo pull-right">
+								<p class="download-16">
+									<a href="http://www.joomla.org/download.html">Download</a>
+								</p>
+								<p class="demo">
+									<a href="http://demo.joomla.org">Demo</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Site Menu -->
+	<div class="navbar navbar-inverse">
+		<div class="navbar-inner">
+			<div id="inset" class="container">
+			<!--Begin Menu-->
+				<ul class="nav">
+					<li><a href="<?php echo JRoute::_('index.php'); ?>">Tracker</a></li>
+				</ul>
+				<ul class="nav pull-right">
+					<li>
 					<?php if ($user->id) :  ?>
 						<a href="<?php echo JRoute::_('index.php?option=com_users') ?>"><?php echo $user->name; ?></a>
 					<?php else : ?>
@@ -282,14 +320,6 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 	<!-- Body -->
 	<div class="body">
 		<div class="container">
-			<!-- Header -->
-			<div class="header">
-				<div class="header-inner clearfix">
-					<div class="btn-group pull-right">
-
-					</div>
-				</div>
-			</div>
 			<div class="row-fluid">
 				<div id="content" class="span12">
 					<!-- Begin Content -->

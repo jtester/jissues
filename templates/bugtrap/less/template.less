@@ -82,13 +82,108 @@
 // Icon Font
 @import "icomoon.less";
 
+/* Joomla.org comparitive styling */
+body.site,
+body.site.fluid {
+	background-color: #1A3867;
+}
+
+.sup {
+	font-size: 10px;
+	position: relative;
+	top: -8px;
+	left: 2px;
+}
+
+div#header {
+	background: url(http://cdn.joomla.org/jorgm/images/16/t/bg.jpg) no-repeat 50% 100%;
+	border-top: 1px solid #12619A;
+	padding: 15px 0;
+}
+
+div#header #title {
+	color: #fff;
+	text-shadow: 1px 1px 1px black;
+}
+
+div#header #title h1 {
+	font-size: 28px;
+	font-weight: bold;
+	margin: 0;
+}
+
+.downdemo p {
+	display: inline;
+	margin: 10px;
+}
+
+.downdemo a {
+	font-family: Helvetica, arial, sans-serif;
+	font-size: 22px;
+	font-weight: bold;
+	text-align: center;
+	.border-radius(5px);
+	padding: 8px 30px 6px 30px;
+	line-height: 80px;
+}
+
+div#header #title .downdemo a {
+	line-height: 30px;
+	padding: 6px 26px 5px 26px;
+	font-size: 18px;
+}
+
+.download-16 a, sup.new, sup.popular {
+	color: #944004;
+	border-top: 1px solid #FFE8AE;
+	border-bottom: 1px solid #8E510F;
+	#gradient > .vertical(#FFCA41, #FD8F19);
+	.box-shadow(0 1px 0 #608AAE);
+	text-shadow: 0 1px 0 #FECE86;
+}
+
+.download-16 a:hover {
+	color: #944004;
+	#gradient > .vertical(#FFEF71, #FD8F19);
+	text-decoration: none;
+}
+
+.demo a {
+	color: #122943;
+	border-top: 1px solid #9DCDEA;
+	border-bottom: 1px solid #1E3B59;
+	#gradient > .vertical(#3F98DF, #2D5988);
+	.box-shadow(0 1px 0 #426482);
+	text-shadow: 0 1px 0 #84A7C4;
+}
+
+.demo a:hover {
+	color: #122943;
+	#gradient > .vertical(#6BB4DF, #2D5988);
+	text-decoration: none;
+}
+
+#inset a {
+	font-size: 15px;
+	text-shadow: 0px -1px 0px #142849;
+	margin: 0 6px;
+}
+
+.body {
+	background-color: #EDEDED;
+}
+
+.body .container {
+	background-color: #fff;
+	padding: 20px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	.box-shadow(0px 0px 6px rgba(0, 0, 0, 0.05));
+	-moz-box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
+	-webkit-box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
+	box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
+}
+
 /* Site Body Styles */
-body.site {
-	background-color: #EDEDED;
-}
-body.site.fluid{
-	background-color: #EDEDED;
-}
 .thumbnail {
 	margin-bottom:9px;
 }
@@ -143,17 +238,6 @@ body.site.fluid{
 /* Container */
 .container{
 	max-width: 960px;
-}
-.body .container{
-	background-color: #fff;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	padding: 20px;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
-	-webkit-box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
-	box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
 }
 /* Wells */
 .well .page-header{
@@ -486,10 +570,4 @@ table tr.issue-info-row td label {
     width: 120px;
     float: left;
     font-weight: bold;
-}
-.sup {
-	font-size: 10px;
-	position: relative;
-	top: -8px;
-	left: 2px;
 }

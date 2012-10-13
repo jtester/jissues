@@ -9,7 +9,6 @@
 // Base class and wrapper
 .navbar {
   overflow: visible;
-  margin-bottom: @baseLineHeight;
   color: @navbarText;
 
   // Fix for IE7's bad z-indexing so dropdowns don't appear below content that follows the navbar
@@ -375,8 +374,9 @@
   color: @navbarInverseText;
 
   .navbar-inner {
-    #gradient > .vertical(@navbarInverseBackgroundHighlight, @navbarInverseBackground);
-    border-color: @navbarInverseBorder;
+    background: url(http://developer.joomla.org/templates/joomla12/images/linear.jpg) repeat-x;
+    border-top: 1px solid #1A96EE;
+    height: 29px;
   }
 
   .brand,
