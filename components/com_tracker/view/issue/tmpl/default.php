@@ -9,14 +9,18 @@
 defined('_JEXEC') or die;
 ?>
 
+<form method="post" name="adminForm" id="adminForm">
 <div class="container-fluid">
-	<div class="row-fluild">
-		<div class="span12">
-            <h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
-		</div>
+    <div class="row-fluid">
+        <div class="pull-right btn-group">
+            <a class="btn btn-small" href="index.php?option=com_tracker&view=issues"><?php echo JTEXT::_('Cancel'); ?></a>
+            <input type="submit" class="btn btn-success" value="Save" />
+	    </div>
 	</div>
-	<div class="row-fluid">
-		<div class="span9">
+    <h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
+
+    <div class="row-fluid">
+		<div class="span5">
 			<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_INFO'); ?></h4>
 			<table class="table">
 				<tr class="issue-info-row">
@@ -71,21 +75,14 @@ defined('_JEXEC') or die;
 						<?php endif ?>
 					</td>
 				</tr>
-
-
-				<tr class="issue-info-row">
-					<td>
-						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PATCH_URL'); ?></label>
-						<?php if ($this->item->patch_url) : ?>
-						<a href="<?php echo $this->item->patch_url; ?>" target="_blank"><?php echo $this->item->patch_url; ?></a>
-						<?php endif ?>
-					</td>
-					<td>
-						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DATABASE_TYPE') ?></label>
-						<?php if ($this->item->database_type) : ?>
-                        <?php echo $this->item->database_type; ?>
-						<?php endif ?>
-					</td>
+				<tr>
+					<th><?= JText::_('Category') ?></th>
+					<td><?= $this->categoryList ?></td>
+				</tr>
+				<?php if ($this->item->patch_url) : ?>
+				<tr>
+					<td><strong><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PATCH_URL'); ?></strong></td>
+					<td><a href="<?php echo $this->item->patch_url; ?>" target="_blank"><?php echo $this->item->patch_url; ?></a></td>
 				</tr>
 
 				<tr class="issue-info-row">
@@ -146,7 +143,9 @@ defined('_JEXEC') or die;
 				</tr>
 				<?php endif; ?>
 			</table>
-			<a href="index.php?option=com_tracker&view=issues"><?php echo JTEXT::_('COM_TRACKER_BACK_TO_ISSUES'); ?></a>
+
+			<?php include $this->getPath('fields'); ?>
+
 		</div>
 		<div class="span3">
 
@@ -180,3 +179,6 @@ defined('_JEXEC') or die;
 	<?php endforeach; ?>
 	<?php endif; ?>
 </div>
+	<input type="hidden" name="id" value="<?= $this->item->id ?>" />
+	<input type="hidden" name="task" value="save" />
+</form>
