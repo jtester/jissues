@@ -8,41 +8,27 @@
 
 defined('_JEXEC') or die;
 
+// Get the additional fields
+$browser   = $this->fields->get('browser');
+$database  = $this->fields->get('database');
+$php       = $this->fields->get('php_version');
+$webserver = $this->fields->get('web_server');
 ?>
 
-<form method="post" name="adminForm" id="adminForm">
 <div class="container-fluid">
-    <div class="row-fluid">
-        <div class="pull-right btn-group">
-            <a class="btn btn-small" href="index.php?option=com_tracker&view=issues"><?php echo JTEXT::_('Cancel'); ?></a>
-            <input type="submit" class="btn btn-success" value="Save" />
-	    </div>
-	</div>
     <h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
 
     <div class="row-fluid">
-		<div class="span5">
+		<div class="span9">
 			<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_INFO'); ?></h4>
 			<table class="table">
-
-				<tr class="issue-info-row">
-					<td>
-						<label><?php echo JText::_('COM_TRACKER_HEADING_SUBMITTER'); ?></label>
-
-					</td>
-                    <td>
-                        <label><?= JText::_('Category') ?></label>
-                    	<?= $this->categoryList ?>
-                    </td>
-				</tr>
-
 				<tr class="issue-info-row">
 					<td>
 						<label><?php echo JText::_('JSTATUS'); ?></label>
 						<?php echo JText::_('COM_TRACKER_STATUS_' . strtoupper($this->item->status_title)); ?>
 					</td>
 					<td>
-                        <label><?php echo JText::_('COM_TRACKER_HEADING_PRIORITY'); ?></label>
+	    	    	    <label><?php echo JText::_('COM_TRACKER_HEADING_PRIORITY'); ?></label>
 						<?php if($this->item->priority == 1)
 						{
 							$status_class = 'badge-important';
@@ -64,46 +50,41 @@ defined('_JEXEC') or die;
 							$status_class = '';
 						}
 						?>
-                        <span class="badge <?php echo $status_class; ?>">
+	    	    	    <span class="badge <?php echo $status_class; ?>">
 							<?php echo $this->item->priority; ?>
 						</span>
-                    </td>
+	    	    	</td>
 				</tr>
-
 				<tr class="issue-info-row">
-                    <td>
-                        <label><?php echo JText::_('COM_TRACKER_HEADING_GITHUB_ID'); ?></label>
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_HEADING_GITHUB_ID'); ?></label>
 						<?php if ($this->item->gh_id) : ?>
-                        <a href="https://github.com/joomla/joomla-cms/issues/<?php echo $this->item->gh_id; ?>" target="_blank"><?php echo $this->item->gh_id; ?></a>
+						<a href="https://github.com/joomla/joomla-cms/issues/<?php echo $this->item->gh_id; ?>" target="_blank"><?php echo $this->item->gh_id; ?></a>
 						<?php endif; ?>
-                    </td>
+					</td>
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_HEADING_JOOMLACODE_ID'); ?></strong></label>
 						<?php if ($this->item->jc_id) : ?>
                         <a href="http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&tracker_item_id=<?php echo (int) $this->item->jc_id; ?>" target="_blank">
 							<?php echo (int) $this->item->jc_id; ?>
                         </a>
-						<?php endif ?>
+						<?php endif; ?>
 					</td>
 				</tr>
-
 				<tr class="issue-info-row">
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PATCH_URL'); ?></label>
 						<?php if ($this->item->patch_url) : ?>
 						<a href="<?php echo $this->item->patch_url; ?>" target="_blank"><?php echo $this->item->patch_url; ?></a>
-						<?php endif ?>
+						<?php endif; ?>
 					</td>
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DATABASE_TYPE') ?></label>
-						<?php
-						if ($this->item->database_type) :
-                        	echo $this->item->database_type;
-						endif
-						?>
+						<?php if ($database) : ?>
+                        	<?php echo $this->item->database_type; ?>
+						<?php endif; ?>
 					</td>
 				</tr>
-
 				<tr class="issue-info-row">
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_HEADING_DATE_OPENED'); ?></label>
@@ -111,91 +92,53 @@ defined('_JEXEC') or die;
 					</td>
                     <td>
                         <label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_WEBSERVER') ?></label>
-						<?php
-						if ($this->item->webserver) :
-                        	echo $this->item->webserver;
-						endif
-						?>
+						<?php if ($webserver) : ?>
+                        	<?php echo $this->item->webserver; ?>
+						<?php endif; ?>
                     </td>
 				</tr>
-
 				<tr class="issue-info-row">
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_HEADING_DATE_CLOSED'); ?></label>
-						<?php
-						if ($this->item->closed_date) :
-							echo JHtml::_('date', $this->item->closed_date, 'DATE_FORMAT_LC2');
-						endif;
-						?>
+						<?php if ($this->item->closed) : ?>
+							<?php echo JHtml::_('date', $this->item->closed_date, 'DATE_FORMAT_LC2'); ?>
+						<?php endif; ?>
 					</td>
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_HEADING_PHP_VERSION'); ?></label>
-						<?php
-						if ($this->item->php_version) :
-							echo $this->item->php_version;
-						endif;
-						?>
+						<?php if ($php) : ?>
+							<?php echo $this->item->php_version; ?>
+						<?php endif; ?>
 					</td>
 				</tr>
-
 				<tr class="issue-info-row">
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_HEADING_LAST_MODIFIED'); ?></label>
-						<?php
-						if ($this->item->modified != '0000-00-00 00:00:00') :
-							echo JHtml::_('date', $this->item->modified, 'DATE_FORMAT_LC2');
-						endif;
-						?>
+						<?php if ($this->item->modified != '0000-00-00 00:00:00') : ?>
+							<?php echo JHtml::_('date', $this->item->modified, 'DATE_FORMAT_LC2'); ?>
+						<?php endif; ?>
 					</td>
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DATABASE_TYPE'); ?></label>
-						<?php
-						if ($this->item->database_type):
-							echo $this->item->database_type;
-						endif
-						?>
+						<?php if ($database) : ?>
+							<?php echo $database; ?>
+						<?php endif; ?>
 					</td>
 				</tr>
-
-				<tr class="issue-info-row">
-					<td>
-						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_WEBSERVER'); ?></label>
-						<?php
-						if ($this->item->webserver) :
-							echo $this->item->webserver;
-						endif;
-						?>
-					</td>
-                    <td>
-                        <label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PHP_VERISON'); ?></label>
-						<?php
-						if ($this->item->php_version) :
-							echo $this->item->php_version;
-						endif;
-						?>
-                    </td>
-				</tr>
-
 				<tr class="issue-info-row">
                     <td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_BROWSER'); ?></label>
-						<?php
-						if ($this->item->browser) :
-							echo $this->item->browser;
-						endif;
-						?>
+						<?php if ($this->item->browser) : ?>
+							<?php echo $this->item->browser; ?>
+						<?php endif; ?>
 					</td>
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_SUCCESSFUL_TEST_COUNT') ?></label>
-
 					</td>
 				</tr>
-
 			</table>
-
-			<?php include $this->getPath('fields'); ?>
 		</div>
-		<div class="span3">
+		<div class="span3 pull-right">
             <h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_INVOLVED_PEOPLE'); ?></h4>
         	<ul>
 				<?php foreach ($this->involvedPeople as $people) : ?>
@@ -252,6 +195,3 @@ defined('_JEXEC') or die;
 	<?php endforeach; ?>
 	<?php endif; ?>
 </div>
-	<input type="hidden" name="id" value="<?= $this->item->id ?>" />
-	<input type="hidden" name="task" value="save" />
-</form>

@@ -72,9 +72,6 @@ class TrackerModelIssue extends JModelDatabase
 		$query->select('s.status AS status_title, s.closed AS closed');
 		$query->join('LEFT', '#__status AS s ON a.status = s.id');
 
-		$query->select(('c.title AS category'));
-		$query->leftJoin('#__categories AS c ON a.catid = c.id');
-
 		/*
 		 * Join over the selects table
 		 */

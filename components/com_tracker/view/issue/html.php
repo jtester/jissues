@@ -26,11 +26,13 @@ class TrackerViewIssueHtml extends JViewHtml
 	 */
 	protected $model;
 
+	/**
+	 * Object containing the additional field data
+	 *
+	 * @var    JRegistry
+	 * @since  1.0
+	 */
 	protected $fields = array();
-
-	protected $fieldList = array();
-
-	protected $categoryList = '';
 
 	/**
 	 * Method to render the view.
@@ -52,41 +54,6 @@ class TrackerViewIssueHtml extends JViewHtml
 		$this->comments = $this->model->getComments($id);
 		$this->fields   = $this->item->fields;
 		$this->involvedPeople = $this->model->getInvolvedPeople($id);
-
-		// Categories
-
-		$section = 'com_tracker.' . $this->item->project_id . '.categories';
-
-		$this->categoryList = JHtmlProjects::items($section)
-			? JHtmlProjects::select($section, 'catid', $this->item->catid, 'N/A', '')
-			: JHtmlProjects::select('com_tracker.categories', 'catid', $this->item->catid, 'N/A', '');
-
-		// Fields
-
-		$this->fields = JHtmlProjects::items('com_tracker.' . $this->item->project_id . '.fields');
-
-		if (0 == count($this->fields))
-		{
-			$this->fields = JHtmlProjects::items('com_tracker.fields');
-		}
-
-		foreach ($this->fields as $field)
-		{
-			// Project fields
-			$this->fieldList[$field->alias] = JHtmlProjects::select(
-				'com_tracker.' . $this->item->project_id . '.fields.' . $field->id,
-				$field->id, $this->item->fields->get($field->id), 'N/A', ''
-			);
-
-			// Use global fields if no project fields are set.
-			if ('' == $this->fieldList[$field->alias])
-			{
-				$this->fieldList[$field->alias] = JHtmlProjects::select(
-					'com_tracker.fields.' . $field->id,
-					$field->id, $this->item->fields->get($field->id), 'N/A', ''
-				);
-			}
-		}
 
 		return parent::render();
 	}
