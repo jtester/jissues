@@ -46,6 +46,17 @@ class TrackerModelIssues extends JModelTrackerlist
 		$query->select('s.status AS status_title, s.closed AS closed_status');
 		$query->join('LEFT', '#__status AS s ON a.status = s.id');
 
+		// Join over the category
+		$query->select('c.title AS category');
+		$query->leftJoin('#__categories AS c ON a.catid = c.id');
+
+		$filter = $this->state->get('filter.project');
+
+		if ($filter)
+		{
+			$query->where($db->quoteName('a.project_id') . ' = ' . (int) $filter);
+		}
+
 		$filter = $this->state->get('list.filter');
 
 		if ($filter)
@@ -73,6 +84,39 @@ class TrackerModelIssues extends JModelTrackerlist
 	}
 
 	/**
+	 * Returns a record count for the query
+	 *
+	 * @param   string  $query  The query.
+	 *
+	 * @return  integer  Number of rows for query
+	 *
+	 * @since   1.0
+	 */
+	protected function _getListCount($query)
+	{
+		if ($query instanceof JDatabaseQuery)
+		{
+			// Create COUNT(*) query to allow database engine to optimize the query.
+			$query = clone $query;
+			$query->clear('select')->clear('order')->select('COUNT(*)');
+			$this->db->setQuery($query);
+
+			return (int) $this->db->loadResult();
+		}
+		else
+		{
+			/* Performance of this query is very bad as it forces database engine to go
+			 * through all items in the database. If you don't use JDatabaseQuery object,
+			 * you should override this function in your model.
+			 */
+			$this->db->setQuery($query);
+			$this->db->execute();
+
+			return $this->db->getNumRows();
+		}
+	}
+
+	/**
 	 * Method to get a store id based on the model configuration state.
 	 *
 	 * This is necessary because the model is used by the component and
@@ -96,39 +140,40 @@ class TrackerModelIssues extends JModelTrackerlist
 	}
 
 	/**
-	 * Method to auto-populate the model state.
+	 * Load the model state.
 	 *
-	 * @param   string  $ordering   An optional ordering field.
-	 * @param   string  $direction  An optional direction (asc|desc).
-	 *
-	 * @return  void
+	 * @return  JRegistry  The state object.
 	 *
 	 * @since   1.0
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function loadState()
 	{
+		$this->state = new JRegistry;
+
 		$app = JFactory::getApplication();
+		$input = JFactory::getApplication()->input;
 
-		$orderCol = $app->input->get('filter_order', 'a.id');
-		$this->state->set('list.ordering', $orderCol);
+		$fields = new JRegistry($input->get('fields', array(), 'array'));
 
-		$listOrder = $app->input->get('filter_order_Dir', 'ASC');
+		$this->state->set('filter.project', (int) $fields->get('project'));
+
+		$this->state->set('list.ordering', $input->get('filter_order', 'a.id'));
+
+		$listOrder = $input->get('filter_order_Dir', 'ASC');
 		if (!in_array(strtoupper($listOrder), array('ASC', 'DESC', '')))
 		{
 			$listOrder = 'ASC';
 		}
 		$this->state->set('list.direction', $listOrder);
 
-		$priority = $app->input->get('priority', 3, 'uint');
-		$this->state->set('filter.priority', $priority);
+		$this->state->set('filter.priority', $input->getUint('priority', 3));
 
-		$status = $app->input->get('status', 0, 'uint');
-		$this->state->set('filter.status', $status);
+		$this->state->set('filter.status', $input->getUint('status'));
 
 		// Optional filter text
-		$this->state->set('list.filter', $app->input->get('filter-search', '', 'string'));
+		$this->state->set('list.filter', $input->getString('filter-search'));
 
 		// List state information.
-		parent::populateState('a.id', 'ASC');
+		parent::loadState();
 	}
 }

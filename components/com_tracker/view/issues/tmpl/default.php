@@ -18,7 +18,10 @@ $ttParams['trigger']   = 'hover';
 JHtml::_('bootstrap.tooltip', '.hasTooltip', $ttParams);
 JHtml::_('formbehavior.chosen', 'select');
 
-$filterStatus = $this->state->get('filter.status')
+$filterStatus = $this->state->get('filter.status');
+
+$fields = new JRegistry(JFactory::getApplication()->input->get('fields', array(), 'array'));
+
 ?>
 <form action="<?php echo htmlspecialchars(JUri::getInstance()->toString()); ?>" method="post" name="adminForm" id="adminForm" class="form-inline">
 	<div class="filters clearfix">
@@ -128,7 +131,7 @@ $filterStatus = $this->state->get('filter.status')
 					<?php echo JText::_('COM_TRACKER_STATUS_' . strtoupper($item->status_title)); ?>
 				</td>
 				<td class="hidden-phone">
-					N/A
+					<?php echo $item->category ? : 'N/A'; ?>
 				</td>
 				<td class="nowrap small hidden-phone">
 					<?php echo JHtml::_('date', $item->opened, 'DATE_FORMAT_LC4'); ?>

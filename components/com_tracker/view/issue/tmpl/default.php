@@ -7,6 +7,12 @@
  */
 
 defined('_JEXEC') or die;
+
+// Get the additional fields
+$browser   = $this->fields->get('browser');
+$database  = $this->fields->get('database');
+$php       = $this->fields->get('php_version');
+$webserver = $this->fields->get('web_server');
 ?>
 
 <div class="container-fluid">
@@ -24,10 +30,8 @@ defined('_JEXEC') or die;
 						<label><?php echo JText::_('JSTATUS'); ?></label>
 						<?php echo JText::_('COM_TRACKER_STATUS_' . strtoupper($this->item->status_title)); ?>
 					</td>
-
-                    <td>
-						<label><?php echo JText::_('COM_TRACKER_HEADING_PRIORITY'); ?></label>
-
+					<td>
+                        <label><?php echo JText::_('COM_TRACKER_HEADING_PRIORITY'); ?></label>
 						<?php if($this->item->priority == 1)
 						{
 							$status_class = 'badge-important';
@@ -82,10 +86,13 @@ defined('_JEXEC') or die;
 					</td>
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DATABASE_TYPE') ?></label>
-						<?php if ($this->item->database_type) : ?>
-                        <?php echo $this->item->database_type; ?>
-						<?php endif ?>
+						<?php
+						if ($this->item->database_type) :
+                        	echo $this->item->database_type;
+						endif
+						?>
 					</td>
+
 				</tr>
 
 				<tr class="issue-info-row">
@@ -95,61 +102,96 @@ defined('_JEXEC') or die;
 					</td>
                     <td>
                         <label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_WEBSERVER') ?></label>
-						<?php if ($this->item->webserver) : ?>
-                        <?php echo $this->item->webserver; ?>
-						<?php endif ?>
+						<?php
+						if ($this->item->webserver) :
+                        	echo $this->item->webserver;
+						endif
+						?>
                     </td>
 				</tr>
 
 				<tr class="issue-info-row">
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_HEADING_DATE_CLOSED'); ?></label>
-						<?php if ($this->item->closed_date) : ?>
-						<?php echo JHtml::_('date', $this->item->closed_date, 'DATE_FORMAT_LC2'); ?>
-						<?php endif; ?>
+						<?php
+						if ($this->item->closed_date) :
+							echo JHtml::_('date', $this->item->closed_date, 'DATE_FORMAT_LC2');
+						endif;
+						?>
 					</td>
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_HEADING_PHP_VERSION'); ?></label>
-						<?php echo $this->item->php_version; ?>
+						<?php
+						if ($this->item->php_version) :
+							echo $this->item->php_version;
+						endif;
+						?>
 					</td>
-
 				</tr>
 
-				<?php if ($this->item->modified != '0000-00-00 00:00:00') : ?>
-					<tr>
-						<td><strong><?php echo JText::_('COM_TRACKER_HEADING_DATE_MODIFIED'); ?></strong></td>
-						<td><?php echo JHtml::_('date', $this->item->modified, 'DATE_FORMAT_LC2'); ?></td>
-					</tr>
-				<?php endif; ?>
-				<?php if ($this->item->database_type): ?>
-				<tr>
-					<td><strong><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DATABASE_TYPE'); ?></strong></td>
-					<td><?php echo $this->item->database_type; ?></td>
+				<tr class="issue-info-row">
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_HEADING_LAST_MODIFIED'); ?></label>
+						<?php
+						if ($this->item->modified != '0000-00-00 00:00:00') :
+							echo JHtml::_('date', $this->item->modified, 'DATE_FORMAT_LC2');
+						endif;
+						?>
+					</td>
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DATABASE_TYPE'); ?></label>
+						<?php
+						if ($database):
+							echo $database;
+						endif
+						?>
+					</td>
 				</tr>
-				<?php endif; ?>
-				<?php if($this->item->webserver): ?>
-				<tr>
-					<td><strong><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_WEBSERVER'); ?></strong></td>
-					<td><?php echo $this->item->webserver; ?></td>
+
+				<tr class="issue-info-row">
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_WEBSERVER'); ?></label>
+						<?php
+						if ($webserver) :
+							echo $webserver;
+						endif;
+						?>
+					</td>
+                    <td>
+                        <label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PHP_VERISON'); ?></label>
+						<?php
+						if ($php) :
+							echo $php;
+						endif;
+						?>
+                    </td>
 				</tr>
-				<?php endif; ?>
-				<?php if($this->item->php_version): ?>
-				<tr>
-					<td><strong><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PHP_VERISON'); ?></strong></td>
-					<td><?php echo $this->item->php_version; ?></td>
+
+				<tr class="issue-info-row">
+                    <td>
+						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_BROWSER'); ?></label>
+						<?php
+						if ($browser) :
+							echo $browser;
+						endif;
+						?>
+					</td>
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_SUCCESSFUL_TEST_COUNT') ?></label>
+
+					</td>
 				</tr>
-				<?php endif; ?>
-				<?php if($this->item->browser): ?>
-				<tr>
-					<td><strong><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_BROWSER'); ?></strong></td>
-					<td><?php echo $this->item->browser; ?></td>
-				</tr>
-				<?php endif; ?>
+
 			</table>
-			<a href="index.php?option=com_tracker&view=issues"><?php echo JTEXT::_('COM_TRACKER_BACK_TO_ISSUES'); ?></a>
+
 		</div>
 		<div class="span3">
-
+            <h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_INVOLVED_PEOPLE'); ?></h4>
+        	<ul>
+				<?php foreach ($this->involvedPeople as $people) : ?>
+				<li><a href="https://github.com/<?php echo $people->submitter ?>"><?php echo $people->submitter ?></a></li>
+				<?php endforeach ?>
+            </ul>
 		</div>
 	</div>
 
@@ -161,6 +203,26 @@ defined('_JEXEC') or die;
             </div>
         </div>
 	</div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_TEST_INSTRUCTIONS'); ?></h4>
+            <div class="well well-small issue">
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+					Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+					Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
+					Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.
+					In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.
+					Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+					Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.
+					Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
+					Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.
+					Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum.
+					Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
+				</p>
+            </div>
+        </div>
+    </div>
 
 	<?php if ($this->comments) : ?>
 	<div class="row-fluid">
