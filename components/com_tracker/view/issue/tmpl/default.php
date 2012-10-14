@@ -8,23 +8,34 @@
 
 defined('_JEXEC') or die;
 
-// Get the additional fields
-$browser   = $this->fields->get('browser');
-$database  = $this->fields->get('database');
-$php       = $this->fields->get('php_version');
-$webserver = $this->fields->get('web_server');
 ?>
 
+<form method="post" name="adminForm" id="adminForm">
 <div class="container-fluid">
-	<div class="row-fluild">
-		<div class="span12">
-            <h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
-		</div>
+    <div class="row-fluid">
+        <div class="pull-right btn-group">
+            <a class="btn btn-small" href="index.php?option=com_tracker&view=issues"><?php echo JTEXT::_('Cancel'); ?></a>
+            <input type="submit" class="btn btn-success" value="Save" />
+	    </div>
 	</div>
-	<div class="row-fluid">
-		<div class="span9">
+    <h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
+
+    <div class="row-fluid">
+		<div class="span5">
 			<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_INFO'); ?></h4>
 			<table class="table">
+
+				<tr class="issue-info-row">
+					<td>
+						<label><?php echo JText::_('COM_TRACKER_HEADING_SUBMITTER'); ?></label>
+
+					</td>
+                    <td>
+                        <label><?= JText::_('Category') ?></label>
+                    	<?= $this->categoryList ?>
+                    </td>
+				</tr>
+
 				<tr class="issue-info-row">
 					<td>
 						<label><?php echo JText::_('JSTATUS'); ?></label>
@@ -76,7 +87,6 @@ $webserver = $this->fields->get('web_server');
 					</td>
 				</tr>
 
-
 				<tr class="issue-info-row">
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PATCH_URL'); ?></label>
@@ -92,7 +102,6 @@ $webserver = $this->fields->get('web_server');
 						endif
 						?>
 					</td>
-
 				</tr>
 
 				<tr class="issue-info-row">
@@ -141,8 +150,8 @@ $webserver = $this->fields->get('web_server');
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DATABASE_TYPE'); ?></label>
 						<?php
-						if ($database):
-							echo $database;
+						if ($this->item->database_type):
+							echo $this->item->database_type;
 						endif
 						?>
 					</td>
@@ -152,16 +161,16 @@ $webserver = $this->fields->get('web_server');
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_WEBSERVER'); ?></label>
 						<?php
-						if ($webserver) :
-							echo $webserver;
+						if ($this->item->webserver) :
+							echo $this->item->webserver;
 						endif;
 						?>
 					</td>
                     <td>
                         <label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_PHP_VERISON'); ?></label>
 						<?php
-						if ($php) :
-							echo $php;
+						if ($this->item->php_version) :
+							echo $this->item->php_version;
 						endif;
 						?>
                     </td>
@@ -171,8 +180,8 @@ $webserver = $this->fields->get('web_server');
                     <td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_BROWSER'); ?></label>
 						<?php
-						if ($browser) :
-							echo $browser;
+						if ($this->item->browser) :
+							echo $this->item->browser;
 						endif;
 						?>
 					</td>
@@ -184,6 +193,7 @@ $webserver = $this->fields->get('web_server');
 
 			</table>
 
+			<?php include $this->getPath('fields'); ?>
 		</div>
 		<div class="span3">
             <h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_INVOLVED_PEOPLE'); ?></h4>
@@ -242,3 +252,6 @@ $webserver = $this->fields->get('web_server');
 	<?php endforeach; ?>
 	<?php endif; ?>
 </div>
+	<input type="hidden" name="id" value="<?= $this->item->id ?>" />
+	<input type="hidden" name="task" value="save" />
+</form>

@@ -19,6 +19,7 @@
     margin-top:7px;
     border:none;
     z-index:100;
+	line-height:20px;
 }
 #menu li:hover {
     margin-right: 8px;
