@@ -303,8 +303,6 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 			<!--Begin Menu-->
 				<ul class="nav">
 					<li><a href="<?php echo JRoute::_('index.php'); ?>">Tracker</a></li>
-				</ul>
-				<ul class="nav pull-right">
 					<li>
 					<?php if ($user->id) :  ?>
 						<a href="<?php echo JRoute::_('index.php?option=com_users') ?>"><?php echo $user->name; ?></a>
@@ -313,6 +311,9 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 					<?php endif; ?>
 					</li>
 				</ul>
+				<div class="pull-right">
+					<jdoc:include type="modules" name="toolbar" style="no" />
+				</div>
 			<!--End Menu-->
 			</div>
 		</div>

@@ -6102,6 +6102,9 @@ sup.popular {
 	text-shadow: 0px -1px 0px #142849;
 	margin: 0 6px;
 }
+#inset .btn-toolbar {
+	margin-top: 3px;
+}
 .body {
 	background-color: #EDEDED;
 }
