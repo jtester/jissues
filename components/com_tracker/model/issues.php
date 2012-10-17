@@ -68,11 +68,62 @@ class TrackerModelIssues extends JModelTrackerlist
 			$query->where('(' . $db->quoteName('a.title') . ' LIKE ' . $filter . ' OR ' . $db->quoteName('a.description') . ' LIKE ' . $filter . ')');
 		}
 
-		$status = $this->state->get('filter.status');
-		if ($status)
+		$status = $this->state->get('filter.status', 0);
+		if ($status > 0)
 		{
 			$query->where($db->quoteName('a.status') . ' = ' . (int) $status);
 		}
+
+		$priority = $this->state->get('filter.priority', 0);
+		if ($priority > 0)
+		{
+			$query->where($db->quoteName('a.priority') . ' = ' . (int) $priority);
+		}
+
+		$opendate = $this->state->get('filter.opendate', '');
+		if ($opendate !=  'all')
+		{
+			if ($opendate == 'today')
+			{
+				$query->where('DATE(a.opened) = DATE(NOW())');
+			}
+			else if ($opendate == 'thisweek')
+			{
+				$query->where('WEEKOFYEAR(a.opened) = WEEKOFYEAR(NOW())');
+			}
+			else if ($opendate == 'thismonth')
+			{
+				$query->where('MONTH(a.opened) = MONTH(NOW())');
+			}
+			else if ($opendate == 'last3')
+			{
+				$query->where('MONTH(a.opened) <= MONTH(NOW()) AND  MONTH(a.opened) >= (MONTH(NOW()) - 2)');
+			}
+			else if ($opendate == 'last6')
+			{
+				$query->where('MONTH(a.opened) <= MONTH(NOW()) AND  MONTH(a.opened) >= (MONTH(NOW()) - 5)');
+			}
+		}
+
+		$other = $this->state->get('filter.other', 'nothing');
+		if ($other != 'nothing')
+		{
+			if ($other == 'icreated')
+			{
+				$user = JFactory::getUser();
+				$query->where($db->quoteName('a.author_id') . ' = ' . (int) $user->get('id'));
+			}
+			else if ($other == 'icommented')
+			{
+				$user = JFactory::getUser();
+				$query->where('a.id IN (SELECT issue_id FROM #__issue_comments WHERE author_id ='.(int) $user->get('id').')');
+			}
+			else if ($other == 'havenocomment')
+			{
+				$query->where('a.id NOT IN (SELECT issue_id FROM #__issue_comments)');
+			}
+		}
+
 
 		// TODO: Implement filtering and join to other tables as added
 
@@ -169,6 +220,10 @@ class TrackerModelIssues extends JModelTrackerlist
 		$this->state->set('filter.priority', $input->getUint('priority', 3));
 
 		$this->state->set('filter.status', $input->getUint('status'));
+
+		$this->state->set('filter.opendate', $input->getString('opendate', 'all'));
+
+		$this->state->set('filter.other', $input->getString('that', 'nothing'));
 
 		// Optional filter text
 		$this->state->set('list.filter', $input->getString('filter-search'));

@@ -113,6 +113,8 @@ CREATE TABLE IF NOT EXISTS `#__issues` (
   `webserver` integer NULL,
   `php_version` integer NULL,
   `browser` integer NULL,
+  `author_id` integer NULL,
+  `assignee_id` integer NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT FOREIGN KEY (`status`) REFERENCES `#__status` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -127,6 +129,7 @@ CREATE TABLE IF NOT EXISTS `#__issue_comments` (
   `submitter` varchar(255) NOT NULL DEFAULT '',
   `text` mediumtext NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `author_id` integer NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT FOREIGN KEY (`issue_id`) REFERENCES `#__issues` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

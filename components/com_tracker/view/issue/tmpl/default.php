@@ -32,26 +32,31 @@ $webserver = $this->fields->get('web_server');
 						<?php if($this->item->priority == 1)
 						{
 							$status_class = 'badge-important';
+							$priority_title = JText::_('COM_TRACKER_PRIORITY_HIGH');
 						}
 						elseif ($this->item->priority == 2)
 						{
 							$status_class = 'badge-warning';
+							$priority_title = JText::_('COM_TRACKER_PRIORITY_MEDIUM_HIGH');
 						}
 						elseif ($this->item->priority == 3)
 						{
 							$status_class = 'badge-info';
+							$priority_title = JText::_('COM_TRACKER_PRIORITY_MEDIUM');
 						}
 						elseif ($this->item->priority == 4)
 						{
 							$status_class = 'badge-inverse';
+							$priority_title = JText::_('COM_TRACKER_PRIORITY_LOW');
 						}
 						elseif ($this->item->priority == 5)
 						{
 							$status_class = '';
+							$priority_title = JText::_('COM_TRACKER_PRIORITY_VERY_LOW');
 						}
 						?>
 	    	    	    <span class="badge <?php echo $status_class; ?>">
-							<?php echo $this->item->priority; ?>
+							<?php echo $priority_title; ?>
 						</span>
 	    	    	</td>
 				</tr>

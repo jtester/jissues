@@ -23,6 +23,47 @@ $filterStatus = $this->state->get('filter.status');
 $fields = new JRegistry(JFactory::getApplication()->input->get('fields', array(), 'array'));
 
 ?>
+
+<fieldset class="quick-filters">
+    <legend>Quick filters</legend>
+    <dl>
+        <dt>Priority</dt>
+		<dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&priority=0')?>">All</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&priority=1')?>">High</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&priority=2')?>">Medium high</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&priority=3')?>">Medium</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&priority=4')?>">Low</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&priority=5')?>">Very low</a></dd>
+    </dl>
+    <dl>
+        <dt>Status</dt>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&status=0')?>">All</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&status=1')?>">Open</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&status=2')?>">Confirmed</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&status=3')?>">Pending</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&status=4')?>">Ready to commit</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&status=5')?>">Fixed</a></dd>
+    </dl>
+    <dl>
+        <dt>Open date</dt>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&opendate=all')?>">Today</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&opendate=today')?>">Today</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&opendate=thisweek')?>">This week</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&opendate=thismonth')?>">This month</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&opendate=last3')?>">Last 3 months</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&opendate=last6')?>">Last 6 months</a></dd>
+    </dl>
+    <dl>
+        <dt>Issues that</dt>
+
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&that=icreated')?>">I created</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&that=icommented')?>">I joined</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&that=havenocomment')?>">Nobody comment</a></dd>
+        <dd><a href="<?php echo JRoute::_('index.php?option=com_tracker&view=issues&that=nothing')?>">Reset this filter</a></dd>
+
+    </dl>
+</fieldset>
+
 <form action="<?php echo htmlspecialchars(JUri::getInstance()->toString()); ?>" method="post" name="adminForm" id="adminForm" class="form-inline">
 	<div class="filters btn-toolbar clearfix">
 		<div class="filter-search btn-group pull-left input-append">
@@ -107,29 +148,34 @@ $fields = new JRegistry(JFactory::getApplication()->input->get('fields', array()
 					<?php endif; ?>
 				</td>
 				<td class="center">
-					<?php if ($item->priority == 1)
+					<?php if($item->priority == 1)
 					{
 						$status_class = 'badge-important';
+						$priority_title = JText::_('COM_TRACKER_PRIORITY_HIGH');
 					}
 					elseif ($item->priority == 2)
 					{
 						$status_class = 'badge-warning';
+						$priority_title = JText::_('COM_TRACKER_PRIORITY_MEDIUM_HIGH');
 					}
 					elseif ($item->priority == 3)
 					{
 						$status_class = 'badge-info';
+						$priority_title = JText::_('COM_TRACKER_PRIORITY_MEDIUM');
 					}
 					elseif ($item->priority == 4)
 					{
 						$status_class = 'badge-inverse';
+						$priority_title = JText::_('COM_TRACKER_PRIORITY_LOW');
 					}
 					elseif ($item->priority == 5)
 					{
 						$status_class = '';
+						$priority_title = JText::_('COM_TRACKER_PRIORITY_VERY_LOW');
 					}
 					?>
 					<span class="badge <?php echo $status_class; ?>">
-						<?php echo (int) $item->priority; ?>
+						<?php echo $priority_title; ?>
 					</span>
 				</td>
 				<td>
