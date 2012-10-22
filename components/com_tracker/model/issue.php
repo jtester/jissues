@@ -133,6 +133,14 @@ class TrackerModelIssue extends JModelTrackerform
 		{
 			$db->setQuery($query);
 			$lists = $db->loadObjectList();
+
+			$github = new JGithub();
+
+			foreach ($lists as $item)
+			{
+				$githubUserDetails = $github->users->get($item->submitter);
+				$item->avatar_url = $githubUserDetails->avatar_url;
+			}
 		}
 		catch (RuntimeException $e)
 		{
