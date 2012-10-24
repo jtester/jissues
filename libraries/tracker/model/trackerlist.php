@@ -84,6 +84,7 @@ abstract class JModelTrackerlist extends JModelDatabase
 		catch (RuntimeException $e)
 		{
 			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+
 			return array();
 		}
 
@@ -150,6 +151,7 @@ abstract class JModelTrackerlist extends JModelDatabase
 		$start = (int) $this->state->get('list.start');
 		$limit = (int) $this->state->get('list.limit');
 		$total = $this->getTotal();
+
 		if ($start > $total - $limit)
 		{
 			$start = max(0, (int) (ceil($total / $limit) - 1) * $limit);
@@ -205,6 +207,7 @@ abstract class JModelTrackerlist extends JModelDatabase
 
 		// Load the total.
 		$query = $this->_getListQuery();
+
 		try
 		{
 			$total = (int) $this->_getListCount($query);
@@ -212,6 +215,7 @@ abstract class JModelTrackerlist extends JModelDatabase
 		catch (RuntimeException $e)
 		{
 			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+
 			return false;
 		}
 

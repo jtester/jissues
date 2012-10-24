@@ -117,6 +117,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 
 			// Remove expired sessions from the database.
 			$time = time();
+
 			if ($time % 2)
 			{
 				// The modulus introduces a little entropy, making the flushing less accurate
@@ -130,7 +131,8 @@ abstract class JApplicationTracker extends JApplicationWeb
 			}
 
 			// Check to see the the session already exists.
-			$handler = $this->getCfg('sess_handler');
+			// @todo remove ? $handler = $this->getCfg('sess_handler');
+
 			if (($time % 2 || $session->isNew()) || ($session->isNew()))
 			{
 				$this->checkSession();
@@ -168,6 +170,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 			$query->clear();
 
 			$query->insert($query->qn('#__session'));
+
 			if ($session->isNew())
 			{
 				$query->columns($query->qn('session_id') . ', ' . $query->qn('client_id') . ', ' . $query->qn('time'));
@@ -497,7 +500,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 	/**
 	 * Method to get the component params
 	 *
-	 * @param string $component
+	 * @param   string  $component  The component name.
 	 *
 	 * @return  JRegistry  Component params
 	 *
@@ -658,9 +661,11 @@ abstract class JApplicationTracker extends JApplicationWeb
 			// Validate that the user should be able to login (different to being authenticated).
 			// This permits authentication plugins blocking the user
 			$authorisations = $authenticate->authorise($response, $options);
+
 			foreach ($authorisations as $authorisation)
 			{
 				$denied_states = array(JAuthentication::STATUS_EXPIRED, JAuthentication::STATUS_DENIED);
+
 				if (in_array($authorisation->status, $denied_states))
 				{
 					// Trigger onUserAuthorisationFailure Event.

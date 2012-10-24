@@ -42,6 +42,7 @@ class JTableIssue extends JTable
 	protected function _getAssetName()
 	{
 		$k = $this->_tbl_key;
+
 		return 'com_tracker.issue.' . (int) $this->$k;
 	}
 
@@ -124,6 +125,7 @@ class JTableIssue extends JTable
 
 			// Get the asset id from the database.
 			$this->_db->setQuery($query);
+
 			if ($result = $this->_db->loadResult())
 			{
 				$assetId = (int) $result;
@@ -154,12 +156,14 @@ class JTableIssue extends JTable
 		if (trim($this->title) == '')
 		{
 			$this->setError('A title is required.');
+
 			return false;
 		}
 
 		if (trim($this->description) == '')
 		{
 			$this->setError('A description is required.');
+
 			return false;
 		}
 

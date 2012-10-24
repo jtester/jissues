@@ -102,6 +102,11 @@ final class JApplicationSite extends JApplicationTracker
 		return $template->template;
 	}
 
+	/**
+	 * Dummy function.
+	 *
+	 * @return bool
+	 */
 	public function getLanguageFilter()
 	{
 		return false;

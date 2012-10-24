@@ -37,7 +37,7 @@ abstract class JHtmlProjects
 
 		$options = JHtmlCategory::options($section);
 
-		if ( ! $options)
+		if (!$options)
 		{
 			return '';
 		}
@@ -45,12 +45,11 @@ abstract class JHtmlProjects
 		$options = array_merge(array(JHtmlSelect::option('', $title)), $options);
 
 		return JHtmlSelect::genericlist(
-	//		'select.genericlist',
 			$options,
 			'fields[' . $name . ']',
 			$js,
 			'value', 'text', // Hate it..
-			$selected, 'select-'.$name
+			$selected, 'select-' . $name
 		);
 	}
 
@@ -135,11 +134,11 @@ abstract class JHtmlProjects
 	/**
 	 * Draws a text input.
 	 *
-	 * @todo moveme
+	 * @param   string  $name         Control name.
+	 * @param   string  $value        The initial value.
+	 * @param   string  $description  Description to be displayed in a tooltip.
 	 *
-	 * @param        $name
-	 * @param        $value
-	 * @param string $description
+	 * @todo moveme
 	 *
 	 * @return string
 	 */
@@ -154,18 +153,18 @@ abstract class JHtmlProjects
 	/**
 	 * Draws a checkbox
 	 *
-	 * @todo     moveme
+	 * @param   string   $name         Control name.
+	 * @param   boolean  $checked      Initial state.
+	 * @param   string   $description  Description to be displayed in a tooltip.
 	 *
-	 * @param        $name
-	 * @param bool   $checked
-	 * @param string $description
+	 * @todo     moveme
 	 *
 	 * @return string
 	 */
 	public static function checkbox($name, $checked = false, $description = '')
 	{
 		$description = ($description) ? ' class="hasTooltip" title="' . htmlspecialchars($description, ENT_COMPAT, 'UTF-8') . '"' : '';
-		$checked = $checked ? ' checked="checked"' : '';
+		$checked     = $checked ? ' checked="checked"' : '';
 
 		return '<input type="checkbox" name="fields[' . $name . ']" '
 			. ' id="chk-' . $name . '"' . $checked . $description . ' />';
