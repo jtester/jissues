@@ -1,18 +1,18 @@
 <?php
 /**
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  HTML
  *
- * @copyright   Copyright (C) 2012 Michael Babker. All rights reserved.
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_BASE') or die;
+defined('JPATH_PLATFORM') or die;
 
 /**
  * Utility class for tracker statuses
  *
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  HTML
  * @since       1.0
  */
@@ -51,16 +51,22 @@ abstract class JHtmlStatus
 			$items = $db->loadObjectList();
 
 			// Assemble the list options.
-			self::$items[$hash] = array();
+			self::$items = array();
 
 			foreach ($items as $item)
 			{
 				self::$items[] = JHtml::_('select.option', $item->id, JText::_('COM_TRACKER_STATUS_' . strtoupper($item->status)));
 			}
 
+			self::$items = array(
+				'<select name="status[id]" class="inputbox" id="status-select-id">',
+				JHtml::_('select.options', self::$items),
+				'</select>'
+			);
+
 			$loaded = true;
 		}
 
-		return self::$items;
+		return implode("\n", self::$items);
 	}
 }

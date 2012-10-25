@@ -1,18 +1,18 @@
 <?php
 /**
- * @package     X
- * @subpackage  X.Y
+ * @package     JTracker
+ * @subpackage  HTML
  *
- * @copyright   Copyright (C) 2012 X. All rights reserved.
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('JPATH_BASE') or die;
+defined('JPATH_PLATFORM') or die;
 
 /**
- * Utility class for projects
+ * HTML Utility class for projects
  *
- * @package     X
+ * @package     JTracker
  * @subpackage  HTML
  * @since       1.0
  */
@@ -27,39 +27,35 @@ abstract class JHtmlProjects
 	 * @param   string  $title     Title to show
 	 * @param   string  $js        Javascript
 	 *
-	 * @return mixed
+	 * @return  mixed
+	 *
+	 * @since   1.0
 	 */
 	public static function select($section, $name, $selected = '', $title = '', $js = 'onchange="document.adminForm.submit();"')
 	{
 		$title = $title ? : JText::_('Select an Option');
 
-		$options = JHtml::_('category.options', $section);
+		$options = JHtmlCategory::options($section);
 
-		if ($options)
-		{
-			$options = array_merge(
-				array(JHtml::_('select.option', '', $title)),
-				$options
-			);
-		}
-		else
+		if ( ! $options)
 		{
 			return '';
 		}
 
-		return
-			JHtml::_(
-				'select.genericlist',
-				$options,
-				'fields[' . $name . ']',
-				$js,
-				'value', 'text', // Hate it..
-				$selected
-			);
+		$options = array_merge(array(JHtmlSelect::option('', $title)), $options);
+
+		return JHtmlSelect::genericlist(
+	//		'select.genericlist',
+			$options,
+			'fields[' . $name . ']',
+			$js,
+			'value', 'text', // Hate it..
+			$selected, 'select-'.$name
+		);
 	}
 
 	/**
-	 * Returns a html list of categories for the given extension.
+	 * Returns a HTML list of categories for the given extension.
 	 *
 	 * @param   string  $section   The extension option.
 	 * @param   bool    $links     Links or simple list items.
@@ -74,18 +70,20 @@ abstract class JHtmlProjects
 		$items = self::items($section);
 
 		if (0 == count($items))
+		{
 			return '';
+		}
 
 		$html = array();
 
 		$link = 'index.php?option=com_categories&extension=%s.%s';
 
-		$html[] = '<ul>';
+		$html[] = '<ul class="unstyled">';
 
 		foreach ($items as $item)
 		{
-			$selected = ($selected == $item->id) ? ' selected' : '';
-			$repeat = ($item->level - 1 >= 0) ? $item->level - 1 : 0;
+			$selected    = ($selected == $item->id) ? ' selected' : '';
+			$repeat      = ($item->level - 1 >= 0) ? $item->level - 1 : 0;
 			$item->title = str_repeat('- ', $repeat) . $item->title;
 
 			$html[] = '<li>';
@@ -105,7 +103,9 @@ abstract class JHtmlProjects
 	 *
 	 * @param   string  $section  A section
 	 *
-	 * @return array
+	 * @return  array
+	 *
+	 * @since   1.0
 	 */
 	public static function items($section)
 	{
@@ -120,7 +120,7 @@ abstract class JHtmlProjects
 
 		$items = $db->setQuery(
 			$db->getQuery(true)
-				->select('id, title, alias, level, parent_id')
+				->select('id, title, alias, description, level, parent_id')
 				->from('#__categories')
 				->where('parent_id > 0')
 				->where('extension = ' . $db->q($section))
@@ -130,6 +130,45 @@ abstract class JHtmlProjects
 		$sections[$section] = $items;
 
 		return $sections[$section];
+	}
+
+	/**
+	 * Draws a text input.
+	 *
+	 * @todo moveme
+	 *
+	 * @param        $name
+	 * @param        $value
+	 * @param string $description
+	 *
+	 * @return string
+	 */
+	public static function textfield($name, $value, $description = '')
+	{
+		$description = ($description) ? ' class="hasTooltip" title="' . htmlspecialchars($description, ENT_COMPAT, 'UTF-8') . '"' : '';
+
+		return '<input type="text" name="fields[' . $name . ']" '
+			. ' id="txt-' . $name . '" value="' . $value . '"' . $description . ' />';
+	}
+
+	/**
+	 * Draws a checkbox
+	 *
+	 * @todo     moveme
+	 *
+	 * @param        $name
+	 * @param bool   $checked
+	 * @param string $description
+	 *
+	 * @return string
+	 */
+	public static function checkbox($name, $checked = false, $description = '')
+	{
+		$description = ($description) ? ' class="hasTooltip" title="' . htmlspecialchars($description, ENT_COMPAT, 'UTF-8') . '"' : '';
+		$checked = $checked ? ' checked="checked"' : '';
+
+		return '<input type="checkbox" name="fields[' . $name . ']" '
+			. ' id="chk-' . $name . '"' . $checked . $description . ' />';
 	}
 
 }

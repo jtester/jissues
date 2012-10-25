@@ -1,18 +1,18 @@
 <?php
 /**
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  Application
  *
- * @copyright   Copyright (C) 2012 Michael Babker. All rights reserved.
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+defined('JPATH_PLATFORM') or die;
 
 /**
  * Joomla! Issue Tracker Application class
  *
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  Application
  * @since       1.0
  */
@@ -109,12 +109,11 @@ abstract class JApplicationTracker extends JApplicationWeb
 	{
 		parent::afterSessionStart();
 
-		$session = JFactory::getSession();
-
 		// TODO: At some point we need to get away from having session data always in the db.
 		if ($this->getCfg('sess_handler') == 'database')
 		{
-			$db = JFactory::getDBO();
+			$session = JFactory::getSession();
+			$db      = JFactory::getDBO();
 
 			// Remove expired sessions from the database.
 			$time = time();
@@ -252,7 +251,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 			$document->setBuffer($contents, 'component');
 		}
 
-		// Mop up any uncaught exceptions.
+			// Mop up any uncaught exceptions.
 		catch (Exception $e)
 		{
 			echo $e->getMessage();
@@ -275,7 +274,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 		// For empty queue, if messages exists in the session, enqueue them first.
 		if (!count($this->messageQueue))
 		{
-			$session = JFactory::getSession();
+			$session      = JFactory::getSession();
 			$sessionQueue = $session->get('application.queue');
 
 			if (count($sessionQueue))
@@ -322,9 +321,8 @@ abstract class JApplicationTracker extends JApplicationWeb
 		// Start an output buffer.
 		ob_start();
 		$controller->execute();
-		$output = ob_get_clean();
 
-		return $output;
+		return ob_get_clean();
 	}
 
 	/**
@@ -362,9 +360,28 @@ abstract class JApplicationTracker extends JApplicationWeb
 		{
 			return new $class;
 		}
+		// See if there's an action class in the libraries if we aren't calling the default task
+		elseif ($task && $task != 'default')
+		{
+			$class = 'JController' . ucfirst($task);
+
+			if (class_exists($class))
+			{
+				return new $class;
+			}
+		}
+		else
+		{
+			$class = ucfirst($base) . 'ControllerDefault';
+
+			if (class_exists($class))
+			{
+				return new $class;
+			}
+		}
 
 		// Nothing found. Panic.
-		throw new RuntimeException('Class ' . $class . ' not found');
+		throw new RuntimeException(sprintf('Class %s not found', $class));
 	}
 
 	/**
@@ -379,8 +396,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 	 */
 	public function getCfg($varname, $default = null)
 	{
-		$config = JFactory::getConfig();
-		return $config->get($varname, $default);
+		return JFactory::getConfig()->get($varname, $default);
 	}
 
 	/**
@@ -421,7 +437,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 		// For empty queue, if messages exists in the session, enqueue them.
 		if (!count($this->messageQueue))
 		{
-			$session = JFactory::getSession();
+			$session      = JFactory::getSession();
 			$sessionQueue = $session->get('application.queue');
 
 			if (count($sessionQueue))
@@ -506,8 +522,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 	{
 		if (!isset($name))
 		{
-			$app = JFactory::getApplication();
-			$name = $app->getName();
+			$name = JFactory::getApplication()->getName();
 		}
 
 		jimport('joomla.application.router');
@@ -547,8 +562,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 	 */
 	public function getUserState($key, $default = null)
 	{
-		$session = JFactory::getSession();
-		$registry = $session->get('registry');
+		$registry = JFactory::getSession()->get('registry');
 
 		if (!is_null($registry))
 		{
@@ -637,7 +651,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 		jimport('joomla.user.authentication');
 
 		$authenticate = JAuthentication::getInstance();
-		$response = $authenticate->authenticate($credentials, $options);
+		$response     = $authenticate->authenticate($credentials, $options);
 
 		if ($response->status === JAuthentication::STATUS_SUCCESS)
 		{
@@ -696,14 +710,14 @@ abstract class JApplicationTracker extends JApplicationWeb
 					// Create the encryption key, apply extra hardening using the user agent string.
 					$privateKey = JApplication::getHash(@$_SERVER['HTTP_USER_AGENT']);
 
-					$key = new JCryptKey('simple', $privateKey, $privateKey);
-					$crypt = new JCrypt(new JCryptCipherSimple, $key);
-					$rcookie = $crypt->encrypt(serialize($credentials));
+					$key      = new JCryptKey('simple', $privateKey, $privateKey);
+					$crypt    = new JCrypt(new JCryptCipherSimple, $key);
+					$rcookie  = $crypt->encrypt(serialize($credentials));
 					$lifetime = time() + 365 * 24 * 60 * 60;
 
 					// Use domain and path set in config for cookie if it exists.
 					$cookie_domain = $this->getCfg('cookie_domain', '');
-					$cookie_path = $this->getCfg('cookie_path', '/');
+					$cookie_path   = $this->getCfg('cookie_path', '/');
 					setcookie(JApplication::getHash('JLOGIN_REMEMBER'), $rcookie, $lifetime, $cookie_path, $cookie_domain);
 				}
 
@@ -753,7 +767,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 
 		// Build the credentials array.
 		$parameters['username'] = $user->get('username');
-		$parameters['id'] = $user->get('id');
+		$parameters['id']       = $user->get('id');
 
 		// Set clientid in the options array if it hasn't been set already.
 		if (!isset($options['clientid']))
@@ -773,7 +787,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 		{
 			// Use domain and path set in config for cookie if it exists.
 			$cookie_domain = $this->getCfg('cookie_domain', '');
-			$cookie_path = $this->getCfg('cookie_path', '/');
+			$cookie_path   = $this->getCfg('cookie_path', '/');
 			setcookie(self::getHash('JLOGIN_REMEMBER'), false, time() - 86400, $cookie_path, $cookie_domain);
 
 			return true;
@@ -804,8 +818,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 		// Persist messages if they exist.
 		if (count($this->messageQueue))
 		{
-			$session = JFactory::getSession();
-			$session->set('application.queue', $this->messageQueue);
+			JFactory::getSession()->set('application.queue', $this->messageQueue);
 		}
 
 		parent::redirect($url, $moved);
@@ -837,8 +850,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 	 */
 	public function setUserState($key, $value)
 	{
-		$session = JFactory::getSession();
-		$registry = $session->get('registry');
+		$registry = JFactory::getSession()->get('registry');
 
 		if (!is_null($registry))
 		{

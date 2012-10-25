@@ -1,18 +1,18 @@
 <?php
 /**
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  Model
  *
- * @copyright   Copyright (C) 2012 Michael Babker. All rights reserved.
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+defined('JPATH_PLATFORM') or die;
 
 /**
  * Abstract model to get data for a list view
  *
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  Model
  * @since       1.0
  */
@@ -241,7 +241,7 @@ abstract class JModelTrackerlist extends JModelDatabase
 		{
 			$app = JFactory::getApplication();
 
-			$value = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'uint');
+			$value = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit', 20), 'uint');
 			$limit = $value;
 			$this->state->set('list.limit', $limit);
 

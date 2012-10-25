@@ -1,10 +1,21 @@
 <?php
 /**
- * User: elkuku
- * Date: 09.10.12
- * Time: 20:32
+ * @package     JTracker
+ * @subpackage  Model
+ *
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+defined('JPATH_PLATFORM') or die;
+
+/**
+ * Abstract model to get data for a form view
+ *
+ * @package     JTracker
+ * @subpackage  Model
+ * @since       1.0
+ */
 abstract class JModelTrackerform extends JModelDatabase
 {
 	/**
@@ -14,6 +25,14 @@ abstract class JModelTrackerform extends JModelDatabase
 	 * @since  1.0
 	 */
 	protected $forms = array();
+
+	/**
+	 * JTable instance
+	 *
+	 * @var   JTable
+	 * @since 1.0
+	 */
+	protected $table;
 
 	/**
 	 * Instantiate the model.
@@ -26,6 +45,51 @@ abstract class JModelTrackerform extends JModelDatabase
 
 		// Populate the state
 		$this->loadState();
+	}
+
+	/**
+	 * Method to check-out a row for editing.
+	 *
+	 * @param   integer  $pk  The numeric id of the primary key.
+	 *
+	 * @return  boolean  False on failure or error, true otherwise.
+	 *
+	 * @since   1.0
+	 * @throws  InvalidArgumentException
+	 * @throws  RuntimeException
+	 */
+	public function checkout($pk = null)
+	{
+		// Ensure the child class set the table object before continuing
+		if (!($this->table instanceof JTable))
+		{
+			throw new InvalidArgumentException('JTable class must be instantiated.');
+		}
+		// Only attempt to check the row in if it exists.
+		if ($pk)
+		{
+			$user = JFactory::getUser();
+
+			// Get an instance of the row to checkout.
+			if (!$this->table->load($pk))
+			{
+				throw new RuntimeException($this->table->getError());
+			}
+
+			// Check if this is the user having previously checked out the row.
+			if ($this->table->checked_out > 0 && $this->table->checked_out != $user->get('id'))
+			{
+				throw new RuntimeException(JText::_('JLIB_APPLICATION_ERROR_CHECKOUT_USER_MISMATCH'));
+			}
+
+			// Attempt to check the row out.
+			if (!$this->table->checkout($user->get('id'), $pk))
+			{
+				throw new RuntimeException($this->table->getError());
+			}
+		}
+
+		return true;
 	}
 
 	/**

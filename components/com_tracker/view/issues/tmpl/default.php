@@ -1,10 +1,13 @@
 <?php
 /**
- * @package    BabDev.Tracker
+ * @package     JTracker
+ * @subpackage  com_tracker
  *
- * @copyright  Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @copyright   Copyright (C) 2012 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+/* @var TrackerViewIssuesHtml $this */
 
 defined('_JEXEC') or die;
 
@@ -113,19 +116,19 @@ $fields = new JRegistry(JFactory::getApplication()->input->get('fields', array()
 		<?php else : ?>
 		<?php foreach ($this->items as $i => $item) :
 		$rowClass = '';
-		if (in_array($item->priority, $blockers)) {
+		if (in_array($item->priority, $blockers)) :
 			$rowClass = 'class="error"';
-		}
-		if ($item->status == '4') {
+		endif;
+		if ($item->status == '4') :
 			$rowClass = 'class="success"';
-		}
+		endif
 		?>
 			<tr <?php echo $rowClass; ?>>
 				<td class="center hidden-phone">
 					<?php echo (int) $item->id; ?>
 				</td>
 				<td class="hasContext">
-					<div class="hasTooltip" title="<?php echo JHtml::_('string.truncate', $item->description, 100); ?>">
+					<div class="hasTooltip" title="<?php echo JHtml::_('string.truncate', $this->escape($item->description), 100); ?>">
 						<a href="index.php?option=com_tracker&view=issue&id=<?php echo (int) $item->id;?>">
 						<?php echo $this->escape($item->title); ?></a>
 					</div>
@@ -148,31 +151,23 @@ $fields = new JRegistry(JFactory::getApplication()->input->get('fields', array()
 					<?php endif; ?>
 				</td>
 				<td class="center">
-					<?php if($item->priority == 1)
-					{
+					<?php
+					if ($item->priority == 1) :
 						$status_class = 'badge-important';
 						$priority_title = JText::_('COM_TRACKER_PRIORITY_HIGH');
-					}
-					elseif ($item->priority == 2)
-					{
+					elseif ($item->priority == 2) :
 						$status_class = 'badge-warning';
 						$priority_title = JText::_('COM_TRACKER_PRIORITY_MEDIUM_HIGH');
-					}
-					elseif ($item->priority == 3)
-					{
+					elseif ($item->priority == 3) :
 						$status_class = 'badge-info';
 						$priority_title = JText::_('COM_TRACKER_PRIORITY_MEDIUM');
-					}
-					elseif ($item->priority == 4)
-					{
+					elseif ($item->priority == 4) :
 						$status_class = 'badge-inverse';
 						$priority_title = JText::_('COM_TRACKER_PRIORITY_LOW');
-					}
-					elseif ($item->priority == 5)
-					{
+					elseif ($item->priority == 5) :
 						$status_class = '';
 						$priority_title = JText::_('COM_TRACKER_PRIORITY_VERY_LOW');
-					}
+					endif;
 					?>
 					<span class="badge <?php echo $status_class; ?>">
 						<?php echo $priority_title; ?>
@@ -203,4 +198,5 @@ $fields = new JRegistry(JFactory::getApplication()->input->get('fields', array()
 		</tbody>
 	</table>
 	<?php echo $this->pagination->getListFooter(); ?>
+	<input type="hidden" name="task" />
 </form>

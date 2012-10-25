@@ -1,9 +1,9 @@
 <?php
 /**
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  Table
  *
- * @copyright   Copyright (C) 2012 Michael Babker. All rights reserved.
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -12,7 +12,7 @@ defined('JPATH_PLATFORM') or die;
 /**
  * Table interface class for the issues table
  *
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  Table
  * @since       1.0
  */
@@ -31,6 +31,21 @@ class JTableIssue extends JTable
 	}
 
 	/**
+	 * Method to compute the default name of the asset.
+	 * The default name is in the form table_name.id
+	 * where id is the value of the primary key of the table.
+	 *
+	 * @return  string
+	 *
+	 * @since   1.0
+	 */
+	protected function _getAssetName()
+	{
+		$k = $this->_tbl_key;
+		return 'com_tracker.issue.' . (int) $this->$k;
+	}
+
+	/**
 	 * Method to bind an associative array or object to the JTable instance.This
 	 * method only binds properties that are publicly accessible and optionally
 	 * takes an array of properties to ignore when binding.
@@ -41,7 +56,7 @@ class JTableIssue extends JTable
 	 * @return  boolean  True on success.
 	 *
 	 * @link    http://docs.joomla.org/JTable/bind
-	 * @since   11.1
+	 * @since   1.0
 	 * @throws  InvalidArgumentException
 	 */
 	public function bind($src, $ignore = array())
@@ -70,6 +85,60 @@ class JTableIssue extends JTable
 		}
 
 		throw new InvalidArgumentException(sprintf('%s::bind(*%s*)', get_class($this), gettype($src)));
+	}
+
+	/**
+	 * Method to return the title to use for the asset table.
+	 *
+	 * @return  string
+	 *
+	 * @since   1.0
+	 */
+	protected function _getAssetTitle()
+	{
+		return $this->title;
+	}
+
+	/**
+	 * Method to get the parent asset id for the record
+	 *
+	 * @param   JTable   $table  A JTable object (optional) for the asset parent
+	 * @param   integer  $id     The id (optional) of the content.
+	 *
+	 * @return  integer
+	 *
+	 * @since   1.0
+	 */
+	protected function _getAssetParentId($table = null, $id = null)
+	{
+		$assetId = null;
+
+		// Issues are nested directly underneath the component.
+		if ($assetId === null)
+		{
+			// Build the query to get the asset id for the component.
+			$query = $this->_db->getQuery(true);
+			$query->select($this->_db->quoteName('id'));
+			$query->from($this->_db->quoteName('#__assets'));
+			$query->where($this->_db->quoteName('name') . ' = ' . $this->_db->quote('com_tracker'));
+
+			// Get the asset id from the database.
+			$this->_db->setQuery($query);
+			if ($result = $this->_db->loadResult())
+			{
+				$assetId = (int) $result;
+			}
+		}
+
+		// Return the asset id.
+		if ($assetId)
+		{
+			return $assetId;
+		}
+		else
+		{
+			return parent::_getAssetParentId($table, $id);
+		}
 	}
 
 	/**
@@ -134,7 +203,7 @@ class JTableIssue extends JTable
 			throw new RuntimeException($this->getError());
 		}
 
-		if (!$this->fieldValues)
+		if (!(isset($this->fieldValues)) || !$this->fieldValues)
 		{
 			return true;
 		}

@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 /**
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  CLI
  *
- * @copyright   Copyright (C) 2012 Michael Babker. All rights reserved.
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -42,7 +42,7 @@ ini_set('display_errors', 1);
  * NOTE: Since this pulls each GitHub Issue's comments separately and inserts each record to the database separately,
  * this will be a time consuming script.
  *
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  CLI
  * @since       1.0
  */
@@ -100,8 +100,30 @@ class TrackerApplicationComments extends JApplicationCli
 	 */
 	protected function getComments()
 	{
+		$options = new JRegistry;
+
+		// Ask if the user wishes to authenticate to GitHub.  Advantage is increased rate limit to the API.
+		$this->out('Do you wish to authenticate to GitHub? [y]es / [n]o :', false);
+
+		$resp = trim($this->in());
+
+		if ($resp == 'y' || $resp == 'yes')
+		{
+			// Get the username
+			$this->out('Enter your GitHub username :', false);
+			$username = trim($this->in());
+
+			// Get the password
+			$this->out('Enter your GitHub password :', false);
+			$password = trim($this->in());
+
+			// Set the options
+			$options->set('api.username', $username);
+			$options->set('api.password', $password);
+		}
+
 		// Instantiate JGithub
-		$github = new JGithub;
+		$github = new JGithub($options);
 
 		try
 		{
@@ -204,7 +226,7 @@ class TrackerApplicationComments extends JApplicationCli
 					(int) $comment->id . ', '
 					. (int) $issue->id . ', '
 					. $this->db->quote($comment->user->login) . ', '
-					. $this->db->quote(str_replace("\n", "<br>", $comment->body)) . ', '
+					. $this->db->quote($comment->body) . ', '
 					. $this->db->quote(JFactory::getDate($comment->created_at)->toSql())
 				);
 				$this->db->setQuery($query);

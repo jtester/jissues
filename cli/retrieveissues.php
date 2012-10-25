@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 /**
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  CLI
  *
- * @copyright   Copyright (C) 2012 Michael Babker. All rights reserved.
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -40,7 +40,7 @@ ini_set('display_errors', 1);
 /**
  * CLI Script to pull open issues from GitHub and inject them to the database if not already present
  *
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  CLI
  * @since       1.0
  */
@@ -69,8 +69,30 @@ class TrackerApplicationRetrieve extends JApplicationCli
 	 */
 	protected function getData()
 	{
+		$options = new JRegistry;
+
+		// Ask if the user wishes to authenticate to GitHub.  Advantage is increased rate limit to the API.
+		$this->out('Do you wish to authenticate to GitHub? [y]es / [n]o :', false);
+
+		$resp = trim($this->in());
+
+		if ($resp == 'y' || $resp == 'yes')
+		{
+			// Get the username
+			$this->out('Enter your GitHub username :', false);
+			$username = trim($this->in());
+
+			// Get the password
+			$this->out('Enter your GitHub password :', false);
+			$password = trim($this->in());
+
+			// Set the options
+			$options->set('api.username', $username);
+			$options->set('api.password', $password);
+		}
+
 		// Instantiate JGithub
-		$github = new JGithub;
+		$github = new JGithub($options);
 
 		try
 		{
@@ -166,7 +188,7 @@ class TrackerApplicationRetrieve extends JApplicationCli
 			$table = JTable::getInstance('Issue');
 			$table->gh_id       = $issue->number;
 			$table->title       = $issue->title;
-			$table->description = str_replace("\n", "<br>", $issue->body);
+			$table->description = $issue->body;
 			$table->status		= ($issue->state == 'open') ? 1 : 10;
 			$table->opened      = JFactory::getDate($issue->created_at)->toSql();
 

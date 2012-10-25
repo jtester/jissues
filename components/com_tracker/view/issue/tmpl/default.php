@@ -1,10 +1,13 @@
 <?php
 /**
- * @package    BabDev.Tracker
+ * @package     JTracker
+ * @subpackage  com_tracker
  *
- * @copyright  Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @copyright   Copyright (C) 2012 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
+/* @var TrackerViewIssueHtml $this */
 
 defined('_JEXEC') or die;
 
@@ -15,8 +18,9 @@ $php       = $this->fields->get('php_version');
 $webserver = $this->fields->get('web_server');
 ?>
 
-<div class="container-fluid">
-    <h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
+<form action="<?php echo htmlspecialchars(JUri::getInstance()->toString()); ?>" method="post" name="adminForm" id="adminForm">
+	<div class="container-fluid">
+		<h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
 
     <div class="row-fluid">
 		<div class="span9">
@@ -86,7 +90,7 @@ $webserver = $this->fields->get('web_server');
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DATABASE_TYPE') ?></label>
 						<?php if ($database) : ?>
-                        	<?php echo $this->item->database_type; ?>
+                        	<?php echo $database; ?>
 						<?php endif; ?>
 					</td>
 				</tr>
@@ -98,7 +102,7 @@ $webserver = $this->fields->get('web_server');
                     <td>
                         <label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_WEBSERVER') ?></label>
 						<?php if ($webserver) : ?>
-                        	<?php echo $this->item->webserver; ?>
+                        	<?php echo $webserver; ?>
 						<?php endif; ?>
                     </td>
 				</tr>
@@ -112,7 +116,7 @@ $webserver = $this->fields->get('web_server');
 					<td>
 						<label><?php echo JText::_('COM_TRACKER_HEADING_PHP_VERSION'); ?></label>
 						<?php if ($php) : ?>
-							<?php echo $this->item->php_version; ?>
+							<?php echo $php; ?>
 						<?php endif; ?>
 					</td>
 				</tr>
@@ -133,8 +137,8 @@ $webserver = $this->fields->get('web_server');
 				<tr class="issue-info-row">
                     <td>
 						<label><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_BROWSER'); ?></label>
-						<?php if ($this->item->browser) : ?>
-							<?php echo $this->item->browser; ?>
+						<?php if ($browser) : ?>
+							<?php echo $browser; ?>
 						<?php endif; ?>
 					</td>
 					<td>
@@ -187,16 +191,21 @@ $webserver = $this->fields->get('web_server');
 		<div class="span12">
 			<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_COMMENTS'); ?></h4>
 		</div>
-	</div>
-	<?php foreach ($this->comments as $comment) : ?>
-	<div class="row-fluid">
-		<div class="span12">
-			<div class="well well-small">
-				<h5><?php echo JText::sprintf('COM_TRACKER_LABEL_SUBMITTED_BY', $comment->submitter, $comment->created); ?></h5>
-				<p><?php echo $comment->text; ?></p>
+
+		<?php foreach ($this->comments as $i => $comment) : ?>
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="well well-small">
+					<h5>
+						<a href="#issue-comment-<?php echo $i + 1; ?>" id="issue-comment-<?php echo $i + 1; ?>">#<?php echo $i + 1; ?></a>
+						<?php echo JText::sprintf('COM_TRACKER_LABEL_SUBMITTED_BY', $comment->submitter, $comment->created); ?>
+					</h5>
+					<p><?php echo $comment->text; ?></p>
+				</div>
 			</div>
 		</div>
+		<?php endforeach; ?>
+		<?php endif; ?>
 	</div>
-	<?php endforeach; ?>
-	<?php endif; ?>
-</div>
+	<input type="hidden" name="task" />
+</form>

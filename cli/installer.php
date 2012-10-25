@@ -1,19 +1,15 @@
 #!/usr/bin/env php
 <?php
 /**
- * User: elkuku
- * Date: 08.10.12
- * Time: 20:30
+ * @package     JTracker
+ * @subpackage  CLI
  *
- * @todo improveme =;)
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
-
-'cli' == PHP_SAPI || die('This script must be run from the command line');
 
 // We are a valid entry point.
 const _JEXEC = 1;
-
-error_reporting(-1);
 
 // Load system defines
 if (file_exists(dirname(__DIR__) . '/defines.php'))
@@ -28,10 +24,24 @@ if (!defined('_JDEFINES'))
 }
 
 // Get the framework.
-require_once JPATH_LIBRARIES . '/import.php';
+require_once JPATH_LIBRARIES . '/import.legacy.php';
+
+// Bootstrap the CMS libraries.
+require_once JPATH_LIBRARIES . '/cms.php';
+
+// Bootstrap the Tracker application libraries.
+require_once JPATH_LIBRARIES . '/tracker.php';
+
+// Configure error reporting to maximum for CLI output.
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 /**
  * Simple Installer.
+ *
+ * @package     JTracker
+ * @subpackage  CLI
+ * @since       1.0
  */
 class InstallerApplication extends JApplicationCli
 {
@@ -43,9 +53,9 @@ class InstallerApplication extends JApplicationCli
 	/**
 	 * Method to run the application routines.
 	 *
-	 * @throws UnexpectedValueException
+	 * @throws RuntimeException
 	 * @throws InstallerAbortException
-	 *
+	 * @throws UnexpectedValueException
 	 * @return  void
 	 */
 	protected function doExecute()
@@ -57,24 +67,32 @@ class InstallerApplication extends JApplicationCli
 		try
 		{
 			// Check if the database "exists"
-
 			$tables = $db->getTableList();
 
-			$this->out('WARNING: A database has been found. Do you want to reinstall ? [y]es / [n]o :', false);
+			$this->out('WARNING: A database has been found !!')->out('Do you want to reinstall ? [y]es / [[n]]o :', false);
 
-			$resp = trim($this->in());
+			$in = trim($this->in());
 
-			if ('yes' != $resp && 'y' != $resp)
+			if ('yes' != $in && 'y' != $in)
+			{
 				throw new InstallerAbortException;
+			}
 
 			// Remove existing tables
 
-			$this->out('Remove existing tables...', false);
+			$this->out('Removing existing tables...', false);
+
+			// First, need to drop the tables with FKs in specific order
+			$keyTables = array($db->replacePrefix('#__tracker_fields_values'), $db->replacePrefix('#__issue_comments'), $db->replacePrefix('#__issues'), $db->replacePrefix('#__status'));
+			foreach ($keyTables as $table)
+			{
+				$db->setQuery('DROP TABLE IF EXISTS ' . $table)->execute();
+				$this->out('.', false);
+			}
 
 			foreach ($tables as $table)
 			{
-				$db->setQuery('DROP TABLE ' . $table)->execute();
-
+				$db->setQuery('DROP TABLE IF EXISTS ' . $table)->execute();
 				$this->out('.', false);
 			}
 
@@ -82,60 +100,147 @@ class InstallerApplication extends JApplicationCli
 		}
 		catch (RuntimeException $e)
 		{
-			// Note: we may end up here if the db has not been found *OR* if the db server is down.
-			// @todo check $e->getCode()
+			// Check if the message is "Could not connect to database."  Odds are, this means the DB isn't there or the server is down.
+			if (strpos($e->getMessage(), 'Could not connect to database.') !== false)
+			{
+				// ? really..
+				$this->out('No database found.');
 
-			$this->out('No database found.');// ? really..
+				$this->out('Creating the database...', false);
 
-			$this->out('Creating the database...', false);
+				$dbOptions          = new stdClass;
+				$dbOptions->db_name = $this->config->get('db');
+				$dbOptions->db_user = $this->config->get('user');
 
-			$db->setQuery('CREATE DATABASE ' . JFactory::getConfig()->get('db'))->execute();
+				$db->createDatabase($dbOptions);
+				$db->select($this->config->get('db'));
 
-			$db->select(JFactory::getConfig()->get('db'));
-
-			$this->out('ok');
+				$this->out('ok');
+			}
 		}
 
 		// Install.
-		$sql = file_get_contents(JPATH_ROOT . '/sql/mysql.sql');
+
+		$dbType = $this->config->get('dbtype');
+
+		if ('mysqli' == $dbType)
+		{
+			$dbType = 'mysql';
+		}
+
+		if (false == file_exists(JPATH_ROOT . '/sql/' . $dbType . '.sql'))
+		{
+			throw new UnexpectedValueException(sprintf('Install SQL file for %s not found.', $dbType));
+		}
+
+		$sql = file_get_contents(JPATH_ROOT . '/sql/' . $dbType . '.sql');
 
 		if (false == $sql)
+		{
 			throw new UnexpectedValueException('SQL file not found.');
+		}
 
-		$this->out('Creating tables from file /sql/mysql.sql', false);
+		$this->out('Creating tables from file /sql/' . $dbType . '.sql', false);
 
 		foreach ($db->splitSql($sql) as $query)
 		{
 			$q = trim($db->replacePrefix($query));
 
 			if ('' == trim($q))
+			{
 				continue;
+			}
 
-			$db->setQuery($q)->execute();
+			$db->setQuery($q);
+
+			try
+			{
+				$db->execute();
+			}
+			catch (RuntimeException $e)
+			{
+				throw new RuntimeException($e->getMessage());
+			}
 
 			$this->out('.', false);
 		}
 
 		$this->out('ok');
-		
-		$this->out('Do you want to create an admin user? [y]es / [n]o :', false);	
 
-		$resp = trim($this->in());
-
-		if ('yes' == $resp || 'y' == $resp)
+		/* @var DirectoryIterator $fileInfo */
+		foreach (new DirectoryIterator(JPATH_ROOT . '/sql') as $fileInfo)
 		{
-			$this->out('Enter username: ', false);
+			if ($fileInfo->isDot())
+			{
+				continue;
+			}
+
+			$fileName = $fileInfo->getFilename();
+
+			if ('index.html' == $fileName
+				|| $dbType . '.sql' == $fileName)
+			{
+				continue;
+			}
+
+			// Process optional SQL files
+			$this->out(sprintf('Process: %s? [[y]]es / [n]o :', $fileName), false);
+
+			$in = trim($this->in());
+
+			if ('no' == $in || 'n' == $in)
+			{
+				continue;
+			}
+
+			$sql = file_get_contents(JPATH_ROOT . '/sql/' . $fileName);
+
+			if (false == $sql)
+			{
+				throw new UnexpectedValueException('SQL file not found.');
+			}
+
+			$this->out(sprintf('Processing %s', $fileName), false);
+
+			foreach ($db->splitSql($sql) as $query)
+			{
+				$q = trim($db->replacePrefix($query));
+
+				if ('' == trim($q))
+				{
+					continue;
+				}
+
+				$db->setQuery($q)->execute();
+
+				$this->out('.', false);
+			}
+
+			$this->out('ok');
+		}
+
+		$this->out('Do you want to create an admin user? [[y]]es / [n]o :', false);
+
+		$in = trim($this->in());
+
+		if ('no' != $in && 'n' != $in)
+		{
+			$this->out('Enter username [[admin]]: ', false);
 			$username = trim($this->in());
-			$this->out('Enter password: ', false);
+			$username = $username ? : 'admin';
+
+			$this->out('Enter password [[test]]: ', false);
 			$password = trim($this->in());
-			$salt = JUserHelper::genRandomPassword(32);
+			$password = $password ? : 'test';
+
+			$salt  = JUserHelper::genRandomPassword(32);
 			$crypt = JUserHelper::getCryptedPassword($password, $salt);
 
-			$query = $db->getQuery(true);	
+			$query = $db->getQuery(true);
 			$query->insert('#__users');
 			$query->set('name = "Super User"');
-			$query->set('username = '. $db->quote($username));
-			$query->set('password = '. $db->quote($crypt . ':' . $salt));
+			$query->set('username = ' . $db->quote($username));
+			$query->set('password = ' . $db->quote($crypt . ':' . $salt));
 			$query->set('email = "test@localhost.test"');
 			$query->set('block = 0');
 			$query->set('sendEmail = 1');
@@ -148,53 +253,25 @@ class InstallerApplication extends JApplicationCli
 
 			$db->setQuery($query)->execute();
 			$userId = $db->insertid();
-			
+
 			$query->clear();
 			$query->insert('#__user_usergroup_map');
-			$query->set('user_id = '.  $db->quote($userId) );
+			$query->set('user_id = ' . $db->quote($userId));
 			$query->set('group_id = 8');
 			$db->setQuery($query)->execute();
-			$this->out('User created');	
+			$this->out('User created.');
 		}
 
-		$this->out('Do you want to import sample Github issues? [y]es / [n]o :', false);	
-
-		$resp = trim($this->in());
-
-		if ('yes' == $resp || 'y' == $resp)
-		{
-			$sql = file_get_contents(JPATH_ROOT . '/sql/sampledata.sql');
-
-			if (false == $sql)
-				throw new UnexpectedValueException('SQL file not found.');
-
-			$this->out('Importing sample Github issues from /sql/sampledata.sql', false);
-
-			foreach ($db->splitSql($sql) as $query)
-			{
-				$q = trim($db->replacePrefix($query));
-
-				if ('' == trim($q))
-					continue;
-
-				$db->setQuery($q)->execute();
-
-				$this->out('.', false);
-			}
-
-			$this->out('ok');	
-		}	
-		
 		$this->out()
-			 ->out(sprintf('%s installer has terminated successfully.', $this->appName));
+			->out(sprintf('%s installer has terminated successfully.', $this->appName));
 	}
 
 	/**
 	 * Output a nicely formatted title for the application.
 	 *
-	 * @param string $title    The title to display.
-	 * @param string $subTitle A subtitle
-	 * @param int    $width    Total width in chars
+	 * @param   string  $title     The title to display.
+	 * @param   string  $subTitle  A subtitle
+	 * @param   int     $width     Total width in chars
 	 *
 	 * @return InstallerApplication
 	 */
@@ -204,7 +281,9 @@ class InstallerApplication extends JApplicationCli
 		$this->out(str_repeat(' ', $width / 2 - (strlen($title) / 2)) . $title);
 
 		if ($subTitle)
+		{
 			$this->out(str_repeat(' ', $width / 2 - (strlen($subTitle) / 2)) . $subTitle);
+		}
 
 		$this->out(str_repeat('-', $width))
 			->out();
@@ -215,9 +294,16 @@ class InstallerApplication extends JApplicationCli
 
 /**
  * Exception class
+ *
  * @todo move
+ *
+ * @package     JTracker
+ * @subpackage  CLI
+ * @since       1.0
  */
-class InstallerAbortException extends Exception{}
+class InstallerAbortException extends Exception
+{
+}
 
 /*
  * Main

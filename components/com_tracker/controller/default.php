@@ -1,9 +1,9 @@
 <?php
 /**
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  com_tracker
  *
- * @copyright   Copyright (C) 2012 Michael Babker. All rights reserved.
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -12,9 +12,9 @@ defined('_JEXEC') or die;
 /**
  * Default controller class for the Tracker component.
  *
- * @package     BabDev.Tracker
+ * @package     JTracker
  * @subpackage  com_tracker
- * @since       3.0
+ * @since       1.0
  */
 class TrackerControllerDefault extends JControllerBase
 {
@@ -33,9 +33,9 @@ class TrackerControllerDefault extends JControllerBase
 		// Get the document object.
 		$document = $app->getDocument();
 
-		$vName = $app->input->getWord('view', 'issues');
+		$vName   = $app->input->getWord('view', 'issues');
 		$vFormat = $document->getType();
-		$lName = $app->input->getWord('layout', 'default');
+		$lName   = $app->input->getWord('layout', 'default');
 
 		$app->input->set('view', $vName);
 
@@ -45,6 +45,12 @@ class TrackerControllerDefault extends JControllerBase
 
 		$vClass = 'TrackerView' . ucfirst($vName) . ucfirst($vFormat);
 		$mClass = 'TrackerModel' . ucfirst($vName);
+
+		if (false == class_exists($mClass))
+		{
+			$mClass = 'TrackerModelDefault';
+		}
+
 		$view = new $vClass(new $mClass, $paths);
 		$view->setLayout($lName);
 
