@@ -16,14 +16,16 @@ defined('_JEXEC') or die;
  * @subpackage  com_login
  * @since       1.5
  */
-class LoginModelLogin extends JModelLegacy
+class ComAdminLoginModelLogin extends JModelLegacy
 {
 	/**
 	 * Method to auto-populate the model state.
 	 *
 	 * Note. Calling getState in this method will result in recursion.
 	 *
-	 * @since	1.6
+	 * @since    1.6
+	 *
+	 * @return void
 	 */
 	protected function populateState()
 	{
@@ -31,18 +33,23 @@ class LoginModelLogin extends JModelLegacy
 			'username' => JRequest::getVar('username', '', 'method', 'username'),
 			'password' => JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW)
 		);
+
 		$this->setState('credentials', $credentials);
 
-		// check for return URL from the request first
-		if ($return = JRequest::getVar('return', '', 'method', 'base64')) {
+		// Check for return URL from the request first
+		if ($return = JRequest::getVar('return', '', 'method', 'base64'))
+		{
 			$return = base64_decode($return);
-			if (!JURI::isInternal($return)) {
+
+			if (!JURI::isInternal($return))
+			{
 				$return = '';
 			}
 		}
 
 		// Set the return URL if empty.
-		if (empty($return)) {
+		if (empty($return))
+		{
 			$return = 'index.php';
 		}
 
@@ -68,28 +75,32 @@ class LoginModelLogin extends JModelLegacy
 		for ($i = 0; $i < $total; $i++)
 		{
 			// Match the title if we're looking for a specific instance of the module
-			if (!$title || $modules[$i]->title == $title) {
+			if (!$title || $modules[$i]->title == $title)
+			{
+				// Found it
 				$result = $modules[$i];
-				break;	// Found it
+				break;
 			}
 		}
 
 		// If we didn't find it, and the name is mod_something, create a dummy object
-		if (is_null($result) && substr($name, 0, 4) == 'mod_') {
-			$result				= new stdClass;
-			$result->id			= 0;
-			$result->title		= '';
-			$result->module		= $name;
-			$result->position	= '';
-			$result->content	= '';
-			$result->showtitle	= 0;
-			$result->control	= '';
-			$result->params		= '';
-			$result->user		= 0;
+		if (is_null($result) && substr($name, 0, 4) == 'mod_')
+		{
+			$result            = new stdClass;
+			$result->id        = 0;
+			$result->title     = '';
+			$result->module    = $name;
+			$result->position  = '';
+			$result->content   = '';
+			$result->showtitle = 0;
+			$result->control   = '';
+			$result->params    = '';
+			$result->user      = 0;
 		}
 
 		return $result;
 	}
+
 	/**
 	 * Load login modules.
 	 *
@@ -99,7 +110,7 @@ class LoginModelLogin extends JModelLegacy
 	 * This is put in as a failsafe to avoid super user lock out caused by an unpublished
 	 * login module or by a module set to have a viewing access level that is not Public.
 	 *
-	 * @param   string  $name   The name of the module
+	 * @param   string  $module  The name of the module
 	 *
 	 * @return  array
 	 *
@@ -109,7 +120,8 @@ class LoginModelLogin extends JModelLegacy
 	{
 		static $clean;
 
-		if (isset($clean)) {
+		if (isset($clean))
+		{
 			return $clean;
 		}
 
@@ -121,19 +133,21 @@ class LoginModelLogin extends JModelLegacy
 		$cacheid     = md5(serialize(array($clientId, $lang)));
 		$loginmodule = array();
 
-		if (!($clean = $cache->get($cacheid))) {
-			$db	= JFactory::getDbo();
+		if (!($clean = $cache->get($cacheid)))
+		{
+			$db = JFactory::getDbo();
 
 			$query = $db->getQuery(true);
 			$query->select('m.id, m.title, m.module, m.position, m.showtitle, m.params');
 			$query->from('#__modules AS m');
-			$query->where('m.module =' . $db->Quote($module) .' AND m.client_id = 1');
+			$query->where('m.module =' . $db->Quote($module) . ' AND m.client_id = 1');
 
 			$query->join('LEFT', '#__extensions AS e ON e.element = m.module AND e.client_id = m.client_id');
 			$query->where('e.enabled = 1');
 
 			// Filter by language
-			if ($app->isSite() && $app->getLanguageFilter()) {
+			if ($app->isSite() && $app->getLanguageFilter())
+			{
 				$query->where('m.language IN (' . $db->Quote($lang) . ',' . $db->Quote('*') . ')');
 			}
 
@@ -149,6 +163,7 @@ class LoginModelLogin extends JModelLegacy
 			catch (RuntimeException $e)
 			{
 				JError::raiseWarning(500, JText::sprintf('JLIB_APPLICATION_ERROR_MODULE_LOAD', $e->getMessage()));
+
 				return $loginmodule;
 			}
 
