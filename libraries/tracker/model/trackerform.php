@@ -109,7 +109,7 @@ abstract class JModelTrackerform extends JModelDatabase
 	protected function loadForm($name, $source = null, $options = array(), $clear = false, $xpath = false)
 	{
 		// Handle the optional arguments.
-		$options['control'] = JArrayHelper::getValue($options, 'control', false);
+		$options['control'] = JArrayHelper::getValue($options, 'control', 'jform');
 
 		// Create a signature hash.
 		$hash = md5($source . serialize($options));
@@ -118,6 +118,11 @@ abstract class JModelTrackerform extends JModelDatabase
 		if (isset($this->forms[$hash]) && !$clear)
 		{
 			return $this->forms[$hash];
+		}
+
+		if (is_null($source))
+		{
+			$source = $name;
 		}
 
 		// Get the form.
