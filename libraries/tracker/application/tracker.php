@@ -74,19 +74,19 @@ abstract class JApplicationTracker extends JApplicationWeb
 		$this->loadDispatcher();
 
 		// Enable sessions by default.
-		if (is_null($this->config->get('session')))
+		if (is_null($this->get('session')))
 		{
-			$this->config->set('session', true);
+			$this->set('session', true);
 		}
 
 		// Set the session default name.
-		if (is_null($this->config->get('session_name')))
+		if (is_null($this->get('session_name')))
 		{
-			$this->config->set('session_name', 'jissues');
+			$this->set('session_name', 'jissues');
 		}
 
 		// Create the session if a session name is passed.
-		if ($this->config->get('session') !== false)
+		if ($this->get('session') !== false)
 		{
 			$this->loadSession();
 
@@ -110,7 +110,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 		parent::afterSessionStart();
 
 		// TODO: At some point we need to get away from having session data always in the db.
-		if ($this->getCfg('sess_handler') == 'database')
+		if ($this->get('sess_handler') == 'database')
 		{
 			$session = JFactory::getSession();
 			$db      = JFactory::getDBO();
@@ -133,6 +133,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 			// Check to see the the session already exists.
 			// @todo remove ? $handler = $this->getCfg('sess_handler');
 
+			$handler = $this->get('sess_handler');
 			if (($time % 2 || $session->isNew()) || ($session->isNew()))
 			{
 				$this->checkSession();
@@ -341,6 +342,9 @@ abstract class JApplicationTracker extends JApplicationWeb
 	 */
 	protected function fetchController($component, $task)
 	{
+		// Define component path.
+		define('JPATH_COMPONENT', JPATH_BASE . '/components/' . $component);
+
 		if (is_null($task))
 		{
 			$task = 'default';
@@ -349,57 +353,36 @@ abstract class JApplicationTracker extends JApplicationWeb
 		// Strip com_ off the component
 		$base = substr($component, 4);
 
-		// Set the controller class name based on the task
-		$class = ucfirst($base) . 'Controller' . ucfirst($task);
-
-		// Define component path.
-		define('JPATH_COMPONENT', JPATH_BASE . '/components/' . $component);
-
 		// Register the component with the autoloader
 		JLoader::registerPrefix(ucfirst($base), JPATH_COMPONENT);
 
-		// If the requested controller exists let's use it.
-		if (class_exists($class))
-		{
-			return new $class;
-		}
-		// See if there's an action class in the libraries if we aren't calling the default task
-		elseif ($task && $task != 'default')
-		{
-			$class = 'JController' . ucfirst($task);
+		// Set the controller class name based on the task
+		$class = ucfirst($base) . 'Controller' . ucfirst($task);
 
-			if (class_exists($class))
+		// Check for the requested controller.
+		if (!class_exists($class) || !is_subclass_of($class, 'JController'))
+		{
+			// See if there's an action class in the libraries if we aren't calling the default task
+			if ($task && $task != 'default')
 			{
-				return new $class;
+				$class = 'JController' . ucfirst($task);
+			}
+
+			if (!class_exists($class) || !is_subclass_of($class, 'JController'))
+			{
+				// Look for a default controller for the component
+				$class = ucfirst($base) . 'ControllerDefault';
+
+				if (!class_exists($class) || !is_subclass_of($class, 'JController'))
+				{
+					// Nothing found. Panic.
+					throw new RuntimeException(sprintf('Controller not found for %s task', $task));
+				}
 			}
 		}
-		else
-		{
-			$class = ucfirst($base) . 'ControllerDefault';
 
-			if (class_exists($class))
-			{
-				return new $class;
-			}
-		}
-
-		// Nothing found. Panic.
-		throw new RuntimeException(sprintf('Class %s not found', $class));
-	}
-
-	/**
-	 * Gets a configuration value.
-	 *
-	 * @param   string  $varname  The name of the value to get.
-	 * @param   string  $default  Default value to return
-	 *
-	 * @return  mixed  The user state.
-	 *
-	 * @since   1.0
-	 */
-	public function getCfg($varname, $default = null)
-	{
-		return JFactory::getConfig()->get($varname, $default);
+		// Instantiate and return the controller
+		return new $class($this->input, $this);
 	}
 
 	/**
@@ -721,8 +704,8 @@ abstract class JApplicationTracker extends JApplicationWeb
 					$lifetime = time() + 365 * 24 * 60 * 60;
 
 					// Use domain and path set in config for cookie if it exists.
-					$cookie_domain = $this->getCfg('cookie_domain', '');
-					$cookie_path   = $this->getCfg('cookie_path', '/');
+					$cookie_domain = $this->get('cookie_domain', '');
+					$cookie_path   = $this->get('cookie_path', '/');
 					setcookie(JApplication::getHash('JLOGIN_REMEMBER'), $rcookie, $lifetime, $cookie_path, $cookie_domain);
 				}
 
@@ -791,8 +774,8 @@ abstract class JApplicationTracker extends JApplicationWeb
 		if (!in_array(false, $results, true))
 		{
 			// Use domain and path set in config for cookie if it exists.
-			$cookie_domain = $this->getCfg('cookie_domain', '');
-			$cookie_path   = $this->getCfg('cookie_path', '/');
+			$cookie_domain = $this->get('cookie_domain', '');
+			$cookie_path   = $this->get('cookie_path', '/');
 			setcookie(self::getHash('JLOGIN_REMEMBER'), false, time() - 86400, $cookie_path, $cookie_domain);
 
 			return true;

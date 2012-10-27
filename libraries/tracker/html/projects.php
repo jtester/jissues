@@ -132,6 +132,98 @@ abstract class JHtmlProjects
 	}
 
 	/**
+	 * Get a project selector.
+	 *
+	 * @param   string  $selected  The selected entry
+	 *
+	 * @return string
+	 */
+	public static function projectsSelect($selected = '')
+	{
+		$projects = self::projects();
+
+		if (!$projects)
+		{
+			return '';
+		}
+
+		$options = array();
+
+		$options[] = JHtmlSelect::option('', JText::_('Select a Project'));
+
+		foreach ($projects as $project)
+		{
+			$options[] = JHtmlSelect::option($project->id, $project->title);
+		}
+
+		$js = 'onchange="document.adminForm.submit();"';
+
+		return JHtmlSelect::genericlist($options, 'project', $js, 'value', 'text', $selected, 'select-project');
+	}
+
+	/**
+	 * Returns a HTML list of categories for the given extension.
+	 *
+	 * @param   bool    $links     Links or simple list items.
+	 * @param   string  $selected  The selected item.
+	 *
+	 * @return  string
+	 *
+	 * @since   1.0
+	 */
+	public static function projectsListing($links = false, $selected = '')
+	{
+		$items = self::projects();
+
+		if (0 == count($items))
+		{
+			return '';
+		}
+
+		$html = array();
+
+		$link = 'index.php?option=com_tracker&view=project&id=%d';
+
+		$html[] = '<ul class="unstyled">';
+
+		foreach ($items as $item)
+		{
+			$selected    = ($selected == $item->id) ? ' selected' : '';
+
+			$html[] = '<li>';
+			$html[] = $links
+				? JHtml::link(sprintf($link, $item->id), $item->title, array('class' => $selected))
+				: $item->title;
+			$html[] = '</li>';
+		}
+
+		$html[] = '</ul>';
+
+		return implode("\n", $html);
+	}
+
+	/**
+	 * Get the defined projects.
+	 *
+	 * @return array
+	 */
+	public static function projects()
+	{
+		static $projects = null;
+
+		if (is_array($projects))
+		{
+			return $projects;
+		}
+
+		$model = new ComAdminTrackerModelProjects;
+
+		$projects = $model->getItems();
+
+		return $projects;
+	}
+
+	/**
 	 * Draws a text input.
 	 *
 	 * @param   string  $name         Control name.
@@ -169,5 +261,4 @@ abstract class JHtmlProjects
 		return '<input type="checkbox" name="fields[' . $name . ']" '
 			. ' id="chk-' . $name . '"' . $checked . $description . ' />';
 	}
-
 }
