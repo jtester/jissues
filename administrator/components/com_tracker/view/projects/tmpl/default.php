@@ -33,7 +33,7 @@ $deleteLink = $baseLink . '&task=deleteproject&id=';
                 <tr>
                     <th style="width: 5%;">ID</th>
                     <th>Title</th>
-                    <th>Alias</th>
+                    <th>GitHub</th>
                     <th style="width: 5%;">Action</th>
                 </tr>
                 </thead>
@@ -42,8 +42,14 @@ $deleteLink = $baseLink . '&task=deleteproject&id=';
 				<?php foreach ($this->model->getItems() as $item) : ?>
                 <tr>
                     <td><?= $item->id ?></td>
-                    <td><?= JHtml::link($editLink . $item->id, $item->title) ?></td>
-                    <td><?= $item->alias ?></td>
+                    <td>
+	                    <?= JHtml::link($editLink . $item->id, $item->title) ?><br />
+	                    <?= $item->alias ?>
+                    </td>
+                    <td><pre>
+	                    <?= JHtml::link('https://github.com/' . $item->gh_user . '/' . $item->gh_project,
+	                    $item->gh_user . '/' . $item->gh_project) ?>
+                    </pre></td>
                     <td><?= JHtml::link($deleteLink . $item->id, 'Delete') ?></td>
                 </tr>
 				<?php endforeach; ?>

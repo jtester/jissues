@@ -32,11 +32,11 @@ $project = JFactory::getApplication()->input->get('project');
                 </div>
             </div>
 
-			<?php if ($project) : ?>
+			<? if ($project) : ?>
 
 			<? include $this->getPath('project') ?>
 
-			<?php else : ?>
+			<? else : ?>
             <div class="row-fluid">
                 <div class="span6">
                     <h2>Projects</h2>
@@ -81,7 +81,7 @@ $project = JFactory::getApplication()->input->get('project');
                     </div>
                 </div>
             </div>
-			<?php endif; ?>
+			<? endif; ?>
 
             <div>
                 <input type="hidden" name="option" value="com_tracker"/>
