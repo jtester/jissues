@@ -116,6 +116,8 @@ abstract class JHtmlProjects
 			return $sections[$section];
 		}
 
+		$sections[$section] = array();
+
 		$db = JFactory::getDbo();
 
 		$items = $db->setQuery(
@@ -127,7 +129,10 @@ abstract class JHtmlProjects
 				->order('lft')
 		)->loadObjectList();
 
-		$sections[$section] = $items;
+		foreach ($items as $item)
+		{
+			$sections[$section][$item->alias] = $item;
+		}
 
 		return $sections[$section];
 	}
