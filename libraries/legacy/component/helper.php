@@ -319,7 +319,7 @@ class JComponentHelper
 		$path = JPATH_COMPONENT . '/' . $file . '.php';
 
 		// If component is disabled throw error
-		if (!self::isEnabled($option) || !file_exists($path))
+		if (!self::isEnabled($option))
 		{
 			throw new Exception(JText::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'), 404);
 		}
@@ -332,8 +332,47 @@ class JComponentHelper
 		// Handle template preview outlining.
 		$contents = null;
 
-		// Execute the component.
-		$contents = self::executeComponent($path);
+		if (file_exists($path))
+		{
+			// !! This identifies a "legacy component" !!!
+
+			// Execute the component.
+			$contents = self::executeComponent($path);
+		}
+		else
+		{
+			$path = JPATH_COMPONENT . '/component.php';
+
+			if (file_exists($path))
+			{
+				include $path;
+			}
+
+			// NOTE: The ternary instead of the default prevents empty strings.
+			$task = $app->input->get('task') ? : 'default';
+
+			// Set the view name based on the task
+			$app->input->set('view', $app->input->get('view', $task));
+
+			// Strip com_ off the component
+			$base = substr($option, 4);
+
+			$prefix = ($app->isAdmin()) ? 'Admin' : '';
+
+			// Set the controller class name based on the task
+			$class = 'Com' . $prefix . ucfirst($base) . 'Controller' . ucfirst($task);
+
+			$controllerClass = (class_exists($class)) ? $class : 'JControllerDefault';
+
+			$controller = new $controllerClass;
+
+			ob_start();
+			$controller->execute();
+			$contents = ob_get_contents();
+			ob_end_clean();
+
+			$controller->redirect();
+		}
 
 		// Revert the scope
 		$app->scope = $scope;
