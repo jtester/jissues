@@ -12,12 +12,17 @@ defined('JPATH_PLATFORM') or die;
 /**
  * Joomla Platform class for interacting with a GitHub server instance.
  *
- * @property-read  JGithubGists    $gists    GitHub API object for gists.
- * @property-read  JGithubIssues   $issues   GitHub API object for issues.
- * @property-read  JGithubPulls    $pulls    GitHub API object for pulls.
- * @property-read  JGithubRefs     $refs     GitHub API object for referencess.
- * @property-read  JGithubForks    $forks    GitHub API object for forks.
- * @property-read  JGithubCommits  $commits  GitHub API object for commits.
+ * @property-read  JGithubGists       $gists       GitHub API object for gists.
+ * @property-read  JGithubIssues      $issues      GitHub API object for issues.
+ * @property-read  JGithubPulls       $pulls       GitHub API object for pulls.
+ * @property-read  JGithubRefs        $refs        GitHub API object for referencess.
+ * @property-read  JGithubForks       $forks       GitHub API object for forks.
+ * @property-read  JGithubCommits     $commits     GitHub API object for commits.
+ * @property-read  JGithubMilestones  $milestones  GitHub API object for commits.
+ * @property-read  JGithubStatuses    $statuses    GitHub API object for commits.
+ * @property-read  JGithubAccount     $account     GitHub API object for account references.
+ * @property-read  JGithubHooks       $hooks       GitHub API object for hooks.
+ * @property-read  JGithubUsers       $users       GitHub API object for users.
  *
  * @package     Joomla.Platform
  * @subpackage  GitHub
@@ -78,6 +83,24 @@ class JGithub
 	 * @since  12.3
 	 */
 	protected $milestones;
+
+	/**
+	 * @var    JGithubStatuses  GitHub API object for statuses.
+	 * @since  12.3
+	 */
+	protected $statuses;
+
+	/**
+	 * @var    JGithubAccount  GitHub API object for account references.
+	 * @since  12.3
+	 */
+	protected $account;
+
+	/**
+	 * @var    JGithubHooks  GitHub API object for hooks.
+	 * @since  12.3
+	 */
+	protected $hooks;
 
 	/**
 	 * @var    JGithubUsers  GitHub API object for users.
@@ -174,6 +197,33 @@ class JGithub
 				$this->milestones = new JGithubMilestones($this->options, $this->client);
 			}
 			return $this->milestones;
+		}
+
+		if ($name == 'statuses')
+		{
+			if ($this->statuses == null)
+			{
+				$this->statuses = new JGithubStatuses($this->options, $this->client);
+			}
+			return $this->statuses;
+		}
+
+		if ($name == 'account')
+		{
+			if ($this->account == null)
+			{
+				$this->account = new JGithubAccount($this->options, $this->client);
+			}
+			return $this->account;
+		}
+
+		if ($name == 'hooks')
+		{
+			if ($this->hooks == null)
+			{
+				$this->hooks = new JGithubHooks($this->options, $this->client);
+			}
+			return $this->hooks;
 		}
 
 		if ($name == 'users')
