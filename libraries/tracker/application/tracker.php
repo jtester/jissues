@@ -131,9 +131,8 @@ abstract class JApplicationTracker extends JApplicationWeb
 			}
 
 			// Check to see the the session already exists.
-			// @todo remove ? $handler = $this->getCfg('sess_handler');
+			// @todo remove ? $handler = $this->get('sess_handler');
 
-			$handler = $this->get('sess_handler');
 			if (($time % 2 || $session->isNew()) || ($session->isNew()))
 			{
 				$this->checkSession();
