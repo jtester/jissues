@@ -9,37 +9,40 @@
 
 defined('_JEXEC') or die;
 
-/* @var TrackerViewTracker $this */
+/* @var JViewDefaultHtml $this */
+
+JHtmlBootstrap::tooltip();
 
 $baseLinkAdd = 'index.php?option=com_categories&view=category&layout=edit&task=category.add&extension=com_tracker';
 $buttonStyles = array('class' => 'btn btn-small btn-success');
-JHtmlBootstrap::tooltip();
-?>
 
+$project = JFactory::getApplication()->input->get('project');
+
+?>
 <div class="row-fluid">
-    <div class="span2"><?= JHtml::_('sidebar.render') ?></div>
+    <div class="span2"><?= JHtmlSidebar::render() ?></div>
 
     <div class="span10">
         <form class="form" name="adminForm" id="adminForm" method="post">
             <div class="row">
                 <div class="span12 well well-small">
-					<?= JHtmlprojects::select('com_tracker', 'project', $this->project, JText::_('Select a Project')); ?>
+					<?= JHtmlprojects::projectsSelect($project); ?>
                     <span style="color: orange; font-size: 1.5em; cursor: help;" class="hasTooltip"
                           title="Select a project to define project specific items."><i class="icon-comment"></i></span>
                 </div>
             </div>
 
-			<?php if ($this->project) : ?>
+			<?php if ($project) : ?>
 
-			<?= $this->loadTemplate('project') ?>
+			<? include $this->getPath('project') ?>
 
 			<?php else : ?>
             <div class="row-fluid">
                 <div class="span6">
                     <h2>Projects</h2>
-					<?= JHtml::link($baseLinkAdd, 'Add a Project', $buttonStyles) ?>
+					<?= JHtml::link('index.php?option=com_tracker&view=project', 'Add a Project', $buttonStyles) ?>
                     <div class="well well-small">
-						<?= JHtmlProjects::listing('com_tracker') ?>
+						<?= JHtmlProjects::projectsListing() ?>
                     </div>
                 </div>
 

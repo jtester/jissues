@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <field
+            name="id"
+            type="text"
+            default="0"
+            label="JGLOBAL_FIELD_ID_LABEL"
+            description="JGLOBAL_FIELD_ID_DESC"
+            class="readonly"
+            readonly="true"/>
+
+    <field
+            name="title"
+            type="text"
+            label="Title"
+            description="Title description"
+            class="inputbox"/>
+    <field
+            name="alias"
+            type="text"
+            label="Alias"
+            description="Alias description"
+            class="inputbox"/>
+
+    <field
+            name="gh_user"
+            type="text"
+            label="GitHub User"
+            description="The GitHub User (Organization)"
+            class="inputbox"/>
+
+    <field
+            name="gh_project"
+            type="text"
+            label="GitHub Project"
+            description="The actual repository"
+            class="inputbox"/>
+</form>

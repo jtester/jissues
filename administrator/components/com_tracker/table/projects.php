@@ -10,12 +10,21 @@
 defined('_JEXEC') or die;
 
 /**
- * Tracker default controller.
+ * JTracker table.
  *
  * @package     JTracker
  * @subpackage  com_tracker
  * @since       1.0
  */
-class TrackerController extends JControllerLegacy
+class ComAdminTrackerTableProjects extends JTableTrackertable
 {
+	/**
+	 * Get a table.
+	 *
+	 * @return ComAdminTrackerTableProjects
+	 */
+	public static function getTable()
+	{
+		return new ComAdminTrackerTableProjects('#__tracker_projects', 'project_id', JFactory::getDbo());
+	}
 }

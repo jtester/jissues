@@ -13,21 +13,21 @@ defined('_JEXEC') or die;
 <div class="row">
     <div class="span12">
         <h2>Categories</h2>
-		<?= $this->lists->get('categories') ? : 'Use global' ?>
+		<?= JHtmlProjects::listing('com_tracker.' . $project . '.categories') ? : 'Use global' ?>
     </div>
 </div>
 <div class="row">
     <div class="span4">
         <h2>Textfields</h2>
-		<?= $this->lists->get('textfields') ? : 'Use global' ?>
+		<?= JHtmlProjects::listing('com_tracker.' . $project . '.textfields') ? : 'Use global' ?>
     </div>
     <div class="span4">
         <h2>Selectlists</h2>
-		<?= $this->lists->get('fields') ? : 'Use global' ?>
+		<?= JHtmlProjects::listing('com_tracker.' . $project . '.fields') ? : 'Use global' ?>
     </div>
     <div class="span4">
         <h2>Checkboxes</h2>
-		<?= $this->lists->get('checkboxes') ? : 'Use global' ?>
+		<?= JHtmlProjects::listing('com_tracker.' . $project . '.checkboxes') ? : 'Use global' ?>
     </div>
 </div>
 

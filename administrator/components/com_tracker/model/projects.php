@@ -10,14 +10,12 @@
 defined('_JEXEC') or die;
 
 /**
- * JTracker helper class.
- *
- * @todo This class exists to satisfy com_categories lookup..
+ * JTracker model.
  *
  * @package     JTracker
  * @subpackage  com_tracker
  * @since       1.0
  */
-abstract class TrackerHelper extends ComAdminTrackerHelper
+class ComAdminTrackerModelProjects extends JModelTrackerlist
 {
 }
