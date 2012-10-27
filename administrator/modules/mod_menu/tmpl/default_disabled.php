@@ -44,7 +44,7 @@ if ($user->authorise('core.manage', 'com_content'))
 //
 
 // Get the authorised components and sub-menus.
-$components = ModMenuHelper::getComponents(true);
+$components = ModAdminMenuHelper::getComponents(true);
 
 // Check if there are any components, otherwise, don't display the components menu item
 if ($components) {

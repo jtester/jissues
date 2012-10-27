@@ -170,7 +170,7 @@ if (0)//$user->authorise('core.manage', 'com_menus'))
 	$menu->addSeparator();
 
 	// Menu Types
-	foreach (ModMenuHelper::getMenus() as $menuType)
+	foreach (ModAdminMenuHelper::getMenus() as $menuType)
 	{
 		$alt = '*' .$menuType->sef. '*';
 		if ($menuType->home == 0)
@@ -256,7 +256,7 @@ if (0)//$user->authorise('core.manage', 'com_content'))
 //
 
 // Get the authorised components and sub-menus.
-$components = ModMenuHelper::getComponents(true);
+$components = ModAdminMenuHelper::getComponents(true);
 
 // Check if there are any components, otherwise, don't render the menu
 if ($components)

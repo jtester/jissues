@@ -10,9 +10,9 @@
 defined('_JEXEC') or die;
 
 // Include the module helper classes.
-if (!class_exists('ModMenuHelper'))
+if (!class_exists('ModAdminMenuHelper'))
 {
-	require __DIR__ . '/helper.php';
+	require __DIR__ . '/helper/helper.php';
 }
 
 if (!class_exists('JAdminCssMenu'))
