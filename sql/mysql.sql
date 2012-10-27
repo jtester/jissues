@@ -67,6 +67,19 @@ CREATE TABLE IF NOT EXISTS `#__issue_comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `jos_tracker_projects`
+--
+
+CREATE TABLE IF NOT EXISTS `#__tracker_projects` (
+  `project_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(150) NOT NULL,
+  `alias` varchar(150) NOT NULL,
+  `gh_user` varchar(150) NOT NULL,
+  `gh_project` varchar(150) NOT NULL,
+  PRIMARY KEY (`project_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `#__tracker_fields_values`
 --
 
