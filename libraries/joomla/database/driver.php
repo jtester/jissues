@@ -287,6 +287,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 		for ($i = 0; $i < $end; $i++)
 		{
 			$current = substr($sql, $i, 1);
+
 			if (($current == '"' || $current == '\''))
 			{
 				$n = 2;
@@ -888,6 +889,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 
 		// Set the query and execute the insert.
 		$this->setQuery($query);
+
 		if (!$this->execute())
 		{
 			return false;
@@ -895,6 +897,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 
 		// Update the primary key if it exists.
 		$id = $this->insertid();
+
 		if ($key && $id && is_string($key))
 		{
 			$object->$key = $id;
@@ -981,6 +984,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 		while ($row = $this->fetchAssoc($cursor))
 		{
 			$value = ($column) ? (isset($row[$column]) ? $row[$column] : $row) : $row;
+
 			if ($key)
 			{
 				$array[$row[$key]] = $value;
@@ -1345,6 +1349,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 			$quotedName = $this->quoteNameStr(explode('.', $name));
 
 			$quotedAs = '';
+
 			if (!is_null($as))
 			{
 				settype($as, 'array');
@@ -1367,6 +1372,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 			elseif (is_array($name) && (count($name) == count($as)))
 			{
 				$count = count($name);
+
 				for ($i = 0; $i < $count; $i++)
 				{
 					$fin[] = $this->quoteName($name[$i], $as[$i]);
@@ -1435,6 +1441,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 		while ($startPos < $n)
 		{
 			$ip = strpos($sql, $prefix, $startPos);
+
 			if ($ip === false)
 			{
 				break;
@@ -1442,6 +1449,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 
 			$j = strpos($sql, "'", $startPos);
 			$k = strpos($sql, '"', $startPos);
+
 			if (($k !== false) && (($k < $j) || ($j === false)))
 			{
 				$quoteChar = '"';
@@ -1472,11 +1480,13 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 			{
 				$k = strpos($sql, $quoteChar, $j);
 				$escaped = false;
+
 				if ($k === false)
 				{
 					break;
 				}
 				$l = $k - 1;
+
 				while ($l >= 0 && $sql{$l} == '\\')
 				{
 					$l--;
@@ -1703,6 +1713,7 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 
 		// Set the query and execute the update.
 		$this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)));
+
 		return $this->execute();
 	}
 
