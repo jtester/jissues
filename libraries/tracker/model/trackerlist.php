@@ -95,15 +95,6 @@ abstract class JModelTrackerlist extends JModelDatabase
 	}
 
 	/**
-	 * Method to get a JDatabaseQuery object for retrieving the data set from a database.
-	 *
-	 * @return  JDatabaseQuery   A JDatabaseQuery object to retrieve the data set.
-	 *
-	 * @since   1.0
-	 */
-	abstract protected function getListQuery();
-
-	/**
 	 * Method to get a JPagination object for the data set.
 	 *
 	 * @return  JPagination  A JPagination object for the data set.
@@ -338,5 +329,22 @@ abstract class JModelTrackerlist extends JModelDatabase
 		}
 
 		return $this->query;
+	}
+
+	/**
+	 * Method to get a JDatabaseQuery object for retrieving the data set from a database.
+	 *
+	 * @return  JDatabaseQuery   A JDatabaseQuery object to retrieve the data set.
+	 *
+	 * @since   1.0
+	 */
+	protected function getListQuery()
+	{
+		$table = ComAdminTrackerTableProjects::getTable();
+
+		return $this->db->getQuery(true)
+			->from($table->getTableName())
+			->select('*')
+			->select($this->db->qn($table->getKeyName()) . ' AS id');
 	}
 }
