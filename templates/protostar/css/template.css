@@ -6407,3 +6407,7 @@ h6 {
 		width: 62px;
 	}
 }
+
+input.invalid {
+    outline: 1px solid red;
+}

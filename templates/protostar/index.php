@@ -49,8 +49,12 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 			<div class="row-fluid">
 				<div class="span7">
 					<ul class="nav nav-pills">
-						<li><a href="<?php echo JRoute::_('index.php?option=com_tracker'); ?>">Tracker</a></li>
-						<li><a href="<?php echo JRoute::_('index.php?option=com_users'); ?>">Users</a></li>
+						<li class="<?php echo 'com_tracker' == $app->input->get('option') ? 'active' : '' ?>">
+							<a href="<?php echo JRoute::_('index.php?option=com_tracker'); ?>">Tracker</a>
+						</li>
+						<li class="<?php echo 'com_users' == $app->input->get('option') ? 'active' : '' ?>">
+							<a href="<?php echo JRoute::_('index.php?option=com_users'); ?>">Users</a>
+						</li>
 					</ul>
 				</div>
 				<div class="span5">
