@@ -76,7 +76,7 @@ $debug  = (boolean) $config->get('debug');
 	<![endif]-->
 </head>
 
-<body class="site <?php echo $option . " view-" . $view . " layout-" . $layout . " task-" . $task . " itemid-" . $itemid . " ";?>">
+<body class="site <?php echo $option . " view-login layout-" . $layout . " task-" . $task . " itemid-" . $itemid . " ";?>">
 	<!-- Container -->
 	<div class="container">
 		<div id="content">
@@ -95,7 +95,7 @@ $debug  = (boolean) $config->get('debug');
 	</div>
 	<div class="navbar navbar-fixed-bottom hidden-phone">
 		<p class="pull-right">&copy; <?php echo $sitename; ?> <?php echo date('Y');?></p>
-		<a class="login-joomla" href="http://www.joomla.org" class="hasTooltip" title="<?php echo JText::_('TPL_ISIS_ISFREESOFTWARE');?>">Joomla!&#174;</a>
+		<a href="http://www.joomla.org" class="login-joomla hasTooltip" title="<?php echo JText::_('TPL_ISIS_ISFREESOFTWARE');?>">Joomla!&#174;</a>
 		<a href="<?php echo JURI::root(); ?>" class="pull-left"><i class="icon-share icon-white"></i> <?php echo JText::_('COM_LOGIN_RETURN_TO_SITE_HOME_PAGE') ?></a>
 	</div>
 	<jdoc:include type="modules" name="debug" style="none" />
