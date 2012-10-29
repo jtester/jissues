@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.keepalive');
+// JHtml::_('behavior.keepalive');
 JHtml::_('bootstrap.tooltip');
 JHtml::_('formbehavior.chosen');
 
@@ -70,9 +70,9 @@ $document = JFactory::getDocument();
             <div class="controls">
                 <div class="input-prepend">
                     <span class="add-on">
-	                    <i class="icon-comment"
+	                    <i class="icon-comment hasTooltip"
                            data-placement="<?php echo $document->direction == 'rtl' ? 'right' : 'left'; ?>"
-                           class="hasTooltip" title="<?php echo JText::_('MOD_LOGIN_LANGUAGE'); ?>">
+                           title="<?php echo JText::_('MOD_LOGIN_LANGUAGE'); ?>">
                         </i>
 	                    <label for="lang" class="element-invisible"><?php echo JText::_('MOD_LOGIN_LANGUAGE'); ?>
                         </label>

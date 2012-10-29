@@ -16,33 +16,38 @@ defined('_JEXEC') or die;
  * @subpackage  mod_login
  * @since       1.6
  */
-abstract class modLoginHelper
+abstract class ModAdminLoginHelper
 {
 	/**
 	 * Get an HTML select list of the available languages.
 	 *
-	 * @return	string
+	 * @return string
 	 */
 	public static function getLanguageList()
 	{
-		$languages = array();
 		$languages = JLanguageHelper::createLanguageList(null, JPATH_ADMINISTRATOR, false, true);
+
 		array_unshift($languages, JHtml::_('select.option', '', JText::_('JDEFAULTLANGUAGE')));
+
 		return JHtml::_('select.genericlist', $languages, 'lang', ' class="inputbox advandedSelect"', 'value', 'text', null);
 	}
 
 	/**
 	 * Get the redirect URI after login.
 	 *
-	 * @return	string
+	 * @return string
 	 */
 	public static function getReturnURI()
 	{
-		$uri = JURI::getInstance();
-		$return = 'index.php'.$uri->toString(array('query'));
-		if($return != 'index.php?option=com_login'){
+		$uri    = JURI::getInstance();
+		$return = 'index.php' . $uri->toString(array('query'));
+
+		if ($return != 'index.php?option=com_login')
+		{
 			return base64_encode($return);
-		} else {
+		}
+		else
+		{
 			return base64_encode('index.php');
 		}
 	}

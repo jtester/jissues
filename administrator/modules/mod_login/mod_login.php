@@ -7,11 +7,9 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+defined('_JEXEC') || die;
 
-// Include the syndicate functions only once
-require_once __DIR__ . '/helper.php';
+$langs	= ModAdminLoginHelper::getLanguageList();
+$return	= ModAdminLoginHelper::getReturnURI();
 
-$langs	= modLoginHelper::getLanguageList();
-$return	= modLoginHelper::getReturnURI();
 require JModuleHelper::getLayoutPath('mod_login', $params->get('layout', 'default'));
