@@ -97,10 +97,32 @@ class JControllerDefault extends JControllerBase
 	{
 		if ($this->redirect)
 		{
-			$app = JFactory::getApplication();
-			$app->redirect($this->redirect, $this->message, $this->messageType);
+			// $app = JFactory::getApplication();
+			JFactory::getApplication()->redirect($this->redirect);
+
+			// $this->message, $this->messageType);
 		}
 
 		return false;
+	}
+
+	/**
+	 * Translator function.
+	 *
+	 * @param   string  $string  The string to translate.
+	 *
+	 * @return string
+	 */
+	protected static function _($string)
+	{
+		// We add a prefix here
+
+		// $string = 'prefix' . $string;
+
+		// ... later
+
+		// For now we just do a:
+
+		return JText::_($string);
 	}
 }

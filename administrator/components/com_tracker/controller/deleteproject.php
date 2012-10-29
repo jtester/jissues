@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+defined('_JEXEC') || die;
 
 /**
  * JTracker controller.
@@ -32,7 +32,7 @@ class ComAdminTrackerControllerDeleteproject extends JControllerDefault
 		$model->delete(JFactory::getApplication()->input->getInt('id'));
 
 		$app = JFactory::getApplication();
-		$app->enqueueMessage('The item has been deleted');
+		$app->enqueueMessage($this->_('The item has been deleted'));
 		$app->redirect('index.php?option=com_tracker&view=projects');
 	}
 }

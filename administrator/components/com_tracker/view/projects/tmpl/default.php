@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+defined('_JEXEC') || die;
 
 JToolbarHelper::addNew('project');
 
@@ -17,6 +17,7 @@ $baseLink = 'index.php?option=com_tracker';
 $editLink = $baseLink . '&view=project&id=';
 $deleteLink = $baseLink . '&task=deleteproject&id=';
 
+JHtml::_('script', 'system/core.js', false, true);
 ?>
 <div class="row-fluid">
 
@@ -31,10 +32,10 @@ $deleteLink = $baseLink . '&task=deleteproject&id=';
 
                 <thead>
                 <tr>
-                    <th style="width: 5%;">ID</th>
-                    <th>Title</th>
-                    <th>GitHub</th>
-                    <th style="width: 5%;">Action</th>
+                    <th style="width: 5%;"><?= $this->_('ID') ?></th>
+                    <th><?= $this->_('Title') ?></th>
+                    <th style="width: 20%;"><?= $this->_('GitHub') ?></th>
+                    <th style="width: 5%;"><?= $this->_('Action') ?></th>
                 </tr>
                 </thead>
 
@@ -46,11 +47,11 @@ $deleteLink = $baseLink . '&task=deleteproject&id=';
 	                    <?= JHtml::link($editLink . $item->id, $item->title) ?><br />
 	                    <?= $item->alias ?>
                     </td>
-                    <td><pre>
+                    <td><pre class="nowrap">
 	                    <?= JHtml::link('https://github.com/' . $item->gh_user . '/' . $item->gh_project,
 	                    $item->gh_user . '/' . $item->gh_project) ?>
                     </pre></td>
-                    <td><?= JHtml::link($deleteLink . $item->id, 'Delete') ?></td>
+                    <td><?= JHtml::link($deleteLink . $item->id, $this->_('Delete')) ?></td>
                 </tr>
 				<?php endforeach; ?>
                 </tbody>

@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+defined('_JEXEC') || die;
 
 /**
  * JTracker controller.
@@ -18,4 +18,24 @@ defined('_JEXEC') or die;
  */
 class ComAdminTrackerControllerSaveproject extends JControllerFormSave
 {
+	/**
+	 * Execute the controller.
+	 *
+	 * @return  boolean  True if controller finished execution, false if the controller did not
+	 *                   finish execution. A controller might return false if some precondition for
+	 *                   the controller to run has not been satisfied.
+	 *
+	 * @since            9999
+	 */
+	public function execute()
+	{
+		if (parent::execute())
+		{
+			JFactory::getApplication()->enqueueMessage($this->_('The item has been saved.'));
+
+			return true;
+		}
+
+		return false;
+	}
 }
