@@ -39,6 +39,9 @@ JError::setErrorHandling(E_ERROR, 'message', array('JError', 'customErrorPage'))
 // Botstrap the CMS libraries.
 require_once JPATH_LIBRARIES.'/cms.php';
 
+// Register THE universal CMS extension autoloader.
+spl_autoload_register(array('JCmsLoader', 'load'));
+
 // Pre-Load configuration.
 ob_start();
 require_once JPATH_CONFIGURATION.'/configuration.php';
