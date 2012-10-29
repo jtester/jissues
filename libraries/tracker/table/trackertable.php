@@ -62,7 +62,7 @@ class JTableTrackertable extends JTable
 	 * @param   mixed  $src     An associative array or object to bind to the JTable instance.
 	 * @param   mixed  $ignore  An optional array or space separated list of properties to ignore while binding.
 	 *
-	 * @return  JTableTrackertable.
+	 * @return  JTable.
 	 *
 	 * @link    http://docs.joomla.org/JTable/bind
 	 * @since   9999
@@ -86,13 +86,14 @@ class JTableTrackertable extends JTable
 	 * method to make sure the data they are storing in the database is safe and
 	 * as expected before storage.
 	 *
-	 * @return  JTableTrackertable
+	 * @return  JTable
 	 *
 	 * @link    http://docs.joomla.org/JTable/check
 	 * @since   9999
 	 */
 	public function check()
 	{
+		// We like chaining =;)
 		return $this;
 	}
 }
