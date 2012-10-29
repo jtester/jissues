@@ -65,6 +65,7 @@ abstract class JModelTrackerform extends JModelDatabase
 		{
 			throw new InvalidArgumentException('JTable class must be instantiated.');
 		}
+
 		// Only attempt to check the row in if it exists.
 		if ($pk)
 		{
@@ -131,15 +132,7 @@ abstract class JModelTrackerform extends JModelDatabase
 
 		$form = JForm::getInstance($name, $source, $options, false, $xpath);
 
-		if (isset($options['load_data']) && $options['load_data'])
-		{
-			// Get the data for the form.
-			$data = $this->loadFormData();
-		}
-		else
-		{
-			$data = array();
-		}
+		$data = $this->loadFormData();
 
 		// Allow for additional modification of the form, and events to be triggered.
 		// We pass the data because plugins may require it.
@@ -236,9 +229,16 @@ abstract class JModelTrackerform extends JModelDatabase
 			$application = JFactory::getApplication();
 
 			// Get the validation messages from the form.
-			foreach ($form->getErrors() as $message)
+			foreach ($form->getErrors() as $error)
 			{
-				$application->enqueueMessage($message, 'warning');
+				if ($error instanceof Exception)
+				{
+					$application->enqueueMessage($error->getMessage(), 'warning');
+				}
+				else
+				{
+					$application->enqueueMessage($error, 'warning');
+				}
 			}
 
 			return false;
