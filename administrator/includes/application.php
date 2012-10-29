@@ -23,7 +23,7 @@ class JAdministrator extends JApplication
 	 * Class constructor
 	 *
 	 * @param   array  $config  An optional associative array of configuration settings.
-	 *                    Recognized key values include 'clientId' (this list is not meant to be comprehensive).
+	 *                          Recognized key values include 'clientId' (this list is not meant to be comprehensive).
 	 *
 	 * @since    1.5
 	 */
@@ -147,45 +147,33 @@ class JAdministrator extends JApplication
 	 */
 	public function dispatch($component = null)
 	{
-		try
+		if ($component === null)
 		{
-			if ($component === null)
-			{
-				$component = JAdministratorHelper::findOption();
-			}
-
-			$document = JFactory::getDocument();
-
-			// $user		= JFactory::getUser();
-
-			switch ($document->getType())
-			{
-				case 'html':
-					$document->setMetaData('keywords', $this->getCfg('MetaKeys'));
-					break;
-
-				default:
-					break;
-			}
-
-			$document->setTitle($this->getCfg('sitename') . ' - ' . JText::_('JADMINISTRATION'));
-			$document->setDescription($this->getCfg('MetaDesc'));
-			$document->setGenerator('Joomla! - Open Source Content Management');
-
-			$contents = JComponentHelper::renderComponent($component);
-			$document->setBuffer($contents, 'component');
-
-			// Trigger the onAfterDispatch event.
-			JPluginHelper::importPlugin('system');
-			$this->triggerEvent('onAfterDispatch');
+			$component = JAdministratorHelper::findOption();
 		}
 
-		// Mop up any uncaught exceptions.
-		catch (Exception $e)
+		$document = JFactory::getDocument();
+
+		switch ($document->getType())
 		{
-			$code = $e->getCode();
-			JError::raiseError($code ? $code : 500, $e->getMessage());
+			case 'html':
+				$document->setMetaData('keywords', $this->getCfg('MetaKeys'));
+				break;
+
+			default:
+				break;
 		}
+
+		$document->setTitle($this->getCfg('sitename') . ' - ' . JText::_('JADMINISTRATION'));
+		$document->setDescription($this->getCfg('MetaDesc'));
+		$document->setGenerator('Joomla! - Open Source Content Management');
+
+		$contents = JComponentHelper::renderComponent($component);
+		$document->setBuffer($contents, 'component');
+
+		// Trigger the onAfterDispatch event.
+		JPluginHelper::importPlugin('system');
+		$this->triggerEvent('onAfterDispatch');
 	}
 
 	/**
@@ -292,6 +280,7 @@ class JAdministrator extends JApplication
 		}
 
 		return $template->template;
+		/*
 
 		static $template;
 
@@ -300,6 +289,7 @@ class JAdministrator extends JApplication
 			$admin_style = JFactory::getUser()->getParam('admin_style');
 
 			// Load the template name from the database
+
 			$db    = JFactory::getDbo();
 			$query = $db->getQuery(true);
 			$query->select('template, s.params');
@@ -332,6 +322,7 @@ class JAdministrator extends JApplication
 		}
 
 		return $template->template;
+		*/
 	}
 
 	/**
