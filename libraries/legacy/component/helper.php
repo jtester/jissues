@@ -349,7 +349,8 @@ class JComponentHelper
 			}
 
 			// NOTE: The ternary instead of the default prevents empty strings.
-			$task = $app->input->get('task') ? : 'default';
+			// NOTE: strtolower is used to allow tasks like "saveFoo"
+			$task = strtolower($app->input->get('task')) ? : 'default';
 
 			// Set the view name based on the task
 			$app->input->set('view', $app->input->get('view', $task));
@@ -427,7 +428,7 @@ class JComponentHelper
 		catch (RuntimeException $e)
 		{
 			// Fatal error.
-			JLog::add(JText::sprintf('JLIB_APPLICATION_ERROR_COMPONENT_NOT_LOADING', $option, $e->getMessage()), JLog::WARNING, 'jerror');
+			JLog::add(JText::sprintf('Component %s not loading (1)', $option, $e->getMessage()), JLog::WARNING, 'jerror');
 
 			return false;
 		}
@@ -435,7 +436,7 @@ class JComponentHelper
 		if (empty(self::$components[$option]))
 		{
 			// Fatal error.
-			JLog::add(JText::sprintf('JLIB_APPLICATION_ERROR_COMPONENT_NOT_LOADING', $option), JLog::WARNING, 'jerror');
+			JLog::add(JText::sprintf('Component %s not loading (2)', $option), JLog::WARNING, 'jerror');
 
 			return false;
 		}
