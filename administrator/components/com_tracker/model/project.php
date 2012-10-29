@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+defined('_JEXEC') || die;
 
 /**
  * JTracker model.
@@ -104,5 +104,18 @@ class ComAdminTrackerModelProject extends JModelTrackerform
 		$this->getTable()->delete($id);
 
 		return $this;
+	}
+
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return  array  The default data is an empty array.
+	 *
+	 * @since   1.0
+	 */
+	public function loadFormData()
+	{
+		return JFactory::getApplication()
+			->getUserState('com_tracker.edit.project.data');
 	}
 }
