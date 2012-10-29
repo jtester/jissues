@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset name="component"
+              label="Joomla! Issue Tracker"
+              description="Component options"
+            >
+
+        <field name="fooo" type="radio"
+               class="btn-group"
+               default="1"
+               label="Are you happy ?"
+               description="Please let us know about your personal state....">
+
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+    </fieldset>
+
+    <fieldset name="permissions"
+              description="JCONFIG_PERMISSIONS_DESC"
+              label="JCONFIG_PERMISSIONS_LABEL"
+            >
+
+        <field name="rules" type="rules"
+               component="com_tracker"
+               filter="rules"
+               validate="rules"
+               label="JCONFIG_PERMISSIONS_LABEL"
+               section="component"/>
+    </fieldset>
+</config>
