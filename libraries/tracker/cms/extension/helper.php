@@ -1,10 +1,21 @@
 <?php
 /**
- * User: elkuku
- * Date: 28.10.12
- * Time: 15:11
+ * @package     JTracker
+ * @subpackage  Model
+ *
+ * @copyright   Copyright (C) 2012 Open Source Matters. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+defined('JPATH_PLATFORM') or die;
+
+/**
+ * Base extension helper class.
+ *
+ * @package     JTracker
+ * @subpackage  CMS
+ * @since       1.0
+ */
 class JCmsExtensionHelper
 {
 	/**
