@@ -135,10 +135,11 @@ abstract class JHtmlProjects
 	 * Get a project selector.
 	 *
 	 * @param   string  $selected  The selected entry
+	 * @param   string  $toolTip   The text for the tooltip.
 	 *
 	 * @return string
 	 */
-	public static function projectsSelect($selected = '')
+	public static function projectsSelect($selected = '', $toolTip = '')
 	{
 		$projects = self::projects();
 
@@ -148,6 +149,7 @@ abstract class JHtmlProjects
 		}
 
 		$options = array();
+		$html    = array();
 
 		$options[] = JHtmlSelect::option('', JText::_('Select a Project'));
 
@@ -158,7 +160,18 @@ abstract class JHtmlProjects
 
 		$js = 'onchange="document.adminForm.submit();"';
 
-		return JHtmlSelect::genericlist($options, 'project', $js, 'value', 'text', $selected, 'select-project');
+		$input = JHtmlSelect::genericlist($options, 'project', $js, 'value', 'text', $selected, 'select-project');
+
+		if ($toolTip)
+		{
+			$html[] = '<div class="input-append">';
+			$html[] = $input;
+			$html[] = '<span class="add-on hasTooltip" style="cursor: help;" title="'
+				. htmlspecialchars($toolTip, ENT_COMPAT, 'UTF-8') . '">?</span>';
+			$html[] = '</div>';
+		}
+
+		return implode("\n", $html);
 	}
 
 	/**
@@ -188,7 +201,7 @@ abstract class JHtmlProjects
 
 		foreach ($items as $item)
 		{
-			$selected    = ($selected == $item->id) ? ' selected' : '';
+			$selected = ($selected == $item->id) ? ' selected' : '';
 
 			$html[] = '<li>';
 			$html[] = $links
