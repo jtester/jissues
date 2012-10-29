@@ -7,17 +7,18 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+defined('_JEXEC') || die;
 
-JToolbarHelper::save('saveproject');
-JToolbarHelper::cancel('projects');
+JToolbarHelper::save('saveProject');
+JToolbarHelper::cancel('cancelEdit');
 
 JToolbarHelper::title('JTracker - Edit Project');
 
 JHtmlBootstrap::tooltip();
 
+JHtml::_('script', 'system/core.js', false, true);
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_tracker&task=saveproject'); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tracker'); ?>"
       method="post" name="adminForm" id="adminForm" class="form-horizontal">
 
     <fieldset>
@@ -27,18 +28,19 @@ JHtmlBootstrap::tooltip();
 		<?php foreach ($this->model->getForm()->getFieldSet() as $field) : ?>
         <div class="row-fluid">
             <div class="control-label">
-				<?php echo $field->label; ?>
+	            <?= $field->label; ?>
             </div>
-            <div class="controls">
-				<?php echo $field->input; ?>
-            </div>
+        <div class="controls">
+		        <?= $field->getInputTooltip(); ?>
+        </div>
         </div>
 		<?php endforeach; ?>
 
     </fieldset>
 
     <div>
-        <input type="hidden" name="task" value=""/>
+        <input type="hidden" name="task" value="saveproject"/>
+        <input type="hidden" name="view" value="projects"/>
 		<?php echo JHtml::_('form.token'); ?>
     </div>
 </form>
