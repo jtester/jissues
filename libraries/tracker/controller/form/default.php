@@ -27,6 +27,20 @@ abstract class JControllerFormDefault extends JControllerDefault
 	protected $context;
 
 	/**
+	 * Record id.
+	 *
+	 * @var integer
+	 */
+	protected $id;
+
+	/**
+	 * Form data.
+	 *
+	 * @var array
+	 */
+	protected $data;
+
+	/**
 	 * The URL option for the component.
 	 *
 	 * @var    string
@@ -49,16 +63,63 @@ abstract class JControllerFormDefault extends JControllerDefault
 	protected $redirect;
 
 	/**
+	 * @var string
+	 */
+	protected $itemLink;
+
+	/**
+	 * @var string
+	 */
+	protected $listLink;
+
+	/**
+	 * @var string
+	 */
+	protected $editContext;
+
+	/**
+	 * Component name.
+	 *
+	 * @var string
+	 */
+	protected $name;
+
+	/**
+	 * Controller type.
+	 * Used for class name building.
+	 *
+	 * @var string
+	 */
+	protected $type = 'Default';
+
+	/**
 	 * Instantiate the controller.
 	 *
 	 * @param   JInput            $input  The input object.
 	 * @param   JApplicationBase  $app    The application object.
 	 *
+	 * @throws Exception
 	 * @since  12.1
 	 */
 	public function __construct(JInput $input = null, JApplicationBase $app = null)
 	{
-		$this->option = 'com_' . strtolower($this->getName());
+		parent::__construct($input, $app);
+
+		// Guess the context as the suffix, eg: Com[Admin]OptionControllerSaveContent.
+		if (!preg_match('/Com[Admin]*(.*)Controller(.*)' . $this->type . '/i', get_class($this), $r))
+		{
+			throw new Exception(
+				sprintf('%s - Cannot get or parse class name %s for controller type %s.',
+					__METHOD__, get_class($this), $this->type
+				),
+				500
+			);
+		}
+
+		$this->name    = strtolower($r[1]);
+		$this->context = strtolower($r[2]);
+
+		$this->option = 'com_' . strtolower($this->name);
 
 		// @TODO Probably worth moving to an inflector class based on
 		// http://kuwamoto.org/2007/12/17/improved-pluralizing-in-php-actionscript-and-ror/
@@ -83,7 +144,17 @@ abstract class JControllerFormDefault extends JControllerDefault
 			}
 		}
 
-		parent::__construct($input, $app);
+		$this->data = $this->input->post->get('jform', array(), 'array');
+
+		$this->id = (isset($this->data['id'])) ? (int) $this->data['id'] : 0;
+		$this->id = ($this->id) ? : $this->input->getInt('id');
+
+		$this->editContext = $this->option . '.edit.' . $this->context;
+
+		$this->itemLink = 'index.php?option=' . $this->option . '&view=' . $this->context;
+		$this->itemLink .= ($this->id) ? '&id=' . $this->id : '';
+
+		$this->listLink = 'index.php?option=' . $this->option . '&view=' . $this->listView;
 	}
 
 	/**
@@ -114,32 +185,43 @@ abstract class JControllerFormDefault extends JControllerDefault
 	 */
 	public function getName()
 	{
-		if (empty($this->name))
-		{
-			$r = null;
-
-			if (!preg_match('/ComAdmin(.*)Controller/i', get_class($this), $r))
-			{
-				if (!preg_match('/Com(.*)Controller/i', get_class($this), $r))
-				{
-					throw new Exception(JText::_('JLIB_APPLICATION_ERROR_CONTROLLER_GET_NAME'), 500);
-				}
-			}
-
-			$this->name = strtolower($r[1]);
-		}
-
 		return $this->name;
 	}
 
 	/**
 	 * Method to get a model object, loading it if required.
 	 *
-	 * @return  object  The model.
-	 *
 	 * @since   9999
+	 * @throws RuntimeException
+	 * @return  JModel  The model.
 	 */
-	abstract public function getModel();
+	public function getModel()
+	{
+		static $model = null;
+
+		if ($model)
+		{
+			return $model;
+		}
+
+		if (!preg_match('/(.*)Controller/i', get_class($this), $r))
+		{
+			throw new RuntimeException(JText::_('Unable to get the model name'), 500);
+		}
+
+		$ext = $r[1];
+
+		$class = $ext . 'Model' . ucfirst($this->context);
+
+		if (false == class_exists($class))
+		{
+			throw new RuntimeException(sprintf(JText::_('Model class %s not found'), $class), 500);
+		}
+
+		$model = new $class;
+
+		return $model;
+	}
 
 	/**
 	 * Function that allows child controller access to model data
@@ -326,5 +408,22 @@ abstract class JControllerFormDefault extends JControllerDefault
 		{
 			return $this->allowAdd($data);
 		}
+	}
+
+	/**
+	 * Set the redirect.
+	 *
+	 * @return JControllerFormSave
+	 */
+	protected function setRedirect()
+	{
+		// Clear the record id and data from the session.
+		$this->releaseEditId($this->editContext, $this->id);
+		$this->app->setUserState($this->editContext . '.data', null);
+
+		// Redirect to the list screen.
+		$this->redirect = JRoute::_('index.php?option=' . $this->option . '&view=' . $this->listView, false);
+
+		return $this;
 	}
 }
