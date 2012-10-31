@@ -25,7 +25,6 @@ class JTableDefault extends JTable
 	 */
 	public $id = 0;
 
-
 	/**
 	 * Object constructor to set table and key fields.  In most cases this will
 	 * be overridden by child classes to explicitly set the table and key fields
@@ -39,7 +38,7 @@ class JTableDefault extends JTable
 	 */
 	public function __construct($table, $key, JDatabaseDriver $db = null)
 	{
-		if(is_null($db))
+		if (is_null($db))
 		{
 			$db = JFactory::getDbo();
 		}
@@ -47,7 +46,7 @@ class JTableDefault extends JTable
 		parent::__construct($table, $key, $db);
 	}
 
-		/**
+	/**
 	 * Method to load a row from the database by primary key and bind the fields
 	 * to the JTable instance properties.
 	 *

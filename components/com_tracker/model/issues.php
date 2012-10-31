@@ -150,7 +150,6 @@ class TrackerModelIssues extends JModelTrackerlist
 	{
 		$this->state = new JRegistry;
 
-		$app = JFactory::getApplication();
 		$input = JFactory::getApplication()->input;
 
 		$fields = new JRegistry($input->get('fields', array(), 'array'));
