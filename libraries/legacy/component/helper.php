@@ -350,7 +350,7 @@ class JComponentHelper
 
 			// NOTE: The ternary instead of the default prevents empty strings.
 			// NOTE: strtolower is used to allow tasks like "saveFoo"
-			$task = strtolower($app->input->get('task')) ? : 'default';
+			$task = $app->input->get('task') ? : 'default';
 
 			// Set the view name based on the task
 			$app->input->set('view', $app->input->get('view', $task));
