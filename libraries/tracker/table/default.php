@@ -16,7 +16,7 @@ defined('JPATH_PLATFORM') or die;
  * @subpackage  Table
  * @since       1.0
  */
-class JTableTrackertable extends JTable
+class JTableDefault extends JTable
 {
 	/**
 	 * This is an "alias" for the tables primary key.
@@ -25,7 +25,29 @@ class JTableTrackertable extends JTable
 	 */
 	public $id = 0;
 
+
 	/**
+	 * Object constructor to set table and key fields.  In most cases this will
+	 * be overridden by child classes to explicitly set the table and key fields
+	 * for a particular database table.
+	 *
+	 * @param   string           $table  Name of the table to model.
+	 * @param   mixed            $key    Name of the primary key field in the table or array of field names that compose the primary key.
+	 * @param   JDatabaseDriver  $db     JDatabaseDriver object.
+	 *
+	 * @since   11.1
+	 */
+	public function __construct($table, $key, JDatabaseDriver $db = null)
+	{
+		if(is_null($db))
+		{
+			$db = JFactory::getDbo();
+		}
+
+		parent::__construct($table, $key, $db);
+	}
+
+		/**
 	 * Method to load a row from the database by primary key and bind the fields
 	 * to the JTable instance properties.
 	 *
