@@ -117,7 +117,7 @@ abstract class JModelTrackerform extends JModelDatabase
 	protected function loadForm($name, $source = null, $options = array(), $clear = false, $xpath = false)
 	{
 		// Handle the optional arguments.
-		$options['control'] = JArrayHelper::getValue($options, 'control', 'jform');
+		$options['control'] = JArrayHelper::getValue($options, 'control', '');
 
 		// Create a signature hash.
 		$hash = md5($source . serialize($options));

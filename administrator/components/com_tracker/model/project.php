@@ -25,7 +25,7 @@ class ComAdminTrackerModelProject extends JModelTrackerform
 	 */
 	public function getForm()
 	{
-		$form = $this->loadForm('project');
+		$form = $this->loadForm('project', null, array('control' => 'jform'));
 
 		$id = JFactory::getApplication()->input->getInt('id');
 
