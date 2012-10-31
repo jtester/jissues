@@ -31,4 +31,27 @@ class ComAdminTrackerTableProjects extends JTableDefault
 	{
 		parent::__construct('#__tracker_projects', 'project_id', $db);
 	}
+
+	/**
+	 * Override check function
+	 *
+	 * @return  boolean
+	 *
+	 * @see     JTable::check
+	 * @since   11.1
+	 */
+	public function check()
+	{
+		// Check for a valid alias.
+		$this->alias = trim($this->alias);
+
+		if (empty($this->alias))
+		{
+			$this->alias = $this->title;
+		}
+
+		$this->alias = JFilterOutput::stringURLSafe($this->alias);
+
+		return $this;
+	}
 }

@@ -21,8 +21,7 @@
             type="text"
             label="Alias"
             description="The Alias is used in URLs"
-            class="inputbox"
-            required="true"/>
+            class="inputbox"/>
 
     <field
             name="gh_user"
