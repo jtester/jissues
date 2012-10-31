@@ -166,7 +166,7 @@ abstract class JHtmlProjects
 		{
 			$html[] = '<div class="input-append">';
 			$html[] = $input;
-			$html[] = '<span class="add-on hasTooltip" style="cursor: help;" title="'
+			$html[] = '<span class="add-on hasTooltip" data-placement="right" style="cursor: help;" title="'
 				. htmlspecialchars($toolTip, ENT_COMPAT, 'UTF-8') . '">?</span>';
 			$html[] = '</div>';
 		}
