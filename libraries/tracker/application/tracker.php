@@ -253,11 +253,21 @@ abstract class JApplicationTracker extends JApplicationWeb
 
 			$document->setBuffer($contents, 'component');
 		}
-
-			// Mop up any uncaught exceptions.
 		catch (Exception $e)
 		{
+			// Mop up any uncaught exceptions.
 			echo $e->getMessage();
+
+			if (JDEBUG)
+			{
+				echo '<pre>';
+				echo '<h2>Exception trace</h2>';
+				echo $e->getTraceAsString();
+				echo '<h2>call stack</h2>';
+				debug_print_backtrace();
+				echo '</pre>';
+			}
+
 			$this->close($e->getCode());
 		}
 	}

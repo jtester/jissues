@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
  */
 
 ini_set('display_errors', true);
-const JDEBUG = false;
+
 @ini_set('magic_quotes_runtime', 0);
 
 /*

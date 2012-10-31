@@ -20,5 +20,7 @@ require_once __DIR__ . '/includes/bootstrap.php';
 // Get the application
 $app = JApplicationWeb::getInstance('JApplicationSite');
 
+define('JDEBUG', $app->get('debug'));
+
 // Execute the application
 $app->execute();
