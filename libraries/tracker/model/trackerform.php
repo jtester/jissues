@@ -43,6 +43,17 @@ abstract class JModelTrackerform extends JModelDatabase
 	{
 		parent::__construct();
 
+		// Guess the context as the suffix, eg: (Com[Admin])<Option>ModelSave.
+		if (!preg_match('/(Com[Admin]*)*(.*)Model(.*)/i', get_class($this), $r))
+		{
+			throw new RuntimeException(
+				sprintf('%s - Cannot get or parse class name %s.',
+					__METHOD__, get_class($this)
+				),
+				500
+			);
+		}
+
 		// Populate the state
 		$this->loadState();
 	}

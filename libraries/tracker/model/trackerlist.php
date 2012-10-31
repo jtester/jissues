@@ -52,10 +52,10 @@ abstract class JModelTrackerlist extends JModelDatabase
 	{
 		parent::__construct();
 
-		// Guess the context as the suffix, eg: Com[Admin]OptionControllerSaveContent.
+		// Guess the context as the suffix, eg: (Com[Admin])<Option>ModelSave.
 		if (!preg_match('/(Com[Admin]*)*(.*)Model(.*)/i', get_class($this), $r))
 		{
-			throw new Exception(
+			throw new RuntimeException(
 				sprintf('%s - Cannot get or parse class name %s.',
 					__METHOD__, get_class($this)
 				),
@@ -64,9 +64,8 @@ abstract class JModelTrackerlist extends JModelDatabase
 		}
 
 		$this->classPrefix = $r[1];
-
-		$this->name    = strtolower($r[2]);
-		$this->context = strtolower($r[3]);
+		$this->name        = strtolower($r[2]);
+		$this->context     = strtolower($r[3]);
 
 		$this->option = 'com_' . strtolower($this->name);
 
@@ -277,7 +276,7 @@ abstract class JModelTrackerlist extends JModelDatabase
 			$limit = $value;
 			$this->state->set('list.limit', $limit);
 
-			$value = $app->getUserStateFromRequest($this->context . '.limitstart', 'limitstart', 0);
+			$value      = $app->getUserStateFromRequest($this->context . '.limitstart', 'limitstart', 0);
 			$limitstart = ($limit != 0 ? (floor($value / $limit) * $limit) : 0);
 			$this->state->set('list.start', $limitstart);
 		}
