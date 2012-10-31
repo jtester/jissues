@@ -14,8 +14,8 @@ JToolbarHelper::addNew('project');
 JToolbarHelper::title('JTracker: Projects');
 
 $baseLink = 'index.php?option=com_tracker';
-$editLink = $baseLink . '&view=project&id=';
-$deleteLink = $baseLink . '&task=deleteproject&id=';
+$editLink = $baseLink . '&task=projectEdit&id=';
+$deleteLink = $baseLink . '&task=projectDelete&id=';
 
 JHtml::_('script', 'system/core.js', false, true);
 ?>

@@ -16,15 +16,19 @@ defined('_JEXEC') || die;
  * @subpackage  com_tracker
  * @since       1.0
  */
-class ComAdminTrackerTableProjects extends JTableTrackertable
+class ComAdminTrackerTableProjects extends JTableDefault
 {
 	/**
-	 * Get a table.
+	 * Object constructor to set table and key fields.  In most cases this will
+	 * be overridden by child classes to explicitly set the table and key fields
+	 * for a particular database table.
 	 *
-	 * @return ComAdminTrackerTableProjects
+	 * @param   JDatabaseDriver  $db     JDatabaseDriver object.
+	 *
+	 * @since   1.0
 	 */
-	public static function getTable()
+	public function __construct(JDatabaseDriver $db = null)
 	{
-		return new ComAdminTrackerTableProjects('#__tracker_projects', 'project_id', JFactory::getDbo());
+		parent::__construct('#__tracker_projects', 'project_id', $db);
 	}
 }

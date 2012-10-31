@@ -9,8 +9,11 @@
 
 defined('_JEXEC') || die;
 
-JToolbarHelper::save('saveProject');
-JToolbarHelper::cancel('cancelEdit');
+JToolbarHelper::save('projectSave');
+JToolbarHelper::apply('projectApply');
+JToolbarHelper::save2copy('projectSave2copy');
+JToolbarHelper::save2new('projectSave2new');
+JToolbarHelper::cancel('projectCancel');
 
 JToolbarHelper::title('JTracker - Edit Project');
 

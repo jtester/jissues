@@ -29,7 +29,7 @@ class ComAdminTrackerModelProject extends JModelTrackerform
 
 		$id = JFactory::getApplication()->input->getInt('id');
 
-		// $id = $id ? : (int) $this->getState()->get('com_tracker.id');
+		$id = $id ? : (int) $this->getState()->get('com_tracker.edit.project.id');
 
 		if ($id)
 		{
@@ -49,7 +49,7 @@ class ComAdminTrackerModelProject extends JModelTrackerform
 	 */
 	public function getTable()
 	{
-		return ComAdminTrackerTableProjects::getTable();
+		return new ComAdminTrackerTableProjects;
 	}
 
 	/**

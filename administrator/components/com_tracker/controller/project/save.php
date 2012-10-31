@@ -16,7 +16,7 @@ defined('_JEXEC') || die;
  * @subpackage  com_tracker
  * @since       1.0
  */
-class ComAdminTrackerControllerSaveproject extends JControllerFormSave
+class ComAdminTrackerControllerProjectSave extends JControllerFormSave
 {
 	/**
 	 * Execute the controller.
@@ -25,7 +25,7 @@ class ComAdminTrackerControllerSaveproject extends JControllerFormSave
 	 *                   finish execution. A controller might return false if some precondition for
 	 *                   the controller to run has not been satisfied.
 	 *
-	 * @since            9999
+	 * @since            1.0
 	 */
 	public function execute()
 	{

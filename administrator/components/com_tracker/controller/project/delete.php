@@ -16,7 +16,7 @@ defined('_JEXEC') || die;
  * @subpackage  com_tracker
  * @since       1.0
  */
-class ComAdminTrackerControllerDeleteproject extends JControllerDefault
+class ComAdminTrackerControllerProjectDelete extends JControllerFormDelete
 {
 	/**
 	 * Delete a record.
@@ -27,12 +27,8 @@ class ComAdminTrackerControllerDeleteproject extends JControllerDefault
 	 */
 	public function execute()
 	{
-		$model = new ComAdminTrackerModelProject;
+		parent::execute();
 
-		$model->delete(JFactory::getApplication()->input->getInt('id'));
-
-		$app = JFactory::getApplication();
-		$app->enqueueMessage($this->_('The item has been deleted'));
-		$app->redirect('index.php?option=com_tracker&view=projects');
+		JFactory::getApplication()->enqueueMessage($this->_('The item has been deleted'));
 	}
 }

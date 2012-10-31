@@ -16,21 +16,6 @@ defined('_JEXEC') || die;
  * @subpackage  com_tracker
  * @since       1.0
  */
-class ComAdminTrackerControllerCanceledit extends JControllerDefault
+class ComAdminTrackerControllerProjectEdit extends JControllerFormEdit
 {
-	/**
-	 * Cancel editing - clean the state.
-	 *
-	 * @since   1.0
-	 *
-	 * @return  void.
-	 */
-	public function execute()
-	{
-		// Clean the state
-		JFactory::getApplication()
-			->setUserState('com_tracker.edit.project.data', null);
-
-		parent::execute();
-	}
 }
