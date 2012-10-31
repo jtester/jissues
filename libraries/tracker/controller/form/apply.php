@@ -30,7 +30,7 @@ class JControllerFormApply extends JControllerFormSave
 		$model = $this->getModel();
 
 		// Set the record data in the session.
-//		$id = $model->getState()->get($this->context . '.id');
+		// $id = $model->getState()->get($this->context . '.id');
 		$this->holdEditId($this->editContext, $this->id);
 		$this->app->setUserState($this->editContext . '.data', null);
 		$model->checkout($this->id);

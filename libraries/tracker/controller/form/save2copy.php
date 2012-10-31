@@ -80,10 +80,12 @@ class JControllerFormSave2copy extends JControllerFormSave
 		$model = $this->getModel();
 
 		// Set the record data in the session.
-		$id = 0;//$model->getState()->get($this->context . '.id');
+		// $model->getState()->get($this->context . '.id');
+		$id = 0;
 		$this->holdEditId($this->editContext, $id);
 		$this->app->setUserState($this->editContext . '.data', $this->data);
-		//$model->checkout($id);
+
+		// $model->checkout($id);
 
 		// Redirect back to the edit screen.
 		$this->redirect = JRoute::_('index.php?option=' . $this->option . '&view=' . $this->context, false);

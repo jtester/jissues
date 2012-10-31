@@ -35,8 +35,9 @@ class JControllerFormSave extends JControllerFormDefault
 	 */
 	protected function precheck()
 	{
-		// Check the edit id
-		if (0)//!$this->checkEditId($this->editContext, $this->id))
+		// @todo .. Check the edit id
+		// $this->checkEditId($this->editContext, $this->id))
+		if (0)
 		{
 			// Somehow the person just went to the form and tried to save it. We don't allow that.
 			$this->app->enqueueMessage('Unheld ID', 'error');
