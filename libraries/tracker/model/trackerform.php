@@ -63,34 +63,41 @@ abstract class JModelTrackerform extends JModelDatabase
 		// Ensure the child class set the table object before continuing
 		if (!($this->table instanceof JTable))
 		{
-			throw new InvalidArgumentException('JTable class must be instantiated.');
+			$this->table = $this->getTable();
+
+			if (!($this->table instanceof JTable))
+			{
+				throw new InvalidArgumentException('JTable class must be instantiated.');
+			}
 		}
 
 		// Only attempt to check the row in if it exists.
-		if ($pk)
+		if (!$pk)
 		{
-			$user = JFactory::getUser();
-
-			// Get an instance of the row to checkout.
-			if (!$this->table->load($pk))
-			{
-				throw new RuntimeException($this->table->getError());
-			}
-
-			// Check if this is the user having previously checked out the row.
-			if ($this->table->checked_out > 0 && $this->table->checked_out != $user->get('id'))
-			{
-				throw new RuntimeException(JText::_('JLIB_APPLICATION_ERROR_CHECKOUT_USER_MISMATCH'));
-			}
-
-			// Attempt to check the row out.
-			if (!$this->table->checkout($user->get('id'), $pk))
-			{
-				throw new RuntimeException($this->table->getError());
-			}
+			return $this;
 		}
 
-		return true;
+		$user = JFactory::getUser();
+
+		// Get an instance of the row to checkout.
+		if (!$this->table->load($pk))
+		{
+			throw new RuntimeException('Checkout failed - table did not load');
+		}
+
+		// Check if this is the user having previously checked out the row.
+		if ($this->table->checked_out > 0 && $this->table->checked_out != $user->get('id'))
+		{
+			throw new RuntimeException(JText::_('JLIB_APPLICATION_ERROR_CHECKOUT_USER_MISMATCH'));
+		}
+
+		// Attempt to check the row out.
+		if (!$this->table->checkout($user->get('id'), $pk))
+		{
+			throw new RuntimeException('Checkout failed - table error');
+		}
+
+		return $this;
 	}
 
 	/**
@@ -231,6 +238,7 @@ abstract class JModelTrackerform extends JModelDatabase
 			// Get the validation messages from the form.
 			foreach ($form->getErrors() as $error)
 			{
+				// @todo only exceptions should arrive here..
 				if ($error instanceof Exception)
 				{
 					$application->enqueueMessage($error->getMessage(), 'warning');

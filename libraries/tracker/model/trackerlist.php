@@ -19,19 +19,6 @@ defined('JPATH_PLATFORM') or die;
 abstract class JModelTrackerlist extends JModelDatabase
 {
 	/**
-	 * Instantiate the model.
-	 *
-	 * @since  1.0
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		// Populate the state
-		$this->loadState();
-	}
-
-	/**
 	 * Internal memory based cache array of data.
 	 *
 	 * @var    array
@@ -55,6 +42,56 @@ abstract class JModelTrackerlist extends JModelDatabase
 	 * @since  1.0
 	 */
 	protected $query = array();
+
+	/**
+	 * Instantiate the model.
+	 *
+	 * @since  1.0
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Guess the context as the suffix, eg: Com[Admin]OptionControllerSaveContent.
+		if (!preg_match('/(Com[Admin]*)(.*)Model(.*)/i', get_class($this), $r))
+		{
+			throw new Exception(
+				sprintf('%s - Cannot get or parse class name %s.',
+					__METHOD__, get_class($this)
+				),
+				500
+			);
+		}
+
+		$this->classPrefix = $r[1];
+
+		$this->name    = strtolower($r[2]);
+		$this->context = strtolower($r[3]);
+
+		$this->option = 'com_' . strtolower($this->name);
+
+		// Populate the state
+		$this->loadState();
+	}
+
+	/**
+	 * Get the matching table for this model.
+	 *
+	 * @throws RuntimeException
+	 *
+	 * @return JTable
+	 */
+	public function getTable()
+	{
+		$class = $this->classPrefix . ucfirst($this->name) . 'Table' . ucfirst($this->context);
+
+		if (false == class_exists(($class)))
+		{
+			throw new RuntimeException(sprintf('Table class not found: %s', $class));
+		}
+
+		return new $class;
+	}
 
 	/**
 	 * Method to get an array of data items.
@@ -236,7 +273,7 @@ abstract class JModelTrackerlist extends JModelDatabase
 		{
 			$app = JFactory::getApplication();
 
-			$value = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->get('list_limit', 20), 'uint');
+			$value = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit', 20), 'uint');
 			$limit = $value;
 			$this->state->set('list.limit', $limit);
 
@@ -340,7 +377,7 @@ abstract class JModelTrackerlist extends JModelDatabase
 	 */
 	protected function getListQuery()
 	{
-		$table = ComAdminTrackerTableProjects::getTable();
+		$table = $this->getTable();
 
 		return $this->db->getQuery(true)
 			->from($table->getTableName())
