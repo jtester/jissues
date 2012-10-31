@@ -37,4 +37,11 @@
             label="GitHub Project"
             description="The actual repository (e.g. joomla-cms)"
             class="inputbox"/>
+
+    <field
+            name="ext_tracker_link"
+            type="text"
+            label="External Tracker Link"
+            description="A tracker link format (e.g. http://tracker.com/issue/%d)"
+            class="inputbox"/>
 </form>
