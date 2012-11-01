@@ -20,6 +20,7 @@ $ttParams['animation'] = true;
 $ttParams['trigger']   = 'hover';
 JHtml::_('bootstrap.tooltip', '.hasTooltip', $ttParams);
 JHtml::_('formbehavior.chosen', 'select');
+JHtml::_('script', 'system/core.js', false, true);
 
 $filterStatus = $this->state->get('filter.status');
 
