@@ -48,7 +48,7 @@ Example:
     <h3>1) Summary</h3>
 
     <div class="well well-small">
-        <input style="font-size: 1.5em;" type="text" name="title" size="30" class="span12"/>
+        <input style="font-size: 1.5em;" type="text" name="title" size="30" class="span12" placeholder="Issue Summary"/>
     </div>
 
     <h3>2) Description.</h3>
