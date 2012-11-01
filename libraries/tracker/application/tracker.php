@@ -96,6 +96,16 @@ abstract class JApplicationTracker extends JApplicationWeb
 
 		// Register the application to JFactory
 		JFactory::$application = $this;
+
+		define('JDEBUG', 1);
+
+		// Load Library language
+		JFactory::getLanguage()->load('lib_joomla', JPATH_ADMINISTRATOR);
+
+		// Trigger the onAfterInitialise event.
+		JPluginHelper::importPlugin('system');
+
+		$this->triggerEvent('onAfterInitialise');
 	}
 
 	/**
