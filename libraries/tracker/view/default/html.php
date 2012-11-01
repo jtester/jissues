@@ -19,6 +19,36 @@ defined('JPATH_PLATFORM') or die;
 class JViewDefaultHtml extends JViewHtml
 {
 	/**
+	 * Method to instantiate the view.
+	 *
+	 * @param   JModel            $model  The model object.
+	 * @param   SplPriorityQueue  $paths  The paths queue.
+	 *
+	 * @throws RuntimeException
+	 * @since   12.1
+	 */
+	public function __construct(JModel $model, SplPriorityQueue $paths = null)
+	{
+		parent::__construct($model, $paths);
+
+		// Guess the context as the suffix, eg: (Com[Admin])<Option>ModelSave.
+		if (!preg_match('/(Com[Admin]*)*(.*)View(.*)Html*/i', get_class($this), $r))
+		{
+			throw new RuntimeException(
+				sprintf('%s - Cannot get or parse class name %s.',
+					__METHOD__, get_class($this)
+				),
+				500
+			);
+		}
+
+		$this->name = strtolower($r[3]);
+
+		// Setup dependencies.
+		$this->paths = isset($paths) ? $paths : $this->loadPaths();
+	}
+
+	/**
 	 * Translator function.
 	 *
 	 * @param   string  $string  The string to translate.
