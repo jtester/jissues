@@ -7,7 +7,7 @@
  */
 
 // Set error reporting for development
-error_reporting(32767);
+error_reporting(-1);
 
 /**
  * Constant that is checked in included files to prevent direct access.
@@ -17,10 +17,6 @@ const _JEXEC = 1;
 // Bootstrap the application
 require_once __DIR__ . '/includes/bootstrap.php';
 
-// Get the application
-$app = JApplicationWeb::getInstance('JApplicationSite');
-
-define('JDEBUG', $app->get('debug'));
-
 // Execute the application
-$app->execute();
+JApplicationWeb::getInstance('JApplicationSite')
+	->execute();
