@@ -11,16 +11,18 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+//JHtml::_('behavior.keepalive');
+//JHtml::_('behavior.formvalidation');
+
+JHtmlBootstrap::tooltip();
+
 ?>
 <div class="row-fluid">
     <div class="span2">
 		<?php echo JHtml::_('sidebar.render'); ?>
     </div>
 
-    <div class="span10 reset <?php echo $this->pageclass_sfx?>">
+    <div class="span10 <?php echo $this->pageclass_sfx?>">
 		<?php if ($this->params->get('show_page_heading')) : ?>
         <div class="page-header">
             <h1>
@@ -50,7 +52,7 @@ JHtml::_('behavior.formvalidation');
 			<?php endforeach; ?>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary validate"><?php echo JText::_('JSUBMIT'); ?></button>
+                <button type="submit" class="btn btn-success validate"><?php echo JText::_('JSUBMIT'); ?></button>
 				<?php echo JHtml::_('form.token'); ?>
             </div>
         </form>

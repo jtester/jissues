@@ -11,9 +11,11 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+//JHtml::_('behavior.keepalive');
+//JHtml::_('behavior.formvalidation');
+
+JHtmlBootstrap::tooltip();
+
 ?>
 <div class="row-fluid">
     <div class="span2">
@@ -29,16 +31,16 @@ JHtml::_('behavior.formvalidation');
 
         <form id="member-registration" action="<?php echo ('index.php'); ?>" method="post"
               class="form-validate form-horizontal">
-			<?php foreach ($this->form->getFieldsets() as $fieldset): // Iterate through the form fieldsets and display each one.?>
+			<?php foreach ($this->form->getFieldsets() as $fieldset): ?>
 			<?php $fields = $this->form->getFieldset($fieldset->name); ?>
 			<?php if (count($fields)): ?>
                 <fieldset>
-					<?php if (isset($fieldset->label)): // If the fieldset has a label set, display it as the legend.
+					<?php if (isset($fieldset->label)):
 					?>
                     <legend><?php echo JText::_($fieldset->label);?></legend>
 					<?php endif;?>
-					<?php foreach ($fields as $field): // Iterate through the fields in the set and display them.?>
-					<?php if ($field->hidden): // If the field is hidden, just display the input.?>
+					<?php foreach ($fields as $field): ?>
+					<?php if ($field->hidden): ?>
 						<?php echo $field->input; ?>
 						<?php else: ?>
                         <div class="control-group">
@@ -58,7 +60,7 @@ JHtml::_('behavior.formvalidation');
 				<?php endif; ?>
 			<?php endforeach;?>
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary validate"><?php echo JText::_('JREGISTER');?></button>
+                <button type="submit" class="btn btn-success validate"><?php echo JText::_('JREGISTER');?></button>
                 <a class="btn" href="index.php"
                    title="<?php echo JText::_('JCANCEL');?>"><?php echo JText::_('JCANCEL');?></a>
                 <input type="hidden" name="option" value="com_users"/>

@@ -42,7 +42,7 @@ abstract class UsersHelperSidebar
 		if (false == in_array($vName, $stdViews) && in_array($vName, $actionViews))
 		{
 			JHtmlSidebar::addEntry(
-				JText::_(sprintf('User / %s', $vName)),
+				JText::_(sprintf('User %s', $vName)),
 				'index.php?option=com_users&view=' . $vName,
 				in_array($vName, $actionViews)
 			);

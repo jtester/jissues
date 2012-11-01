@@ -11,7 +11,8 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.tooltip');
+//JHtml::_('behavior.tooltip');
+JHtmlBootstrap::tooltip();
 
 JLoader::register('JHtmlUsers', JPATH_COMPONENT . '/html/users.php');
 

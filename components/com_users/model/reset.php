@@ -134,7 +134,7 @@ class UsersModelReset extends JModelTrackerform
 		}
 
 		// Filter and validate the form data.
-		$data = $form->filter($data);
+		$data   = $form->filter($data);
 		$return = $form->validate($data);
 
 		// Check for an error.
@@ -156,8 +156,8 @@ class UsersModelReset extends JModelTrackerform
 		}
 
 		// Get the token and user id from the confirmation process.
-		$app = JFactory::getApplication();
-		$token = $app->getUserState('com_users.reset.token', null);
+		$app    = JFactory::getApplication();
+		$token  = $app->getUserState('com_users.reset.token', null);
 		$userId = $app->getUserState('com_users.reset.user', null);
 
 		// Check the token and user id.
@@ -187,16 +187,16 @@ class UsersModelReset extends JModelTrackerform
 		$password = $crypted . ':' . $salt;
 
 		// Update the user object.
-		$user->password = $password;
-		$user->activation = '';
+		$user->password       = $password;
+		$user->activation     = '';
 		$user->password_clear = $data['password1'];
 
 		// Save the user to the database.
 		if (!$user->save(true))
 		{
 			return new RuntimeException(
-				JText::sprintf('COM_USERS_USER_SAVE_FAILED', $user->getError())
-				, 500
+				JText::sprintf('COM_USERS_USER_SAVE_FAILED', ' aka $user->getError()'),
+				500
 			);
 		}
 
@@ -208,7 +208,13 @@ class UsersModelReset extends JModelTrackerform
 	}
 
 	/**
+	 * Process the data.
+	 *
+	 * @param   array  $data  The form data.
+	 *
 	 * @since    1.0
+	 *
+	 * @return JForm
 	 */
 	function processResetConfirm($data)
 	{
@@ -234,10 +240,16 @@ class UsersModelReset extends JModelTrackerform
 		// Check the validation results.
 		if ($return === false)
 		{
+			$app = JFactory::getApplication();
+
 			// Get the validation messages from the form.
-			foreach ($form->getErrors() as $message)
+			foreach ($form->getErrors() as $error)
 			{
-				JFactory::getApplication()->enqueueMessage($message, 'error');
+				$message = ($error instanceof Exception)
+					? $error->getMessage()
+					: $error;
+
+				$app->enqueueMessage($message, 'error');
 			}
 
 			return false;
@@ -272,11 +284,13 @@ class UsersModelReset extends JModelTrackerform
 
 		$parts = explode(':', $user->activation);
 		$crypt = $parts[0];
+
 		if (!isset($parts[1]))
 		{
 			return new RuntimeException(JText::_('COM_USERS_USER_NOT_FOUND'));
 		}
-		$salt = $parts[1];
+
+		$salt      = $parts[1];
 		$testcrypt = JUserHelper::getCryptedPassword($data['token'], $salt);
 
 		// Verify the token
@@ -302,7 +316,15 @@ class UsersModelReset extends JModelTrackerform
 	/**
 	 * Method to start the password reset process.
 	 *
+	 * @param   array  $data  Form data
+	 *
 	 * @since    1.0
+	 *
+	 * @throws RuntimeException
+	 * @throws InvalidArgumentException
+	 * @throws Exception
+	 *
+	 * @return boolean
 	 */
 	public function processResetRequest($data)
 	{
@@ -330,11 +352,18 @@ class UsersModelReset extends JModelTrackerform
 		// Check the validation results.
 		if ($return === false)
 		{
+			$app = JFactory::getApplication();
+
 			// Get the validation messages from the form.
-			foreach ($form->getErrors() as $message)
+			foreach ($form->getErrors() as $error)
 			{
-				JFactory::getApplication()->enqueueMessage($message, 'error');
+				$message = ($error instanceof Exception)
+					? $error->getMessage()
+					: $error;
+
+				$app->enqueueMessage($message, 'error');
 			}
+
 			return false;
 		}
 
@@ -374,15 +403,18 @@ class UsersModelReset extends JModelTrackerform
 		// Make sure the user has not exceeded the reset limit
 		if (!$this->checkResetLimit($user))
 		{
-			//$resetLimit = (int) JFactory::getApplication()->getParams()->get('reset_time');
-			throw new RuntimeException(JText::plural(
-				'COM_USERS_REMIND_LIMIT_ERROR_N_HOURS'
-				, (int) JFactory::getApplication()->getParams()->get('reset_time')
-			));
+			// $resetLimit = (int) JFactory::getApplication()->getParams()->get('reset_time');
+			throw new RuntimeException(
+				JText::plural(
+					'COM_USERS_REMIND_LIMIT_ERROR_N_HOURS',
+					(int) JFactory::getApplication()->getParams()->get('reset_time')
+				)
+			);
 		}
+
 		// Set the confirmation token.
-		$token = JApplication::getHash(JUserHelper::genRandomPassword());
-		$salt = JUserHelper::getSalt('crypt-md5');
+		$token       = JApplication::getHash(JUserHelper::genRandomPassword());
+		$salt        = JUserHelper::getSalt('crypt-md5');
 		$hashedToken = md5($token . $salt) . ':' . $salt;
 
 		$user->activation = $hashedToken;
@@ -394,19 +426,19 @@ class UsersModelReset extends JModelTrackerform
 		}
 
 		// Assemble the password reset confirmation link.
-		$mode = $config->get('force_ssl', 0) == 2 ? 1 : -1;
+		$mode   = $config->get('force_ssl', 0) == 2 ? 1 : -1;
 		$itemid = UsersHelperRoute::getLoginRoute();
 		$itemid = $itemid !== null ? '&Itemid=' . $itemid : '';
-		$link = 'index.php?option=com_users&view=reset&layout=confirm' . $itemid;
+		$link   = 'index.php?option=com_users&view=reset&layout=confirm' . $itemid;
 
 		// Put together the email template data.
-		$data = $user->getProperties();
-		$data['fromname'] = $config->get('fromname');
-		$data['mailfrom'] = $config->get('mailfrom');
-		$data['sitename'] = $config->get('sitename');
+		$data              = $user->getProperties();
+		$data['fromname']  = $config->get('fromname');
+		$data['mailfrom']  = $config->get('mailfrom');
+		$data['sitename']  = $config->get('sitename');
 		$data['link_text'] = JRoute::_($link, false, $mode);
 		$data['link_html'] = JRoute::_($link, true, $mode);
-		$data['token'] = $token;
+		$data['token']     = $token;
 
 		$subject = JText::sprintf(
 			'COM_USERS_EMAIL_PASSWORD_RESET_SUBJECT',
@@ -436,7 +468,7 @@ class UsersModelReset extends JModelTrackerform
 	/**
 	 * Method to check if user reset limit has been exceeded within the allowed time period.
 	 *
-	 * @param   JUser $user the user doing the password reset
+	 * @param   JUser  $user  the user doing the password reset
 	 *
 	 * @return  boolean true if user can do the reset, false if limit exceeded
 	 *
@@ -449,14 +481,14 @@ class UsersModelReset extends JModelTrackerform
 		$resetHours = (int) $params->get('reset_time');
 		$result     = true;
 
-		$lastResetTime = strtotime($user->lastResetTime) ? strtotime($user->lastResetTime) : 0;
+		$lastResetTime       = strtotime($user->lastResetTime) ? strtotime($user->lastResetTime) : 0;
 		$hoursSinceLastReset = (strtotime(JFactory::getDate()->toSql()) - $lastResetTime) / 3600;
 
 		if ($hoursSinceLastReset > $resetHours)
 		{
 			// If it's been long enough, start a new reset count
 			$user->lastResetTime = JFactory::getDate()->toSql();
-			$user->resetCount = 1;
+			$user->resetCount    = 1;
 		}
 		elseif ($user->resetCount < $maxCount)
 		{

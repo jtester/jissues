@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_users
  * @since       1.0
  */
-class UsersViewResetHtml extends JViewHtml
+class UsersViewResetHtml extends JViewDefaultHtml
 {
 	/**
 	 * The form object
@@ -99,7 +99,7 @@ class UsersViewResetHtml extends JViewHtml
 		$this->state = $this->model->getState();
 		$this->params = $this->state->get('com_users.params');
 
-		//Escape strings for HTML output
+		// Escape strings for HTML output
 		$this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx'));
 
 		$this->prepareDocument();
@@ -113,6 +113,8 @@ class UsersViewResetHtml extends JViewHtml
 	 * Prepares the document.
 	 *
 	 * @since    1.6
+	 *
+	 * @return void
 	 */
 	protected function prepareDocument()
 	{

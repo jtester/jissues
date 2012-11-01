@@ -21,16 +21,17 @@ class UsersModelRemind extends JModelTrackerform
 	/**
 	 * Method to get the username reminder form.
 	 *
-	 * @param    array    $data      An optional array of data for the form to interogate.
-	 * @param    boolean  $loadData  True if the form is to load its own data (default case), false if not.
+	 * @param   array    $data      An optional array of data for the form to interogate.
+	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return   JForm  A JForm object on success, false on failure
 	 * @since    1.0
+	 * @return   JForm  A JForm object on success, false on failure
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
 		$form = $this->loadForm('com_users.remind', 'remind', array('control' => 'jform', 'load_data' => $loadData));
+
 		if (empty($form))
 		{
 			return false;
@@ -104,13 +105,19 @@ class UsersModelRemind extends JModelTrackerform
 		// Check the validation results.
 		if ($data === false)
 		{
+			/*
 			// Get the validation messages from the form.
-			foreach ($form->getErrors() as $message)
+			foreach ($form->getErrors() as $error)
 			{
-				$application->enqueueMessage($message, 'warning');
-			}
+				$message = ($error instanceof Exception)
+					? $error->getMessage()
+					: $error;
 
-			return false;
+				$application->enqueueMessage($message, 'error');
+			}
+			*/
+
+			throw new Exception;
 		}
 
 		// Find the user id for the given email address.

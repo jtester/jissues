@@ -11,9 +11,11 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+//JHtml::_('behavior.keepalive');
+//JHtml::_('behavior.formvalidation');
+
+JHtmlBootstrap::tooltip();
+
 ?>
 <div class="row-fluid">
     <div class="span2">
@@ -49,7 +51,7 @@ JHtml::_('behavior.formvalidation');
             </fieldset>
 			<?php endforeach; ?>
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary validate"><?php echo JText::_('JSUBMIT'); ?></button>
+                <button type="submit" class="btn btn-success validate"><?php echo JText::_('JSUBMIT'); ?></button>
 				<?php echo JHtml::_('form.token'); ?>
             </div>
         </form>

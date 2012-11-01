@@ -36,7 +36,13 @@ class UsersControllerResetrequest extends JControllerBase
 
 		try
 		{
-			$model->processResetRequest($data);
+			$legacyReturn = $model->processResetRequest($data);
+
+			if (false == $legacyReturn)
+			{
+				// Verification failed');
+				throw new Exception;
+			}
 
 			// The request succeeded.
 			// Get the route to the next page.
@@ -46,7 +52,6 @@ class UsersControllerResetrequest extends JControllerBase
 
 			// Proceed to step two.
 			$app->redirect(JRoute::_($route, false));
-
 		}
 		catch (Exception $e)
 		{

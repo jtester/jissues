@@ -78,6 +78,7 @@ class UsersViewProfileHtml extends JViewHtml
 		if (JFactory::getUser()->guest)
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
+
 			return '';
 		}
 
@@ -90,7 +91,8 @@ class UsersViewProfileHtml extends JViewHtml
 		// Check if a user was found.
 		if (!$this->data->id)
 		{
-			JError::raiseError(404, JText::_('JERROR_USERS_PROFILE_NOT_FOUND'));
+			JFactory::getApplication()->enqueueMessage(JText::_('JERROR_USERS_PROFILE_NOT_FOUND'), 'error');
+
 			return false;
 		}
 
@@ -102,7 +104,7 @@ class UsersViewProfileHtml extends JViewHtml
 			$this->setLayout($active->query['layout']);
 		}
 
-		//Escape strings for HTML output
+		// Escape strings for HTML output
 		$this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx'));
 
 		$this->prepareDocument();
@@ -142,6 +144,7 @@ class UsersViewProfileHtml extends JViewHtml
 		}
 
 		$title = $this->params->get('page_title', '');
+
 		if (empty($title))
 		{
 			$title = $app->get('sitename');

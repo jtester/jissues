@@ -11,9 +11,11 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+//JHtml::_('behavior.keepalive');
+//JHtml::_('behavior.formvalidation');
+
+JHtmlBootstrap::tooltip();
+
 //load user_profile plugin language
 $lang = JFactory::getLanguage();
 $lang->load('plg_user_profile', JPATH_ADMINISTRATOR);
@@ -51,7 +53,7 @@ $lang->load('plg_user_profile', JPATH_ADMINISTRATOR);
 								<?php endif; ?>
                             </div>
                             <div class="controls">
-								<?php echo $field->input; ?>
+								<?php echo $field->inputTooltip; ?>
                             </div>
                         </div>
 						<?php endif; ?>
@@ -62,7 +64,7 @@ $lang->load('plg_user_profile', JPATH_ADMINISTRATOR);
 
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary validate"><span><?php echo JText::_('JSUBMIT'); ?></span>
+            <button type="submit" class="btn btn-success validate"><span><?php echo JText::_('JSUBMIT'); ?></span>
             </button>
             <a class="btn" href="index.php?option=com_users"
                title="<?php echo JText::_('JCANCEL'); ?>"><?php echo JText::_('JCANCEL'); ?></a>

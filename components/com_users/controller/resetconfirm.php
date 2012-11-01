@@ -52,6 +52,7 @@ class UsersControllerResetconfirm extends JControllerBase
 			{
 				$message = JText::_('COM_USERS_RESET_CONFIRM_ERROR');
 			}
+
 			$app->enqueueMessage($message, 'error');
 
 			// Get the route to the next page.

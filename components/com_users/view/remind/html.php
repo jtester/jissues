@@ -70,6 +70,7 @@ class UsersViewRemindHtml extends JViewHtml
 		if (0 == JFactory::getUser()->guest)
 		{
 			JFactory::getApplication()->enqueueMessage('You are already registered.', 'warning');
+
 			return '';
 		}
 
@@ -86,7 +87,7 @@ class UsersViewRemindHtml extends JViewHtml
 			$this->setLayout($active->query['layout']);
 		}
 
-		//Escape strings for HTML output
+		// Escape strings for HTML output
 		$this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx'));
 
 		$this->prepareDocument();
@@ -125,6 +126,7 @@ class UsersViewRemindHtml extends JViewHtml
 		}
 
 		$title = $this->params->get('page_title', '');
+
 		if (empty($title))
 		{
 			$title = $app->get('sitename');

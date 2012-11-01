@@ -11,8 +11,10 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.formvalidation');
+// JHtml::_('behavior.keepalive');
+// JHtml::_('behavior.formvalidation');
+
+JHtmlBootstrap::tooltip();
 ?>
 <div class="reset-confirm<?php echo $this->pageclass_sfx?>">
 	<?php if ($this->params->get('show_page_heading')) : ?>
@@ -35,7 +37,7 @@ JHtml::_('behavior.formvalidation');
 		<?php endforeach; ?>
 
 		<div>
-			<button type="submit" class="validate"><?php echo JText::_('JSUBMIT'); ?></button>
+			<button type="submit" class="btn btn-success validate"><?php echo JText::_('JSUBMIT'); ?></button>
 			<?php echo JHtml::_('form.token'); ?>
 		</div>
 	</form>

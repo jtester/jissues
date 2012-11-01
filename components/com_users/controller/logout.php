@@ -31,28 +31,26 @@ class UsersControllerLogout extends JControllerBase
 	{
 		JSession::checkToken('request') or jexit(JText::_('JInvalid_Token'));
 
-		$app = $this->getApplication();
-
 		// Perform the log out.
-		$error = $app->logout();
+		$error = $this->app->logout();
 
 		// Check if the log out succeeded.
 		if (!($error instanceof Exception))
 		{
 			// Get the return url from the request and validate that it is internal.
-			$return = base64_decode($input->post->get('return', '', 'BASE64'));
+			$return = base64_decode($this->input->post->get('return', '', 'BASE64'));
+
 			if (!JUri::isInternal($return))
 			{
 				$return = '';
 			}
 
 			// Redirect the user.
-			$app->redirect(JRoute::_($return, false));
+			$this->app->redirect(JRoute::_($return, false));
 		}
 		else
 		{
-			$app->redirect(JRoute::_('index.php?option=com_users&view=login', false));
+			$this->app->redirect(JRoute::_('index.php?option=com_users&view=login', false));
 		}
 	}
-
 }

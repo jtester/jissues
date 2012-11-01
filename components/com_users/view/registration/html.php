@@ -78,6 +78,7 @@ class UsersViewRegistrationHtml extends JViewHtml
 		if (0 == JFactory::getUser()->guest)
 		{
 			JFactory::getApplication()->enqueueMessage('You are already registered.', 'warning');
+
 			return '';
 		}
 
