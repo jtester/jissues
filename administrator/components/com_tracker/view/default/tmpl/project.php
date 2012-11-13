@@ -10,7 +10,7 @@
 defined('_JEXEC') || die;
 ?>
 
-<h2><?= sprintf($this->_('Project %s'), $project) ?></h2>
+<h2><?= sprintf($this->_('Project %s'), JHtmlProjects::getName($project)) ?></h2>
 
 <div class="row">
     <div class="span12">

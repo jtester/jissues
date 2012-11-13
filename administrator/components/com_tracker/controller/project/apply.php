@@ -32,10 +32,6 @@ class ComAdminTrackerControllerProjectApply extends JControllerFormApply
 		if (parent::execute())
 		{
 			JFactory::getApplication()->enqueueMessage($this->_('The changes have been applied.'));
-
-			return true;
 		}
-
-		return false;
 	}
 }

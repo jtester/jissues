@@ -32,10 +32,6 @@ class ComAdminTrackerControllerProjectSave2new extends JControllerFormSave2new
 		if (parent::execute())
 		{
 			JFactory::getApplication()->enqueueMessage($this->_('The item has been saved.'));
-
-			return true;
 		}
-
-		return false;
 	}
 }

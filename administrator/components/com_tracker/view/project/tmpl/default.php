@@ -34,7 +34,7 @@ JHtml::_('script', 'system/core.js', false, true);
 	            <?= $field->label; ?>
             </div>
         <div class="controls">
-		        <?= $field->getInputTooltip(); ?>
+		        <?= $field->inputTooltip; ?>
         </div>
         </div>
 		<?php endforeach; ?>
