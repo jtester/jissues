@@ -100,31 +100,31 @@ abstract class ComAdminTrackerHelper extends JCmsExtensionHelper
 			$item->load($p);
 
 			JHtmlSidebar::addEntry(
-				sprintf(self::_('Project %s'), $p),
+				sprintf(self::_('Project %s'), JHtmlProjects::getName($p)),
 				'index.php?option=com_tracker&project=' . $p,
 				(boolean) $project
 			);
 
 			JHtmlSidebar::addEntry(
-				sprintf(self::_('%s Categories'), $p),
+				sprintf(self::_('%s Categories'), JHtmlProjects::getName($p)),
 				sprintf($baseLink . '.%s.%s', $p, 'categories'),
 				preg_match('/com_tracker.[0-9]+.categories/', $extension)
 			);
 
 			JHtmlSidebar::addEntry(
-				sprintf(self::_('%s Textfields'), $p),
+				sprintf(self::_('%s Textfields'), JHtmlProjects::getName($p)),
 				sprintf($baseLink . '.%s.%s', $p, 'textfields'),
 				preg_match('/com_tracker.[0-9]+.textfields/', $extension)
 			);
 
 			JHtmlSidebar::addEntry(
-				sprintf(self::_('%s Selectlists'), $p),
+				sprintf(self::_('%s Selectlists'), JHtmlProjects::getName($p)),
 				sprintf($baseLink . '.%s.%s', $p, 'fields'),
 				preg_match('/com_tracker.[0-9]+.fields/', $extension)
 			);
 
 			JHtmlSidebar::addEntry(
-				sprintf(self::_('%s Checkboxes'), $p),
+				sprintf(self::_('%s Checkboxes'), JHtmlProjects::getName($p)),
 				sprintf($baseLink . '.%s.%s', $p, 'checkboxes'),
 				preg_match('/com_tracker.[0-9]+.checkboxes/', $extension)
 			);

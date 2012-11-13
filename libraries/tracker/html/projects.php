@@ -131,6 +131,31 @@ abstract class JHtmlProjects
 		return $sections[$section];
 	}
 
+	public static function getName($id)
+	{
+		static $names = array();
+
+		$id = (int) $id;
+
+		if (isset($names[$id]))
+		{
+			return $names[$id];
+		}
+
+		$db = JFactory::getDbo();
+
+		$item = $db->setQuery(
+			$db->getQuery(true)
+				->select($db->qn('title'))
+				->from($db->qn('#__tracker_projects'))
+				->where($db->qn('project_id') . ' = ' . $id)
+		)->loadResult();
+
+		$names[$id] = $item;
+
+		return $names[$id];
+	}
+
 	/**
 	 * Get a project selector.
 	 *
