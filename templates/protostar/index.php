@@ -18,7 +18,7 @@ $this->direction = $doc->direction;
 JHtml::_('bootstrap.framework');
 
 // Add Stylesheets
-$doc->addStyleSheet('templates/protostar/css/template.css');
+//$doc->addStyleSheet('templates/protostar/css/template.css');
 
 // Load optional rtl Bootstrap css and Bootstrap bugfixes
 JHtmlBootstrap::loadCss(false, $this->direction);
@@ -28,10 +28,16 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="<?php echo JUri::root(true) ?>/templates/<?php echo $this->template ?>/css/template.css" type="text/css" />
 	<jdoc:include type="head" />
 	<!--[if lt IE 9]>
 		<script src="<?php echo $this->baseurl ?>/media/jui/js/html5.js"></script>
 	<![endif]-->
+
+    <script src="media/system/js/core.js" type="text/javascript"></script>
+	<noscript>
+        <link rel="stylesheet" href="<?php echo JUri::root(true) ?>/templates/<?php echo $this->template ?>/css/noscript.css" type="text/css" />
+	</noscript>
 </head>
 
 <body class="site fluid">
@@ -42,7 +48,7 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 			<div class="header">
 				<div class="header-inner clearfix">
                     <a class="brand pull-left" href="<?php echo $this->baseurl; ?>">
-                        <img src="<?php echo $this->baseurl ?>/templates/protostar/images/joomla.png" alt="Joomla" />
+                        <img src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/images/joomla.png" alt="Joomla" />
 					</a>
 				</div>
 			</div>
@@ -65,8 +71,9 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 					</div>
 				</div>
 			</div>
-			<div class="row-fluid">
-				<div id="content" class="span12">
+            <noscript>Please <a href="http://www.activatejavascript.org/">activate JavaScript</a> to use this fine Application !</noscript>
+            <div class="row-fluid">
+                <div id="content" class="span12">
 					<!-- Begin Content -->
 					<jdoc:include type="message" />
 					<jdoc:include type="component" />

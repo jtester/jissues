@@ -1,0 +1,20 @@
+body, body.site, body.site.fluid {
+    border: 10px solid red;
+}
+
+div#content {
+    opacity: 0.1;
+}
+
+noscript {
+    font-size: 1.5em;
+    font-weight: bold;
+    background-color: #ffc;
+    color: green;
+    border: 5px solid orange;
+    padding: 1em;
+    margin: 1em;
+    display: block;
+    text-align: center;
+    border-radius: 30px;
+}
