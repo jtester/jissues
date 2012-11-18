@@ -42,15 +42,16 @@ require_once JPATH_LIBRARIES . '/cms.php';
 // Configure error reporting to maximum for logging.
 error_reporting(32767);
 ini_set('display_errors', 0);
+const JDEBUG = true;
 
 /**
- * Web application to receive and inject issue reports from GitHub
+ * Web application to receive and inject issue comments from GitHub
  *
  * @package     JTracker
  * @subpackage  Hooks
  * @since       1.0
  */
-final class TrackerReceiveIssues extends JApplicationHooks
+final class TrackerReceiveComments extends JApplicationHooks
 {
 	/**
 	 * Method to run the application routines.
@@ -66,7 +67,7 @@ final class TrackerReceiveIssues extends JApplicationHooks
 
 		// Initialize the logger
 		$options['format']    = '{DATE}\t{TIME}\t{LEVEL}\t{CODE}\t{MESSAGE}';
-		$options['text_file'] = 'github_issues.php';
+		$options['text_file'] = 'github_comments.php';
 		JLog::addLogger($options);
 
 		// Initialize the database
@@ -79,13 +80,56 @@ final class TrackerReceiveIssues extends JApplicationHooks
 		// Decode it
 		$data = json_decode($data);
 
-		// Get the issue ID
-		$githubID = $data->issue->number;
+		// Get the comment ID
+		$commentID = $data->comment->id;
 
-		// Check to see if the issue is already in the database
+		// Check to see if the comment is already in the database
+		$query->select($db->quoteName('id'));
+		$query->from($db->quoteName('#__issue_comments'));
+		$query->where($db->quoteName('id') . ' = ' . (int) $commentID);
+		$db->setQuery($query);
+		JLog::add('Check query: ' . (string) $query, JLog::INFO);
+
+		try
+		{
+			$comment = $db->loadResult();
+		}
+		catch (RuntimeException $e)
+		{
+			JLog::add('Error checking the database for comment ID:' . $e->getMessage(), JLog::INFO);
+			$this->close();
+		}
+
+		// If the item is already in the databse, update it; else, insert it
+		if ($comment)
+		{
+			$this->updateComment($data);
+		}
+		else
+		{
+			$this->insertComment($data);
+		}
+	}
+
+	/**
+	 * Method to insert data for acomment from GitHub
+	 *
+	 * @param   object  $data  The hook data
+	 *
+	 * @return  boolean  True on success
+	 *
+	 * @since   1.0
+	 */
+	protected function insertComment($data)
+	{
+		// Initialize the database
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		// First, make sure the issue is already in the database
 		$query->select($db->quoteName('id'));
 		$query->from($db->quoteName('#__issues'));
-		$query->where($db->quoteName('gh_id') . ' = ' . (int) $githubID);
+		$query->where($db->quoteName('gh_id') . ' = ' . (int) $data->issue->number);
 		$db->setQuery($query);
 
 		try
@@ -94,58 +138,64 @@ final class TrackerReceiveIssues extends JApplicationHooks
 		}
 		catch (RuntimeException $e)
 		{
-			JLog::add('Error checking the database for the GitHub ID:' . $e->getMessage(), JLog::INFO);
+			JLog::add('Error checking the database for GitHub ID:' . $e->getMessage(), JLog::INFO);
 			$this->close();
 		}
 
-		// Instantiate the JTable instance
-		$table = JTable::getInstance('Issue');
+		// If we don't have an ID, we need to insert the issue
+		if (!$issueID)
+		{
+			$issueID = $this->insertIssue($data);
+		}
 
-		// If the item is already in the databse, update it; else, insert it
-		if ($issueID)
+		// Store the item in the database
+		$columnsArray = array(
+			$db->quoteName('id'), $db->quoteName('issue_id'), $db->quoteName('submitter'), $db->quoteName('text'), $db->quoteName('created')
+		);
+
+		$query->insert($db->quoteName('#__issue_comments'));
+		$query->columns($columnsArray);
+		$query->values(
+			(int) $data->comment->id . ', '
+			. (int) $issueID . ', '
+			. $db->quote($data->comment->user->login) . ', '
+			. $db->quote($data->comment->body) . ', '
+			. $db->quote(JFactory::getDate($data->comment->created_at)->toSql())
+		);
+		$db->setQuery($query);
+
+		try
 		{
-			$this->updateData($issueID, $data);
+			$db->execute();
 		}
-		else
+		catch (RuntimeException $e)
 		{
-			$this->insertData($table, $data);
+			$this->out('Error ' . $e->getCode() . ' - ' . $e->getMessage(), true);
+			$this->close();
 		}
+
+		// Store was successful, update status
+		JLog::add(sprintf('Added GitHub comment %s to the tracker.', $data->comment->id), JLog::INFO);
+
+		return true;
 	}
 
 	/**
 	 * Method to insert data for an issue from GitHub
 	 *
-	 * @param   JTableIssue  $table  Issue table instance
-	 * @param   object       $data   The hook data
+	 * @param   object  $data  The hook data
 	 *
-	 * @return  boolean  True on success
+	 * @return  integer  Issue ID
 	 *
 	 * @since   1.0
 	 */
-	protected function insertData(JTableIssue $table, $data)
+	protected function insertIssue($data)
 	{
-		// Figure out the state based on the action
-		$action = $data->action;
-
-		switch ($action)
-		{
-			case 'closed':
-				$status = 10;
-				break;
-
-			case 'opened':
-			case 'reopened':
-			default:
-				$status = 1;
-				break;
-
-		}
-
 		$table = JTable::getInstance('Issue');
 		$table->gh_id       = $data->issue->number;
 		$table->title       = $data->issue->title;
 		$table->description = $data->issue->body;
-		$table->status		= $status;
+		$table->status		= ($data->issue->state) == 'open' ? 1 : 10;
 		$table->opened      = JFactory::getDate($data->issue->created_at)->toSql();
 		$table->modified    = JFactory::getDate($data->issue->updated_at)->toSql();
 
@@ -181,70 +231,22 @@ final class TrackerReceiveIssues extends JApplicationHooks
 		// Store was successful, update status
 		JLog::add(sprintf('Added GitHub issue %s to the tracker.', $data->issue->number), JLog::INFO);
 
-		return true;
+		return $table->id;
 	}
 
 	/**
 	 * Method to update data for an issue from GitHub
 	 *
-	 * @param   integer  $issueID  Issue ID in the database
-	 * @param   object   $data     The hook data
+	 * @param   object  $data  The hook data
 	 *
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
 	 */
-	protected function updateData($issueID, $data)
+	protected function updateComment($data)
 	{
-		// Figure out the state based on the action
-		$action = $data->action;
-
-		switch ($action)
-		{
-			case 'closed':
-				$status = 10;
-				break;
-
-			case 'opened':
-			case 'reopened':
-			default:
-				$status = 1;
-				break;
-
-		}
-
-		// Only update fields that may have changed, there's no API endpoint to show that so make some guesses
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->update($db->quoteName('#__issues'));
-		$query->set($db->quoteName('title') . ' = ' . $db->quote($data->issue->title));
-		$query->set($db->quoteName('description') . ' = ' . $db->quote($data->issue->body));
-		$query->set($db->quoteName('status') . ' = ' . $status);
-		$query->set($db->quoteName('modified') . ' = ' . $db->quote(JFactory::getDate($data->issue->updated_at)->toSql()));
-		$query->where($db->quoteName('id') . ' = ' . $issueID);
-
-		// Add the closed date if the status is closed
-		if ($data->issue->closed_at)
-		{
-			$query->set($db->quoteName('closed_date') . ' = ' . $db->quote(JFactory::getDate($data->issue->closed_at)->toSql()));
-		}
-
-		try
-		{
-			$db->setQuery($query);
-			$db->execute();
-		}
-		catch (RuntimeException $e)
-		{
-			JLog::add('Error updating the database for issue ' . $issueID . ':' . $e->getMessage(), JLog::INFO);
-			$this->close();
-		}
-
-		// Store was successful, update status
-		JLog::add(sprintf('Updated issue %s in the tracker.', $issueID), JLog::INFO);
-
 		return true;
 	}
 }
 
-JApplicationWeb::getInstance('TrackerReceiveIssues')->execute();
+JApplicationWeb::getInstance('TrackerReceiveComments')->execute();
