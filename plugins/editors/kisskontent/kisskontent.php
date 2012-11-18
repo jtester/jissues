@@ -156,12 +156,12 @@ class PlgEditorKisskontent extends JPlugin
 		if ($syntaxPageLink)
 		{
 			$html[] = '<div class="pull-right">';
-			$html[] = sprintf('Text is parsed with %s', JHtml::link($syntaxPageLink, 'Enhanced ElephantMarkdown'));
+			$html[] = sprintf('Text is parsed with %s', JHtml::link(JRoute::_($syntaxPageLink), 'Enhanced ElephantMarkdown'));
 			$html[] = '</div>';
 		}
 
 		$html[] = '<ul class="nav nav-tabs" id="' . $name . '-tabs">';
-		$html[] = '  <li class="active"><a href="#' . $name . '-write" data-toggle="tab"">Write</a></li>';
+		$html[] = '  <li class="active"><a href="#' . $name . '-write" data-toggle="tab">Write</a></li>';
 		$html[] = '  <li><a href="#' . $name . '-preview" data-toggle="tab">Preview</a></li>';
 		$html[] = '</ul>';
 
