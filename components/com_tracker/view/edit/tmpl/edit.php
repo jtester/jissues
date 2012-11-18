@@ -37,7 +37,7 @@ $priorityOptions['size'] = '5';
 					<tr class="issue-info-row">
 						<td>
 							<label><?php echo JText::_('JSTATUS'); ?></label>
-							<?php echo JHtmlStatus::options(); ?>
+							<?php echo JHtmlStatus::options($this->item->status); ?>
 						</td>
 						<td>
 		    	    	    <label><?php echo JText::_('COM_TRACKER_HEADING_PRIORITY'); ?></label>
@@ -114,7 +114,7 @@ $priorityOptions['size'] = '5';
 			<div class="span12">
 				<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DESC'); ?></h4>
 				<div class="well issue">
-					<?php echo $this->editor->display('description', $this->item->description, '100%', 300, 10, 10, false, 'editor-comment', null, null, $this->editorParams); ?>
+					<?php echo $this->editor->display('jform[description]', $this->item->description, '100%', 300, 10, 10, false, 'jform_description', null, null, $this->editorParams); ?>
 				</div>
 			</div>
 		</div>

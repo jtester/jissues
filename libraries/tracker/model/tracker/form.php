@@ -16,7 +16,7 @@ defined('JPATH_PLATFORM') or die;
  * @subpackage  Model
  * @since       1.0
  */
-abstract class JModelTrackerform extends JModelDatabase
+abstract class JModelTrackerForm extends JModelTracker
 {
 	/**
 	 * Array of form objects.
@@ -25,14 +25,6 @@ abstract class JModelTrackerform extends JModelDatabase
 	 * @since  1.0
 	 */
 	protected $forms = array();
-
-	/**
-	 * JTable instance
-	 *
-	 * @var   JTable
-	 * @since 1.0
-	 */
-	protected $table;
 
 	/**
 	 * Instantiate the model.
@@ -60,10 +52,10 @@ abstract class JModelTrackerform extends JModelDatabase
 	 */
 	public function checkin($pk = null)
 	{
-		// Ensure the child class set the table object before continuing
+		// Ensure the table object is already instantiated
 		if (!($this->table instanceof JTable))
 		{
-			throw new InvalidArgumentException('JTable class must be instantiated.');
+			$this->getTable();
 		}
 
 		// Only attempt to check the row in if it exists.
@@ -105,10 +97,10 @@ abstract class JModelTrackerform extends JModelDatabase
 	 */
 	public function checkout($pk = null)
 	{
-		// Ensure the child class set the table object before continuing
+		// Ensure the table object is already instantiated
 		if (!($this->table instanceof JTable))
 		{
-			throw new InvalidArgumentException('JTable class must be instantiated.');
+			$this->getTable();
 		}
 
 		// Only attempt to check the row in if it exists.

@@ -16,21 +16,8 @@ defined('JPATH_PLATFORM') or die;
  * @subpackage  Model
  * @since       1.0
  */
-abstract class JModelTrackerlist extends JModelDatabase
+abstract class JModelTrackerList extends JModelTracker
 {
-	/**
-	 * Instantiate the model.
-	 *
-	 * @since  1.0
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		// Populate the state
-		$this->loadState();
-	}
-
 	/**
 	 * Internal memory based cache array of data.
 	 *
@@ -55,6 +42,25 @@ abstract class JModelTrackerlist extends JModelDatabase
 	 * @since  1.0
 	 */
 	protected $query = array();
+
+	/**
+	 * Instantiate the model.
+	 *
+	 * @since  1.0
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Populate the state
+		$this->loadState();
+
+		// Set the context if not already done
+		if (empty($this->context))
+		{
+			$this->context = strtolower($this->option . '.' . $this->getName());
+		}
+	}
 
 	/**
 	 * Method to get an array of data items.
