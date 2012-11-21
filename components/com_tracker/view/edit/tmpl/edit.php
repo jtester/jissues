@@ -36,7 +36,7 @@ $priorityOptions['size'] = '5';
 				<table class="table">
 					<tr>
 						<th><?php echo JText::_('JSTATUS'); ?></th>
-						<td><?php echo JHtmlStatus::options(); ?></td>
+						<td><?php echo JHtmlStatus::options($this->item->status); ?></td>
 					</tr>
 					<tr>
 						<th><?php echo JText::_('COM_TRACKER_HEADING_GITHUB_ID'); ?></th>
@@ -81,7 +81,7 @@ $priorityOptions['size'] = '5';
 			<div class="span7">
 				<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DESC'); ?></h4>
 				<div class="well well-small issue">
-					<?php echo $this->editor->display('description', $this->item->description, '100%', 300, 10, 10, false, 'editor-comment', null, null, $this->editorParams); ?>
+					<?php echo $this->editor->display('jform[description]', $this->item->description, '100%', 300, 10, 10, false, 'jform_description', null, null, $this->editorParams); ?>
 				</div>
 			</div>
 		</div>

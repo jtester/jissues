@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_users
  * @since       1.0
  */
-class UsersControllerResetcomplete extends JControllerBase
+class UsersControllerResetComplete extends JControllerTracker
 {
 	/**
 	 * Method to complete the password reset process.

@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_users
  * @since       1.0
  */
-class UsersControllerResetconfirm extends JControllerBase
+class UsersControllerResetConfirm extends JControllerTracker
 {
 	/**
 	 * Method to confirm the password request.

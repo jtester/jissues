@@ -19,9 +19,54 @@ defined('JPATH_PLATFORM') or die;
 abstract class JControllerTracker extends JControllerBase
 {
 	/**
+	 * The default list view for the component
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected $default_list_view;
+
+	/**
+	 * The URL option for the component.
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected $option;
+
+	/**
+	 * Constructor
+	 *
+	 * @since   1.0
+	 * @throws  Exception
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+
+		// Get the option from the input object
+		if (empty($this->option))
+		{
+			$this->option = $this->input->getCmd('option');
+		}
+	}
+
+	/**
 	 * Method to check if you can add a new record.
 	 *
-	 * Extended classes can override this if necessary.
+	 * @param   array  $data  An array of input data.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   12.2
+	 */
+	protected function allowAdd($data = array())
+	{
+		return JFactory::getUser()->authorise('core.create', $this->option);
+	}
+
+	/**
+	 * Method to check if you can edit an existing record.
 	 *
 	 * @param   string  $option  The component to check the permissions of
 	 * @param   array   $data    An array of input data.
@@ -34,6 +79,30 @@ abstract class JControllerTracker extends JControllerBase
 	protected function allowEdit($option, $data = array(), $key = 'id')
 	{
 		return JFactory::getUser()->authorise('core.edit', $option);
+	}
+
+	/**
+	 * Method to check if you can save a new or existing record.
+	 *
+	 * @param   array   $data  An array of input data.
+	 * @param   string  $key   The name of the key for the primary key.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   1.0
+	 */
+	protected function allowSave($data, $key = 'id')
+	{
+		$recordId = isset($data[$key]) ? $data[$key] : '0';
+
+		if ($recordId)
+		{
+			return $this->allowEdit($data, $key);
+		}
+		else
+		{
+			return $this->allowAdd($data);
+		}
 	}
 
 	/**
@@ -77,6 +146,66 @@ abstract class JControllerTracker extends JControllerBase
 			// No id for a new item.
 			return true;
 		}
+	}
+
+	/**
+	 * Execute the controller.
+	 *
+	 * This is a generic method to execute and render a view and is not suitable for tasks.
+	 *
+	 * @return  string  The rendered view.
+	 *
+	 * @since   1.0
+	 * @throws  RuntimeException
+	 */
+	public function execute()
+	{
+		// Get the application
+		/* @var JApplicationTracker $app */
+		$app = $this->getApplication();
+
+		// Get the document object.
+		$document = $app->getDocument();
+
+		$vName   = $app->input->getWord('view', $this->default_list_view);
+		$vFormat = $document->getType();
+		$lName   = $app->input->getWord('layout', 'default');
+
+		$app->input->set('view', $vName);
+
+		// Register the layout paths for the view
+		$paths = new SplPriorityQueue;
+		$paths->insert(JPATH_COMPONENT . '/view/' . $vName . '/tmpl', 'normal');
+
+		$base   = ucfirst(substr($this->option, 4));
+		$vClass = $base . 'View' . ucfirst($vName) . ucfirst($vFormat);
+		$mClass = $base . 'Model' . ucfirst($vName);
+
+		// If a model doesn't exist for our view, revert to the default model
+		if (!class_exists($mClass))
+		{
+			$mClass = $base . 'ModelDefault';
+
+			if (!class_exists($mClass))
+			{
+				throw new RuntimeException(sprintf('No model found for view %s or a default model for %s', $vName, $this->option));
+			}
+		}
+
+		// Make sure the view class exists
+		if (!class_exists($vClass))
+		{
+			throw new RuntimeException(sprintf('Class %s not found', $vClass));
+		}
+
+		/* @var JViewHtml $view */
+		$view = new $vClass(new $mClass, $paths);
+		$view->setLayout($lName);
+
+		// Render our view.
+		echo $view->render();
+
+		return true;
 	}
 
 	/**
