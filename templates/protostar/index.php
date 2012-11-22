@@ -14,6 +14,8 @@ $doc = JFactory::getDocument();
 $this->language = $doc->language;
 $this->direction = $doc->direction;
 
+$option = $app->input->get('option');
+
 // Add JavaScript Frameworks
 JHtml::_('bootstrap.framework');
 
@@ -51,14 +53,20 @@ JHtmlBootstrap::loadCss(false, $this->direction);
                         <img src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/images/joomla.png" alt="Joomla" />
 					</a>
 				</div>
+
+
+                <form id="frm-lang" class="form-inline pull-right" style="margin: 0;">
+					<?= JHtmlLanguage::selector() ?>
+                </form>
+
 			</div>
 			<div class="row-fluid">
 				<div class="span7">
 					<ul class="nav nav-pills">
-						<li class="<?php echo 'com_tracker' == $app->input->get('option') ? 'active' : '' ?>">
+						<li class="<?php echo ( ! $option || 'com_tracker' == $option) ? 'active' : '' ?>">
 							<a href="<?php echo JRoute::_('index.php?option=com_tracker'); ?>">Tracker</a>
 						</li>
-						<li class="<?php echo 'com_users' == $app->input->get('option') ? 'active' : '' ?>">
+						<li class="<?php echo 'com_users' == $option ? 'active' : '' ?>">
 							<a href="<?php echo JRoute::_('index.php?option=com_users'); ?>">Users</a>
 						</li>
 					</ul>
@@ -71,8 +79,10 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 					</div>
 				</div>
 			</div>
+
             <noscript>Please <a href="http://www.activatejavascript.org/">activate JavaScript</a> to use this fine Application !</noscript>
-            <div class="row-fluid">
+
+			<div class="row-fluid">
                 <div id="content" class="span12">
 					<!-- Begin Content -->
 					<jdoc:include type="message" />
@@ -89,8 +99,5 @@ JHtmlBootstrap::loadCss(false, $this->direction);
 			<p class="pull-right"><a href="#top" id="back-top"><?php echo JText::_('TPL_PROTOSTAR_BACKTOTOP'); ?></a></p>
 		</div>
 	</div>
-
-    <jdoc:include type="modules" name="debug" style="none" />
-
 </body>
 </html>

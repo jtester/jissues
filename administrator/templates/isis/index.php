@@ -39,7 +39,7 @@ $view     = $input->get('view', '');
 $layout   = $input->get('layout', '');
 $task     = $input->get('task', '');
 $itemid   = $input->get('Itemid', '');
-$sitename = $app->getCfg('sitename');
+$sitename = $app->get('sitename');
 
 $cpanel = ($option === 'com_cpanel');
 
@@ -132,16 +132,23 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
 				<div>
 				<?php endif; ?>
 					<jdoc:include type="modules" name="menu" style="none" />
-					<ul class="<?php if ($this->direction == 'rtl') : ?>nav<?php else : ?>nav pull-right<?php endif; ?>">
+
+	                <form id="frm-lang" class="form-inline pull-right" style="margin: 0;">
+						<?= JHtmlLanguage::selector() ?>
+	                </form>
+
+	                <ul class="<?php if ($this->direction == 'rtl') : ?>nav<?php else : ?>nav pull-right<?php endif; ?>">
 						<li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"><?php echo $user->name; ?> <b class="caret"></b></a>
 							<ul class="dropdown-menu">
+								<!--
 								<li class=""><a href="index.php?option=com_admin&task=profile.edit&id=<?php echo $user->id;?>"><?php echo JText::_('TPL_ISIS_EDIT_ACCOUNT');?></a></li>
 								<li class="divider"></li>
+								-->
 								<li class=""><a href="<?php echo JRoute::_('index.php?option=com_login&task=logout&'. JSession::getFormToken() .'=1');?>"><?php echo JText::_('TPL_ISIS_LOGOUT');?></a></li>
 							</ul>
 						</li>
 					</ul>
-				</div>
+			</div>
 				<!--/.nav-collapse -->
 			</div>
 		</div>
@@ -149,6 +156,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
 	<!-- Header -->
 	<?php
 	if ($displayHeader):
+		$title = (isset($app->JComponentTitle)) ? $app->JComponentTitle: '';
 	?>
 	<header class="header">
 		<div class="container-fluid">
@@ -157,7 +165,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
 					<a class="logo" href="<?php echo $this->baseurl; ?>"><img src="<?php echo $logo;?>" alt="<?php echo $sitename; ?>" /></a>
 				</div>
 				<div class="span10">
-					<h1 class="page-title"><?php echo JHtml::_('string.truncate', $app->JComponentTitle, 0, false, false);?></h1>
+					<h1 class="page-title"><?php echo JHtml::_('string.truncate', $title, 0, false, false);?></h1>
 				</div>
 			</div>
 		</div>

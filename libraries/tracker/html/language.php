@@ -42,7 +42,7 @@ class JHtmlLanguage
 
 		foreach (JLanguage::getKnownLanguages(JPATH_ADMINISTRATOR) as $lang)
 		{
-			$items[] = JHtml::_('select.option', $lang['tag'], $lang['tag']); // $lang['name']);
+			$items[] = JHtml::_('select.option', $lang['tag'], $lang['name']);
 		}
 
 		return JHtmlSelect::genericlist(
