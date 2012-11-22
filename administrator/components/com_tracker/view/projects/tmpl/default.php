@@ -14,8 +14,8 @@ JToolbarHelper::addNew('project');
 JToolbarHelper::title('JTracker: Projects');
 
 $baseLink = 'index.php?option=com_tracker';
-$editLink = $baseLink . '&task=projectEdit&id=';
-$deleteLink = $baseLink . '&task=projectDelete&id=';
+$editLink = $baseLink . '&task=project.edit&id=';
+$deleteLink = $baseLink . '&task=project.delete&id=';
 
 JHtml::_('script', 'system/core.js', false, true);
 ?>
@@ -44,13 +44,17 @@ JHtml::_('script', 'system/core.js', false, true);
                 <tr>
                     <td><?= $item->id ?></td>
                     <td>
-	                    <?= JHtml::link($editLink . $item->id, $item->title) ?><br />
-	                    <?= $item->alias ?>
+	                    <?= JHtml::link($editLink . $item->id, $item->title) ?>
+	                    <span class="small">(Alias: <?= $item->alias ?>)</span>
                     </td>
-                    <td><pre class="nowrap">
+                    <td>
+	                    <? if ($item->gh_user && $item->gh_project) : ?>
+	                    <div class="nowrap">
 	                    <?= JHtml::link('https://github.com/' . $item->gh_user . '/' . $item->gh_project,
 	                    $item->gh_user . '/' . $item->gh_project) ?>
-                    </pre></td>
+                        </div>
+						<? endif; ?>
+					</td>
                     <td><?= JHtml::link($deleteLink . $item->id, $this->_('Delete')) ?></td>
                 </tr>
 				<?php endforeach; ?>
