@@ -43,7 +43,7 @@ $debug  = (boolean) $config->get('debug');
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<jdoc:include type="head" />
 	<script type="text/javascript">
-		window.addEvent('domready', function () {
+		jQuery(document).ready(function ($) {
 			document.getElementById('form-login').username.select();
 			document.getElementById('form-login').username.focus();
 		});
