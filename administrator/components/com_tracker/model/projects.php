@@ -16,6 +16,6 @@ defined('_JEXEC') || die;
  * @subpackage  com_tracker
  * @since       1.0
  */
-class ComAdminTrackerModelProjects extends JModelTrackerlist
+class ComAdminTrackerModelProjects extends JModelTrackerList
 {
 }

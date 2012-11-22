@@ -16,7 +16,7 @@ defined('_JEXEC') || die;
  * @subpackage  com_tracker
  * @since       1.0
  */
-class ComAdminTrackerModelProject extends JModelTrackerform
+class ComAdminTrackerModelProject extends JModelTrackerForm
 {
 	/**
 	 * Get a form object.
@@ -45,10 +45,15 @@ class ComAdminTrackerModelProject extends JModelTrackerform
 	/**
 	 * Get the corresponding table.
 	 *
+	 * @param   string  $name    @deprecated
+	 * @param   string  $prefix  @deprecated
+	 *
 	 * @return ComAdminTrackerTableProjects
 	 */
-	public function getTable()
+	public function getTable($name = '', $prefix = 'JTable')
 	{
+		// @todo we should be able to guess the table class from the base class by pluralizing the item view
+
 		return new ComAdminTrackerTableProjects;
 	}
 
