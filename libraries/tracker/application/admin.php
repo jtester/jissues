@@ -10,7 +10,7 @@
 defined('JPATH_PLATFORM') or die;
 
 /**
- * Joomla! Issue Tracker Site Application class
+ * Joomla! Issue Tracker Admin Application class
  *
  * @package     JTracker
  * @subpackage  Application
@@ -38,17 +38,17 @@ final class JApplicationAdmin extends JApplicationTracker
 		// Set the client ID
 		$this->clientId = 1;
 
-		// Set the app name
-		$this->name = 'administrator';
+		// We assume the administrator folder to be one level above the Joomla! root.
+		$adminFolder = trim(str_replace(JPATH_SITE, '', JPATH_ADMINISTRATOR), DIRECTORY_SEPARATOR);
+
+		// Set the app name - With a fallback - Just in case ;)
+		$this->name = $adminFolder ? : 'administrator';
 
 		// Set the root in the URI based on the application name
 		JURI::root(false, str_ireplace('/' . $this->getName(), '', JURI::base(true)));
 
 		// Run the parent constructor
 		parent::__construct($input, $config, $client);
-
-		// Set the language for the application
-		$this->setLanguage();
 	}
 
 	/**
@@ -154,46 +154,20 @@ final class JApplicationAdmin extends JApplicationTracker
 			// Load the document to the API
 			$this->loadDocument();
 
-			// Set up the params
-			$document = $this->getDocument();
-
 			// Register the document object with JFactory
-			JFactory::$document = $document;
+			JFactory::$document = $this->document;
 
-			// Register the template to the config
-			$template = $this->getTemplate(true);
-			$this->set('theme', $template->template);
-			$this->set('themeParams', $template->params);
-			$this->set('themeFile', $this->input->get('tmpl', 'index') . '.php');
+			$this->loadTemplate();
 
 			// Set metadata
-			$document->setTitle('Joomla! CMS Issue Tracker - Admin');
+			$this->document->setTitle('Joomla! CMS Issue Tracker - Admin');
 
 			// Load the component
-			$component = $this->findOption();
+			$component = new JCmsExtensionComponent($this->findOption());
 
-			if ('com_login' == $component)
-			{
-				$this->set('themeFile', 'login.php');
-			}
+			$contents = $component->render();
 
-			$legacyComponents = array();
-
-			if (1) //in_array($component, $legacyComponents))
-			{
-				// Legacy component rendering
-				$contents = JComponentHelper::renderComponent($component);
-			}
-			else
-			{
-				// Fetch the controller
-				$controller = $this->fetchController($component, $this->input->getCmd('task'));
-
-				// Execute the component
-				$contents = $this->executeComponent($controller, $component);
-			}
-
-			$document->setBuffer($contents, 'component');
+			$this->document->setBuffer($contents, 'component');
 		}
 		catch (Exception $e)
 		{
@@ -247,22 +221,118 @@ final class JApplicationAdmin extends JApplicationTracker
 		return $option;
 	}
 
-	protected function setLanguage()
+	/**
+	 * Load the template.
+	 *
+	 * @return JApplicationAdmin
+	 */
+	protected function loadTemplate()
 	{
-		$sessionLang = $this->session->get('application.lang');
+		// Register the template to the config
+		$template = $this->getTemplate(true);
 
-		$requestLang = $this->input->get('lang');
+		$this->set('theme', $template->template);
+		$this->set('themeParams', $template->params);
 
-		// The request lang overrides the session lang
-		$lang = $requestLang ? : $sessionLang;
+		if ('com_login' == $this->input->get('option'))
+		{
+			$this->set('themeFile', 'login.php');
+		}
+		else
+		{
+			$this->set('themeFile', $this->input->get('tmpl', 'index') . '.php');
+		}
 
-		// If not, take the config lang
-		$lang = $lang ? : $this->get('language', 'en-GB');
+		// Load template language files.
+		$tName = $template->template;
 
-		$this->session->set('application.lang', $lang);
+		$lang = JFactory::getLanguage();
 
-		$language = JLanguage::getInstance($lang, $this->get('debug_lang'));
+		$lang->load('tpl_' . $tName, JPATH_BASE, null, false, false)
+			|| $lang->load('tpl_' . $tName, JPATH_THEMES . '/' . $tName, null, false, false)
+			|| $lang->load('tpl_' . $tName, JPATH_BASE, $lang->getDefault(), false, false)
+			|| $lang->load('tpl_' . $tName, JPATH_THEMES . '/' . $tName, $lang->getDefault(), false, false);
 
-		JFactory::$language = $language;
+		return $this;
+	}
+
+	/**
+	 * Method to load a PHP configuration class file based on convention and return the instantiated data object.  You
+	 * will extend this method in child classes to provide configuration data from whatever data source is relevant
+	 * for your specific application.
+	 *
+	 * @param   string  $file   The path and filename of the configuration file. If not provided, configuration.php
+	 *                          in JPATH_BASE will be used.
+	 * @param   string  $class  The class name to instantiate.
+	 *
+	 * @throws RuntimeException
+	 *
+	 * @since   11.3
+	 *
+	 * @return  mixed   Either an array or object to be loaded into the configuration object.
+	 */
+	protected function fetchConfigurationData($file = '', $class = 'JConfig')
+	{
+		// Instantiate variables.
+		$config = array();
+
+		if (empty($file) && defined('JPATH_CONFIGURATION'))
+		{
+			$file = JPATH_CONFIGURATION . '/configuration.php';
+
+			// Applications can choose not to have any configuration data
+			// by not implementing this method and not having a config file.
+			if (!file_exists($file))
+			{
+				$file = '';
+			}
+		}
+
+		if (!empty($file))
+		{
+			JLoader::register($class, $file);
+
+			if (class_exists($class))
+			{
+				$config = new $class;
+			}
+			else
+			{
+				throw new RuntimeException('Configuration class does not exist.');
+			}
+		}
+
+		return $config;
+	}
+
+	/**
+	 * Login authentication function
+	 *
+	 * @param   array  $credentials  Array('username' => string, 'password' => string)
+	 * @param   array  $options      Array('remember' => boolean)
+	 *
+	 * @see        JApplication::login
+	 * @since      1.5
+	 *
+	 * @return    boolean True on success.
+	 */
+	public function login($credentials, $options = array())
+	{
+		// The minimum group
+		$options['group'] = 'Public Backend';
+
+		// Make sure users are not autoregistered
+		$options['autoregister'] = false;
+
+		// Set the application login entry point
+		if (!array_key_exists('entry_url', $options))
+		{
+			$options['entry_url'] = JURI::base() . 'index.php?option=com_users&task=login';
+		}
+
+		// Set the access control action to check.
+		$options['action'] = 'core.login.admin';
+
+		return parent::login($credentials, $options);
 	}
 }

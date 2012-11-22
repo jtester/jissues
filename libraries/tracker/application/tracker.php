@@ -82,7 +82,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 		// Set the session default name.
 		if (is_null($this->get('session_name')))
 		{
-			$this->set('session_name', 'jissues');
+			$this->set('session_name', $this->name);
 		}
 
 		// Create the session if a session name is passed.
@@ -98,6 +98,9 @@ abstract class JApplicationTracker extends JApplicationWeb
 		JFactory::$application = $this;
 
 		define('JDEBUG', JFactory::getConfig()->get('debug'));
+
+		// Set the language for the application
+		$this->setLanguage();
 
 		// Load Library language
 		JFactory::getLanguage()->load('lib_joomla', JPATH_ADMINISTRATOR);
@@ -120,7 +123,8 @@ abstract class JApplicationTracker extends JApplicationWeb
 		parent::afterSessionStart();
 
 		// TODO: At some point we need to get away from having session data always in the db.
-		if ($this->get('sess_handler') == 'database')
+		// $this->get('sess_handler') == 'database')
+		if (1)
 		{
 			$session = JFactory::getSession();
 			$db      = JFactory::getDBO();
@@ -243,14 +247,9 @@ abstract class JApplicationTracker extends JApplicationWeb
 			$document->setTitle('Joomla! CMS Issue Tracker');
 
 			// Load the component
-			$component = $this->input->getCmd('option', '');
+			$component = $this->input->get('option', 'com_tracker');
 
-			// If the component isn't set in the input option, set our default
-			if ($component == '')
-			{
-				$this->input->set('option', 'com_tracker');
-				$component = 'com_tracker';
-			}
+			$this->input->set('option', $component);
 
 			$legacyComponents = array();
 
@@ -872,5 +871,31 @@ abstract class JApplicationTracker extends JApplicationWeb
 		}
 
 		return null;
+	}
+
+	/**
+	 * Set the language for the application.
+	 *
+	 * @return JApplicationTracker
+	 */
+	protected function setLanguage()
+	{
+		$sessionLang = $this->session->get('application.lang');
+
+		$requestLang = $this->input->get('lang');
+
+		// The request lang overrides the session lang
+		$lang = $requestLang ? : $sessionLang;
+
+		// If not, take the config lang
+		$lang = $lang ? : $this->get('language', 'en-GB');
+
+		$this->session->set('application.lang', $lang);
+
+		$language = JLanguage::getInstance($lang, $this->get('debug_lang'));
+
+		JFactory::$language = $language;
+
+		return $this;
 	}
 }
