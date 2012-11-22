@@ -30,7 +30,7 @@ abstract class ComAdminTrackerHelper extends JCmsExtensionHelper
 	{
 		$input = JFactory::getApplication()->input;
 
-		$viewName = $input->get('view');
+		$task = $input->get('task');
 
 		$project   = $input->getInt('project');
 		$extension = $input->getString('extension');
@@ -43,14 +43,14 @@ abstract class ComAdminTrackerHelper extends JCmsExtensionHelper
 		}
 
 		JHtmlSidebar::addEntry(
-			JText::_('JTracker'),
+			self::_('JTracker'),
 			'index.php?option=com_tracker',
-			'com_tracker' == $option && '' == $viewName
+			'com_tracker' == $option && '' == $task
 		);
 
 		$baseLink = 'index.php?option=com_categories&extension=com_tracker';
 
-		JHtmlSidebar::addEntry(self::_('Projects'), 'index.php?option=com_tracker&view=projects', $option == 'com_tracker' && $viewName == 'projects');
+		JHtmlSidebar::addEntry(self::_('Projects'), 'index.php?option=com_tracker&task=projects', $option == 'com_tracker' && $task == 'projects');
 		JHtmlSidebar::addEntry(self::_('Categories'), $baseLink . '.categories', preg_match('/com_tracker.categories[.0-9]*/', $extension));
 		JHtmlSidebar::addEntry(self::_('Textfields'), $baseLink . '.textfields', $extension == 'com_tracker.textfields');
 		JHtmlSidebar::addEntry(self::_('Selectlists'), $baseLink . '.fields', $extension == 'com_tracker.fields');
