@@ -103,7 +103,7 @@ abstract class JApplicationTracker extends JApplicationWeb
 		$this->setLanguage();
 
 		// Load Library language
-		JFactory::getLanguage()->load('lib_joomla', JPATH_ADMINISTRATOR);
+		JFactory::getLanguage()->load('lib_joomla', JPATH_LIBRARIES . '/joomla');
 
 		// Trigger the onAfterInitialise event.
 		JPluginHelper::importPlugin('system');
