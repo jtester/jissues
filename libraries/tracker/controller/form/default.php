@@ -151,10 +151,10 @@ abstract class JControllerFormDefault extends JControllerDefault
 
 		$this->editContext = $this->option . '.edit.' . $this->context;
 
-		$this->itemLink = 'index.php?option=' . $this->option . '&view=' . $this->context;
+		$this->itemLink = 'index.php?option=' . $this->option . '&task=' . $this->context;
 		$this->itemLink .= ($this->id) ? '&id=' . $this->id : '';
 
-		$this->listLink = 'index.php?option=' . $this->option . '&view=' . $this->listView;
+		$this->listLink = 'index.php?option=' . $this->option . '&task=' . $this->listView;
 	}
 
 	/**
@@ -422,7 +422,7 @@ abstract class JControllerFormDefault extends JControllerDefault
 		$this->app->setUserState($this->editContext . '.data', null);
 
 		// Redirect to the list screen.
-		$this->redirect = JRoute::_('index.php?option=' . $this->option . '&view=' . $this->listView, false);
+		$this->redirect = JRoute::_('index.php?option=' . $this->option . '&task=' . $this->listView, false);
 
 		return $this;
 	}

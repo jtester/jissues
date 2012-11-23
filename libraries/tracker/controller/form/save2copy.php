@@ -77,7 +77,7 @@ class JControllerFormSave2copy extends JControllerFormSave
 	 */
 	protected function setRedirect()
 	{
-		$model = $this->getModel();
+		// $model = $this->getModel();
 
 		// Set the record data in the session.
 		// $model->getState()->get($this->context . '.id');
@@ -88,7 +88,7 @@ class JControllerFormSave2copy extends JControllerFormSave
 		// $model->checkout($id);
 
 		// Redirect back to the edit screen.
-		$this->redirect = JRoute::_('index.php?option=' . $this->option . '&view=' . $this->context, false);
+		$this->redirect = JRoute::_('index.php?option=' . $this->option . '&task=' . $this->context, false);
 
 		return $this;
 	}

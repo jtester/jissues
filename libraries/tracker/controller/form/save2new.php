@@ -38,7 +38,7 @@ class JControllerFormSave2new extends JControllerFormSave
 		$this->app->setUserState($this->editContext . '.data', null);
 
 		// Redirect back to the edit screen.
-		$this->redirect = JRoute::_('index.php?option=' . $this->option . '&view=' . $this->context, false);
+		$this->redirect = JRoute::_('index.php?option=' . $this->option . '&task=' . $this->context, false);
 
 		return $this;
 	}

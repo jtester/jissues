@@ -97,10 +97,7 @@ class JControllerDefault extends JControllerBase
 	{
 		if ($this->redirect)
 		{
-			// $app = JFactory::getApplication();
 			JFactory::getApplication()->redirect($this->redirect);
-
-			// $this->message, $this->messageType);
 		}
 
 		return false;
