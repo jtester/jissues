@@ -46,6 +46,12 @@ abstract class JModelTrackerForm extends JModelTracker
 			);
 		}
 
+		$this->classPrefix = $r[1];
+		$this->name        = strtolower($r[2]);
+		$this->context     = strtolower($r[3]);
+
+		$this->option = 'com_' . strtolower($this->name);
+
 		// Populate the state
 		$this->loadState();
 	}

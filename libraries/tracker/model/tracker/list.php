@@ -52,25 +52,6 @@ abstract class JModelTrackerList extends JModelTracker
 	{
 		parent::__construct();
 
-		// Populate the state
-		$this->loadState();
-
-		// Set the context if not already done
-		if (empty($this->context))
-		{
-			$this->context = strtolower($this->option . '.' . $this->getName());
-		}
-	}
-
-	/**
-	 * Instantiate the model.
-	 *
-	 * @since  1.0
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
 		// Guess the context as the suffix, eg: (Com[Admin])<Option>ModelSave.
 		if (!preg_match('/(Com[Admin]*)*(.*)Model(.*)/i', get_class($this), $r))
 		{
@@ -95,12 +76,31 @@ abstract class JModelTrackerList extends JModelTracker
 	/**
 	 * Get the matching table for this model.
 	 *
+	 * @param   string  $name    The table name. Optional. @deprecated ?
+	 * @param   string  $prefix  The class prefix. Optional. @deprecated ?
+	 *
 	 * @throws RuntimeException
 	 *
 	 * @return JTable
 	 */
-	public function getTable()
+	public function getTable($name = '', $prefix = 'JTable')
 	{
+		if (!empty($name))
+		{
+			// Legacy handling !
+
+			$class = $prefix . ucfirst($name);
+
+			if (!class_exists($class) && !($class instanceof JTable))
+			{
+				throw new RuntimeException(sprintf('Table class %s not found or is not an instance of JTable', $class));
+			}
+
+			$this->table = new $class($this->db);
+
+			return $this->table;
+		}
+
 		$class = $this->classPrefix . ucfirst($this->name) . 'Table' . ucfirst($this->context);
 
 		if (false == class_exists(($class)))
