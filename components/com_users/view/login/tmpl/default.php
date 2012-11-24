@@ -12,10 +12,6 @@
 defined('_JEXEC') or die;
 ?>
 <div class="row-fluid">
-	<div class="span2">
-		<?php echo JHtml::_('sidebar.render'); ?>
-	</div>
-	<div class="span10">
 <?php
 		if ($this->user->get('guest')):
 			// The user is not logged in.
@@ -26,7 +22,6 @@ defined('_JEXEC') or die;
 		endif;
 
 ?>
-	</div>
 </div>
 
 

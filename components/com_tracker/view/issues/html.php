@@ -60,6 +60,7 @@ class TrackerViewIssuesHtml extends JViewHtml
 		$this->items      = $this->model->getItems();
 		$this->pagination = $this->model->getPagination();
 		$this->state      = $this->model->getState();
+		$this->fields     = new JRegistry($app->input->get('fields', array(), 'array'));
 
 		// Build the toolbar
 		$this->buildToolbar();
@@ -87,5 +88,19 @@ class TrackerViewIssuesHtml extends JViewHtml
 		{
 			$toolbar->appendButton('Standard', 'new', 'COM_TRACKER_TOOLBAR_ADD', 'add', false);
 		}
+
+		JHtmlSidebar::setAction(htmlspecialchars(JUri::getInstance()->toString()));
+
+		JHtmlSidebar::addFilter(
+			JText::_('COM_TRACKER_FILTER_PROJECT'),
+			'filter_project',
+			JHtmlProjects::select('com_tracker', 'project', (int) $this->fields->get('project'), JText::_('COM_TRACKER_FILTER_PROJECT'))
+		);
+
+		JHtmlSidebar::addFilter(
+			JText::_('COM_TRACKER_FILTER_STATUS'),
+			'filter_status',
+			JHtmlSelect::options(JHtmlStatus::filter(), 'value', 'text', $this->state->get('filter.status'))
+		);
 	}
 }

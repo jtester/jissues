@@ -23,7 +23,13 @@ $webserver = $this->fields->get('web_server');
 		<h3><?php echo '[#' . $this->item->id . '] - ' . $this->item->title; ?></h3>
 
 		<div class="row-fluid">
-			<div class="span5">
+			<div class="span8">
+				<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DESC'); ?></h4>
+				<div class="well well-small issue">
+					<p><?php echo $this->item->description; ?></p>
+				</div>
+			</div>
+			<div class="span4">
 				<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_INFO'); ?></h4>
 				<table class="table">
 					<tr>
@@ -117,12 +123,6 @@ $webserver = $this->fields->get('web_server');
 					<?php endif; ?>
 				</table>
 
-			</div>
-			<div class="span7">
-				<h4><?php echo JText::_('COM_TRACKER_LABEL_ISSUE_DESC'); ?></h4>
-				<div class="well well-small issue">
-					<p><?php echo $this->item->description; ?></p>
-				</div>
 			</div>
 		</div>
 
