@@ -103,12 +103,38 @@ final class JApplicationSite extends JApplicationTracker
 	}
 
 	/**
-	 * Dummy function.
+	 * Return the current state of the language filter.
 	 *
-	 * @return bool
+	 * @return  boolean
+	 *
+	 * @since   1.6
 	 */
 	public function getLanguageFilter()
 	{
 		return false;
+	}
+
+	/**
+	 * Login authentication function.
+	 *
+	 * @param   array  $credentials  Array('username' => string, 'password' => string)
+	 * @param   array  $options      Array('remember' => boolean)
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   1.0
+	 */
+	public function login($credentials, $options = array())
+	{
+		// Set the application login entry point
+		if (!array_key_exists('entry_url', $options))
+		{
+			$options['entry_url'] = JUri::base().'index.php?option=com_users&task=login';
+		}
+
+		// Set the access control action to check.
+		$options['action'] = 'core.login.site';
+
+		return parent::login($credentials, $options);
 	}
 }
