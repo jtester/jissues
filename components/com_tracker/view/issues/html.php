@@ -94,7 +94,7 @@ class TrackerViewIssuesHtml extends JViewHtml
 		JHtmlSidebar::addFilter(
 			JText::_('COM_TRACKER_FILTER_PROJECT'),
 			'filter_project',
-			JHtmlProjects::select('com_tracker', 'project', (int) $this->fields->get('project'), JText::_('COM_TRACKER_FILTER_PROJECT'))
+			JHtmlSelect::options(JHtmlCategory::options('com_tracker'), 'value', 'text', (int) $this->fields->get('project'))
 		);
 
 		JHtmlSidebar::addFilter(
