@@ -69,8 +69,12 @@ class JTableIssue extends JTable
 		elseif ($src instanceof JInput)
 		{
 			$data = new stdClass;
-			$data->id = $src->get('id');
-			$fields   = $src->get('fields', array(), 'array');
+
+			$data->id          = $src->get('id');
+			$data->title       = $src->getString('title');
+			$data->description = $src->getString('decription');
+
+			$fields = $src->get('fields', array(), 'array');
 
 			JArrayHelper::toInteger($fields);
 
@@ -212,7 +216,7 @@ class JTableIssue extends JTable
 			return true;
 		}
 
-		$db = $this->getDbo();
+		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
 
 		// Check the tracker table to see if the extra fields are already present
