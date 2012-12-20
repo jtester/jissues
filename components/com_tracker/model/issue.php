@@ -180,7 +180,8 @@ class TrackerModelIssue extends JModelTrackerForm
 		// Save the record
 		if (!$table->save($data, false))
 		{
-			throw new RuntimeException('Could not save record.');
+			$legacyError = $table->getError();
+			throw new RuntimeException('Could not save record: ' . $legacyError);
 		}
 
 		if (isset($table->$key))
