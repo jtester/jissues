@@ -46,7 +46,7 @@ abstract class JHtmlProjects
 
 		return JHtmlSelect::genericlist(
 			$options,
-			'fields[' . $name . ']',
+			$name,
 			$js,
 			'value', 'text', // Hate it..
 			$selected, 'select-' . $name

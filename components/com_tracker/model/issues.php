@@ -19,6 +19,15 @@ defined('_JEXEC') or die;
 class TrackerModelIssues extends JModelTrackerList
 {
 	/**
+	 * Context string for the model type.  This is used to handle uniqueness
+	 * when dealing with the getStoreId() method and caching data structures.
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected $context = 'com_tracker.issues';
+
+	/**
 	 * Method to get a JDatabaseQuery object for retrieving the data set from a database.
 	 *
 	 * @return  JDatabaseQuery   A JDatabaseQuery object to retrieve the data set.
@@ -110,9 +119,7 @@ class TrackerModelIssues extends JModelTrackerList
 
 		$input = JFactory::getApplication()->input;
 
-		$fields = new JRegistry($input->get('fields', array(), 'array'));
-
-		$this->state->set('filter.project', (int) $fields->get('project'));
+		$this->state->set('filter.project', $input->getUint('filter-project'));
 
 		$this->state->set('list.ordering', $input->get('filter_order', 'a.id'));
 
@@ -125,7 +132,7 @@ class TrackerModelIssues extends JModelTrackerList
 
 		$this->state->set('filter.priority', $input->getUint('priority', 3));
 
-		$this->state->set('filter.status', $input->getUint('status'));
+		$this->state->set('filter.status', $input->getUint('filter-status'));
 
 		// Optional filter text
 		$this->state->set('list.filter', $input->getString('filter-search'));
