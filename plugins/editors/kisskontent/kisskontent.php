@@ -131,6 +131,8 @@ class PlgEditorKisskontent extends JPlugin
 	 */
 	public function onDisplay($name, $content, $width, $height, $col, $row, $buttons = true, $id = null, $asset = null, $author = null, $params = array())
 	{
+		$controlName = $name;
+
 		if (empty($id))
 		{
 			$id = $name;
@@ -171,7 +173,7 @@ class PlgEditorKisskontent extends JPlugin
 
 		$html[] = '<div class="tab-content">';
 		$html[] = '  <div class="tab-pane active" id="' . $name . '-write">';
-		$html[] = "   <textarea name=\"$name\" id=\"$id\" cols=\"$col\" rows=\"$row\" style=\"width: $width; height: $height;\">$content</textarea>";
+		$html[] = "   <textarea name=\"$controlName\" id=\"$id\" cols=\"$col\" rows=\"$row\" style=\"width: $width; height: $height;\">$content</textarea>";
 		$html[] = $buttons;
 		$html[] = '  </div>';
 		$html[] = '  <div class="tab-pane fade well well-small" id="' . $name . '-preview" style="min-height: ' . $height . '">Loading...</div>';
