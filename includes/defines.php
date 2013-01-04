@@ -13,9 +13,6 @@ defined('_JEXEC') or die;
  */
 
 // Global definitions
-//$parts = explode(DIRECTORY_SEPARATOR, JPATH_BASE);
-
-// Defines
 define('JPATH_ROOT',          JPATH_BASE);
 define('JPATH_SITE',          JPATH_BASE);
 define('JPATH_CONFIGURATION', JPATH_BASE);

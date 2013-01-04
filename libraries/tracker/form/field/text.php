@@ -32,7 +32,7 @@ class JFormFieldText extends JFormFieldbase
 	/**
 	 * Method to get the field input markup.
 	 *
-	 * @param bool $tooltip
+	 * @param   boolean  $tooltip  The tooltip.
 	 *
 	 * @return  string  The field input markup.
 	 *
@@ -64,33 +64,6 @@ class JFormFieldText extends JFormFieldbase
 			$html[] = $input;
 			$html[] = '<span class="add-on hasTooltip" style="cursor: help;" data-placement="left" title="'
 				. htmlspecialchars(JText::_($description), ENT_COMPAT, 'UTF-8') . '">?</span>';
-			$html[] = '</div>';
-		}
-		else
-		{
-			$html[] = $input;
-		}
-
-		return implode("\n", $html);
-	}
-
-	/**
-	 * @todo ...
-	 */
-	public function XXXXgetInputTooltip()
-	{
-		$html = array();
-
-		$input = $this->getInput();
-
-		$description = (string) $this->element['description'];
-
-		if ($description)
-		{
-			$html[] = '<div class="input-append">';
-			$html[] = $input;
-			$html[] = '<span class="add-on hasTooltip" style="cursor: help;" title="'
-				. htmlspecialchars($description, ENT_COMPAT, 'UTF-8') . '">?</span>';
 			$html[] = '</div>';
 		}
 		else
