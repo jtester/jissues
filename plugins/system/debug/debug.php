@@ -55,7 +55,7 @@ class PlgSystemDebug extends JPlugin
 		parent::__construct($subject, $config);
 
 		$this->linkFormat = ini_get('xdebug.file_link_format');
-		$this->debugLang  = JFactory::getApplication()->getCfg('debug_lang');
+		$this->debugLang  = JFactory::getApplication()->get('debug_lang');
 
 		JLog::addLogger(array('logger' => 'callback', 'callback' => array($this, 'addLogEntry')));
 
@@ -180,11 +180,14 @@ class PlgSystemDebug extends JPlugin
 			if (1) // !$this->params->get('log-deprecated'))
 			{
 				// @todo "old" errors - log only if not in deprecation mode
-				$errors = JError::getErrors();
-
-				if ($errors)
+				if (class_exists('JError'))
 				{
-					$this->process('errors', $errors);
+					$errors = JError::getErrors();
+
+					if ($errors)
+					{
+						$this->process('errors', $errors);
+					}
 				}
 			}
 
