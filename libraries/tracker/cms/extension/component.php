@@ -51,10 +51,6 @@ class JCmsExtensionComponent extends JCmsExtension
 		// Set scope to component name
 		$app->scope = $this->name;
 
-		// Build the component path.
-		// $option = preg_replace('/[^A-Z0-9_\.-]/i', '', $this->name);
-		$option = $this->name;
-
 		// Define component path.
 		define('JPATH_COMPONENT', JPATH_BASE . '/components/' . $this->name);
 		define('JPATH_COMPONENT_SITE', JPATH_COMPONENT);
@@ -69,18 +65,20 @@ class JCmsExtensionComponent extends JCmsExtension
 		$lang = JFactory::getLanguage();
 
 		// Load common and local language files.
-		$lang->load($option, JPATH_BASE, null, false, false) || $lang->load($option, JPATH_COMPONENT, null, false, false)
-			|| $lang->load($option, JPATH_BASE, $lang->getDefault(), false, false)
-			|| $lang->load($option, JPATH_COMPONENT, $lang->getDefault(), false, false);
+		$lang->load($this->name, JPATH_BASE, null, false, false) || $lang->load($this->name, JPATH_COMPONENT, null, false, false)
+			|| $lang->load($this->name, JPATH_BASE, $lang->getDefault(), false, false)
+			|| $lang->load($this->name, JPATH_COMPONENT, $lang->getDefault(), false, false);
 
 		$contents = null;
 
-		$file = substr($option, 4);
+		$file = substr($this->name, 4);
 		$path = JPATH_COMPONENT . '/' . $file . '.php';
 
 		if (file_exists($path))
 		{
 			// !! This identifies a "legacy component" !!!
+
+			require_once JPATH_LIBRARIES . '/import.legacy.php';
 
 			// Execute the component.
 			$contents = $this->executeComponent($path);
@@ -95,7 +93,6 @@ class JCmsExtensionComponent extends JCmsExtension
 			}
 
 			// NOTE: The ternary instead of the default prevents empty strings.
-			// NOTE: strtolower is used to allow tasks like "saveFoo"
 			$task = $app->input->get('task') ? : 'default';
 
 			// Set the view name based on the task
@@ -113,10 +110,8 @@ class JCmsExtensionComponent extends JCmsExtension
 
 			$app->input->set('view', $view);
 
-			// $app->input->set('view', $app->input->get('view', $task));
-
 			// Strip com_ off the component
-			$base = substr($option, 4);
+			$base = substr($this->name, 4);
 
 			$prefix = ($app->isAdmin()) ? 'Admin' : '';
 
