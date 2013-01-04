@@ -65,6 +65,14 @@ class TrackerApplicationComments extends JApplicationCli
 	protected $db;
 
 	/**
+	 * JGithub object
+	 *
+	 * @var    JGithub
+	 * @since  1.0
+	 */
+	protected $github;
+
+	/**
 	 * Array containing the issues from the database and their GitHub ID
 	 *
 	 * @var    array
@@ -123,7 +131,7 @@ class TrackerApplicationComments extends JApplicationCli
 		}
 
 		// Instantiate JGithub
-		$github = new JGithub($options);
+		$this->github = new JGithub($options);
 
 		try
 		{
@@ -132,7 +140,7 @@ class TrackerApplicationComments extends JApplicationCli
 				$id = $issue->gh_id;
 				$this->out('Retrieving comments for issue #' . $id . ' from GitHub.', true);
 
-				$this->comments[$id] = $github->issues->getComments('joomla', 'joomla-cms', $id);
+				$this->comments[$id] = $this->github->issues->getComments('joomla', 'joomla-cms', $id);
 			}
 		}
 		// Catch any DomainExceptions and close the script
@@ -155,11 +163,37 @@ class TrackerApplicationComments extends JApplicationCli
 	 */
 	protected function getIssues()
 	{
+		$rangeFrom = 0;
+		$rangeTo   = 0;
+
+		// Limit issues to process
+		$this->out('GH issues to process? [a]ll / [r]ange :', false);
+
+		$resp = trim($this->in());
+
+		if ($resp == 'r' || $resp == 'range')
+		{
+			// Get the first GitHub issue (from)
+			$this->out('Enter the first GitHub issue ID to process (from) :', false);
+			$rangeFrom = (int) trim($this->in());
+
+			// Get the ending GitHub issue (to)
+			$this->out('Enter the latest GitHub issue ID to process (to) :', false);
+			$rangeTo = (int) trim($this->in());
+		}
+
 		$query = $this->db->getQuery(true);
 
 		$query->select($this->db->quoteName(array('id', 'gh_id')));
 		$query->from($this->db->quoteName('#__issues'));
 		$query->where($this->db->quoteName('gh_id') . ' IS NOT NULL');
+
+		// Issues range selected?
+		if ($rangeTo != 0 && $rangeTo >= $rangeFrom)
+		{
+			$query->where($this->db->quoteName('gh_id') . ' >= ' . (int) $rangeFrom);
+			$query->where($this->db->quoteName('gh_id') . ' <= ' . (int) $rangeTo);
+		}
 
 		$this->db->setQuery($query);
 
@@ -219,6 +253,9 @@ class TrackerApplicationComments extends JApplicationCli
 					$this->db->quoteName('id'), $this->db->quoteName('issue_id'), $this->db->quoteName('submitter'), $this->db->quoteName('text'), $this->db->quoteName('created')
 				);
 
+				// Parse the body through GitHub's markdown parser
+				$body = $this->github->markdown->render($comment->body, 'gfm', 'JTracker/jissues');
+
 				$query->clear();
 				$query->insert($this->db->quoteName('#__issue_comments'));
 				$query->columns($columnsArray);
@@ -226,7 +263,7 @@ class TrackerApplicationComments extends JApplicationCli
 					(int) $comment->id . ', '
 					. (int) $issue->id . ', '
 					. $this->db->quote($comment->user->login) . ', '
-					. $this->db->quote($comment->body) . ', '
+					. $this->db->quote($body) . ', '
 					. $this->db->quote(JFactory::getDate($comment->created_at)->toSql())
 				);
 				$this->db->setQuery($query);

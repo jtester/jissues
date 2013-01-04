@@ -49,9 +49,19 @@ class TrackerApplicationRetrieve extends JApplicationCli
 	protected $project = null;
 
 	/**
+	 * JGithub object
+	 *
+	 * @var    JGithub
+	 * @since  1.0
+	 */
+	protected $github;
+
+	/**
 	 * Method to run the application routines.
 	 *
 	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function doExecute()
 	{
@@ -156,7 +166,7 @@ class TrackerApplicationRetrieve extends JApplicationCli
 		}
 
 		// Instantiate JGithub
-		$github = new JGithub($options);
+		$this->github = new JGithub($options);
 
 		try
 		{
@@ -175,7 +185,7 @@ class TrackerApplicationRetrieve extends JApplicationCli
 				do
 				{
 					$page++;
-					$issues_more = $github->issues->getListByRepository(
+					$issues_more = $this->github->issues->getListByRepository(
 						$this->project->gh_user,		// Owner
 						$this->project->gh_project,	// Repository
 						null,			// Milestone
@@ -265,7 +275,7 @@ class TrackerApplicationRetrieve extends JApplicationCli
 			$table = JTable::getInstance('Issue');
 			$table->gh_id       = $issue->number;
 			$table->title       = $issue->title;
-			$table->description = $issue->body;
+			$table->description = $this->github->markdown->render($issue->body, 'gfm', 'JTracker/jissues');
 			$table->status		= ($issue->state == 'open') ? 1 : 10;
 			$table->opened      = JFactory::getDate($issue->created_at)->toSql();
 			$table->modified    = JFactory::getDate($issue->updated_at)->toSql();
