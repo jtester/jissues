@@ -9,6 +9,6 @@
 defined('_JEXEC') or die;
 
 require_once __DIR__ . '/defines.php';
-require_once JPATH_CONFIGURATION.'/configuration.php';
+require_once JPATH_CONFIGURATION . '/configuration.php';
 require_once __DIR__ . '/framework.php';
 require_once __DIR__ . '/toolbar.php';
