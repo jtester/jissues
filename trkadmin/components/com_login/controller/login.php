@@ -37,8 +37,11 @@ class ComAdminLoginControllerLogin extends JControllerBase
 		$app = JFactory::getApplication();
 
 		$model       = new ComAdminLoginModelLogin;
-		$credentials = $model->getState('credentials');
-		$return      = $model->getState('return');
+
+		$state = $model->getState();
+
+		$credentials = $state->get('credentials');
+		$return      = $state->get('return');
 
 		$result = $app->login($credentials, array('action' => 'core.login.admin'));
 
