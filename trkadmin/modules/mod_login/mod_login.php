@@ -12,4 +12,4 @@ defined('_JEXEC') || die;
 $langs	= ModAdminLoginHelper::getLanguageList();
 $return	= ModAdminLoginHelper::getReturnURI();
 
-require JModuleHelper::getLayoutPath('mod_login', $params->get('layout', 'default'));
+require JCmsExtensionHelperModule::getLayoutPath('mod_login', $params->get('layout', 'default'));

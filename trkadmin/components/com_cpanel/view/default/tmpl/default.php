@@ -47,8 +47,8 @@ JToolbarHelper::title(JText::_('COM_CPANEL'), 'cpanel.png');
 	</div>
 	<div class="span6">
 		<?php
-		foreach (JModuleHelper::getModules('cpanel') as $module) :
-			$output = JModuleHelper::renderModule($module, array('style' => 'well'));
+		foreach (JCmsExtensionHelperModule::getModules('cpanel') as $module) :
+			$output = JCmsExtensionHelperModule::renderModule($module, array('style' => 'well'));
 			$params = new JRegistry;
 			$params->loadString($module->params);
 			echo $output;
@@ -58,8 +58,8 @@ JToolbarHelper::title(JText::_('COM_CPANEL'), 'cpanel.png');
 	<div class="span4">
 		<?php
 		// Display the submenu position modules
-		foreach (JModuleHelper::getModules('icon') as $module) :
-			$output = JModuleHelper::renderModule($module, array('style' => 'well'));
+		foreach (JCmsExtensionHelperModule::getModules('icon') as $module) :
+			$output = JCmsExtensionHelperModule::renderModule($module, array('style' => 'well'));
 			$params = new JRegistry;
 			$params->loadString($module->params);
 			echo $output;

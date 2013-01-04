@@ -44,10 +44,10 @@ $sitename = $app->get('sitename');
 $cpanel = ($option === 'com_cpanel');
 
 $showSubmenu = false;
-$this->submenumodules = JModuleHelper::getModules('submenu');
+$this->submenumodules = JCmsExtensionHelperModule::getModules('submenu');
 foreach ($this->submenumodules as $submenumodule)
 {
-	$output = JModuleHelper::renderModule($submenumodule);
+	$output = JCmsExtensionHelperModule::renderModule($submenumodule);
 	if (strlen($output))
 	{
 		$showSubmenu = true;
