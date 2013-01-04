@@ -26,7 +26,7 @@ class_exists('JLoader') or die;
 JLoader::registerPrefix('J', JPATH_PLATFORM . '/cms');
 
 // Register a handler for uncaught exceptions that shows a pretty error page when possible
-set_exception_handler(array('JErrorPage', 'render'));
+//set_exception_handler(array('JErrorPage', 'render'));
 
 // Define the Joomla version if not already defined.
 if (!defined('JVERSION'))
