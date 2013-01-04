@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_login
  * @since       1.5
  */
-class ComAdminLoginModelLogin extends JModelLegacy
+class ComAdminLoginModelLogin extends JModelBase
 {
 	/**
 	 * Method to auto-populate the model state.
@@ -25,19 +25,25 @@ class ComAdminLoginModelLogin extends JModelLegacy
 	 *
 	 * @since    1.6
 	 *
-	 * @return void
+	 * @return JRegistry
 	 */
-	protected function populateState()
+	protected function loadState()
 	{
+		$post = JFactory::getApplication()->input->post;
+
+		$state = new JRegistry;
+
 		$credentials = array(
-			'username' => JRequest::getVar('username', '', 'method', 'username'),
-			'password' => JRequest::getVar('passwd', '', 'post', 'string', JREQUEST_ALLOWRAW)
+			'username' => $post->getString('username'),
+			'password' => $post->getString('passwd')
 		);
 
-		$this->setState('credentials', $credentials);
+		$state->set('credentials', $credentials);
 
 		// Check for return URL from the request first
-		if ($return = JRequest::getVar('return', '', 'method', 'base64'))
+		$return = $post->getBase64('return');
+
+		if ($return)
 		{
 			$return = base64_decode($return);
 
@@ -53,7 +59,9 @@ class ComAdminLoginModelLogin extends JModelLegacy
 			$return = 'index.php';
 		}
 
-		$this->setState('return', $return);
+		$state->set('return', $return);
+
+		return $state;
 	}
 
 	/**
@@ -66,7 +74,7 @@ class ComAdminLoginModelLogin extends JModelLegacy
 	 *
 	 * @since   11.1
 	 */
-	public static function getLoginModule($name = 'mod_login', $title = null)
+	public static function xxgetLoginModule($name = 'mod_login', $title = null)
 	{
 		$result  = null;
 		$modules = self::_load($name);
@@ -116,7 +124,7 @@ class ComAdminLoginModelLogin extends JModelLegacy
 	 *
 	 * @since   11.1
 	 */
-	protected static function _load($module)
+	protected static function xxx_load($module)
 	{
 		static $clean;
 
