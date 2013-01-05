@@ -161,7 +161,7 @@ class PlgEditorKisskontent extends JPlugin
 		if ($syntaxPageLink)
 		{
 			$html[] = '<div class="pull-right">';
-			$html[] = sprintf('Text is parsed with %s', JHtml::link($syntaxPageLink, 'Enhanced ElephantMarkdown'));
+			$html[] = sprintf('Text is parsed with %s', JHtml::_('link', $syntaxPageLink, 'GitHub Flavored Markdown'));
 			$html[] = '</div>';
 		}
 
@@ -246,7 +246,7 @@ jQuery(document).ready(function($) {
 					$href    = ($button->get('link')) ? 'class="btn" href="' . JURI::base() . $button->get('link') . '"' : null;
 					$onclick = ($button->get('onclick')) ? 'onclick="' . $button->get('onclick') . '"' : null;
 					$title   = ($button->get('title')) ? $button->get('title') : $button->get('text');
-					$return .= "<a " . $modal . " title=\"" . $title . "\" " . $href . " " . $onclick . " rel=\"" . $button->get('options') . "\"><i class=\"icon-" . $button->get('name') . "\"></i> " . $button->get('text') . "</a>\n";
+					$return .= "<a " . $modal . " title=\"" . $title . "\" " . $href . " " . $onclick . " rel=\"" . $button->get('options') . "\"><span class=\"icon-" . $button->get('name') . "\"></span> " . $button->get('text') . "</a>\n";
 				}
 			}
 

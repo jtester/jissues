@@ -23,14 +23,14 @@ if (!defined('_JDEFINES'))
 	require_once JPATH_BASE . '/includes/defines.php';
 }
 
-// Bootstrap the Tracker application libraries.
-require_once JPATH_LIBRARIES . '/tracker.php';
-
 // Bootstrap the Joomla Platform.
 require_once JPATH_LIBRARIES . '/import.legacy.php';
 
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
+
+// Bootstrap the Tracker application libraries.
+require_once JPATH_LIBRARIES . '/tracker.php';
 
 // Configure error reporting to maximum for CLI output.
 error_reporting(E_ALL);
@@ -47,12 +47,40 @@ ini_set('display_errors', 1);
 class TrackerApplicationRetrieve extends JApplicationCli
 {
 	/**
+	 * JGithub object
+	 *
+	 * @var    JGithub
+	 * @since  1.0
+	 */
+	protected $github;
+
+	/**
 	 * Method to run the application routines.
 	 *
 	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function doExecute()
 	{
+		// Set up JGithub
+		$options = new JRegistry;
+
+		// Ask if the user wishes to authenticate to GitHub.  Advantage is increased rate limit to the API.
+		$this->out('Do you wish to authenticate to GitHub? [y]es / [n]o :', false);
+
+		$resp = trim($this->in());
+
+		if ($resp == 'y' || $resp == 'yes')
+		{
+			// Set the options
+			$options->set('api.username', $this->config->get('github_user', ''));
+			$options->set('api.password', $this->config->get('github_password', ''));
+		}
+
+		// Instantiate JGithub
+		$this->github = new JGithub($options);
+
 		// Pull in the data from GitHub
 		$issues = $this->getData();
 
@@ -69,34 +97,10 @@ class TrackerApplicationRetrieve extends JApplicationCli
 	 */
 	protected function getData()
 	{
-		$options = new JRegistry;
-
-		// Ask if the user wishes to authenticate to GitHub.  Advantage is increased rate limit to the API.
-		$this->out('Do you wish to authenticate to GitHub? [y]es / [n]o :', false);
-
-		$resp = trim($this->in());
-
-		if ($resp == 'y' || $resp == 'yes')
-		{
-			// Get the username
-			$this->out('Enter your GitHub username :', false);
-			$username = trim($this->in());
-
-			// Get the password
-			$this->out('Enter your GitHub password :', false);
-			$password = trim($this->in());
-
-			// Set the options
-			$options->set('api.username', $username);
-			$options->set('api.password', $password);
-		}
-
-		// Instantiate JGithub
-		$github = new JGithub($options);
-
 		try
 		{
 			$issues = array();
+
 			foreach(array('open', 'closed') as $state)
 			{
 				$this->out('Retrieving ' . $state . ' items from GitHub.', true);
@@ -104,7 +108,7 @@ class TrackerApplicationRetrieve extends JApplicationCli
 				do
 				{
 					$page++;
-					$issues_more = $github->issues->getListByRepository(
+					$issues_more = $this->github->issues->getListByRepository(
 						'joomla',		// Owner
 						'joomla-cms',	// Repository
 						null,			// Milestone
@@ -138,6 +142,7 @@ class TrackerApplicationRetrieve extends JApplicationCli
 
 		// Retrieved items, report status
 		$this->out('Retrieved ' . count($issues) . ' items from GitHub, checking database now.', true);
+
 		return $issues;
 	}
 
@@ -188,7 +193,7 @@ class TrackerApplicationRetrieve extends JApplicationCli
 			$table = JTable::getInstance('Issue');
 			$table->gh_id       = $issue->number;
 			$table->title       = $issue->title;
-			$table->description = $issue->body;
+			$table->description = $this->github->markdown->render($issue->body, 'gfm', 'JTracker/jissues');
 			$table->status		= ($issue->state == 'open') ? 1 : 10;
 			$table->opened      = JFactory::getDate($issue->created_at)->toSql();
 			$table->modified    = JFactory::getDate($issue->updated_at)->toSql();
