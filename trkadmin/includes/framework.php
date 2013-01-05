@@ -8,9 +8,6 @@
 
 defined('_JEXEC') or die;
 
-// Import the application libraries, load it before the rest of the Platform to allow class overrides
-require_once JPATH_LIBRARIES . '/tracker.php';
-
 // Import the Joomla Platform with legacy support.
 require_once JPATH_LIBRARIES . '/import.php';
 
@@ -20,6 +17,9 @@ require_once JPATH_LIBRARIES . '/cms/version/version.php';
 
 // Botstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
+
+// Import the application libraries.
+require_once JPATH_LIBRARIES . '/tracker.php';
 
 // Register The universal CMS extension autoloader.
 spl_autoload_register(array('JCmsLoader', 'load'));
