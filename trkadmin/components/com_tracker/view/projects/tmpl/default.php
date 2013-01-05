@@ -45,7 +45,9 @@ JHtml::_('script', 'system/core.js', false, true);
                     <td><?= $item->id ?></td>
                     <td>
 	                    <?= JHtml::link($editLink . $item->id, $item->title) ?>
-	                    <span class="small">(Alias: <?= $item->alias ?>)</span>
+	                    <span class="small">
+		                    <?= sprintf('(Alias: %s)', $item->alias) ?>
+	                    </span>
                     </td>
                     <td>
 	                    <? if ($item->gh_user && $item->gh_project) : ?>
