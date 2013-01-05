@@ -96,6 +96,12 @@ abstract class ComAdminTrackerHelper extends JCmsExtensionHelper
 				return;
 			}
 
+			if (false == class_exists('JTableCategory'))
+			{
+				// @legacy
+				JLoader::register('JTableCategory', JPATH_LIBRARIES . '/legacy/table/category.php');
+			}
+
 			$item = new JTableCategory(JFactory::getDbo());
 			$item->load($p);
 
