@@ -16,6 +16,8 @@ before_script:
 
 script:
   - phpunit --configuration phpunit.travis.xml
-  - phpcs -p --standard=build/phpcs/Joomla --report=checkstyle --report-file=build/checkstyle.txt --ignore="/*tmpl/*" src cli
+  #phpcs -p --standard=build/phpcs/Joomla --report=summary --report-file=build/checkstyle.txt --ignore="/*tmpl/*" src cli
+  #phpcs -p --standard=build/phpcs/Joomla --report=emacs --report-file=build/checkstyle.txt --ignore="/*tmpl/*" src cli
+  - phpcs -pv --standard=build/phpcs/Joomla --report=summary --report-file=build/checkstyle.txt --ignore=/*tmpl/* src cli
   - ant -v
   - cat build/checkstyle.txt
