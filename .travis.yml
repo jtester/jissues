@@ -15,9 +15,10 @@ before_script:
   - phpenv rehash
 
 script:
+  - pwd
   - phpunit --configuration phpunit.travis.xml
   #phpcs -p --standard=build/phpcs/Joomla --report=summary --report-file=build/checkstyle.txt --ignore="/*tmpl/*" src cli
   #phpcs -p --standard=build/phpcs/Joomla --report=emacs --report-file=build/checkstyle.txt --ignore="/*tmpl/*" src cli
-  - phpcs -pvv --standard=build/phpcs/Joomla --report=summary --report-file=build/checkstyle.txt --ignore=/*tmpl/* cli/
+  - phpcs -pvv --standard=build/phpcs/Joomla --report=summary --report-file=build/checkstyle.txt --ignore=/*tmpl/* /cli/
   - ant -v
   - cat build/checkstyle.txt
